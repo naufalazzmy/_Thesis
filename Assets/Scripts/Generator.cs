@@ -25,7 +25,7 @@ public class Generator : MonoBehaviour
         return temp;
     }
 
-    public Bilangan Hitung(List<Bilangan> bilangan)
+    private Bilangan Hitung(List<Bilangan> bilangan)
     {
         float a = float.Parse(bilangan[0].bilangan);
         float b = float.Parse(bilangan[1].bilangan);
@@ -200,24 +200,36 @@ public class Generator : MonoBehaviour
 
     }
 
+    private bool Periksa(List<Bilangan> target, List<List<Bilangan>> num_list)
+    {
+        foreach (List<Bilangan> subList in num_list)
+        {
+            foreach (Bilangan item in subList)
+            {
+                Debug.Log(item.bilangan);
+            }
+        }
+        return false;
+    }
 
-    public bool checkList(List<Bilangan> target, List<Bilangan> num_list)
+
+    private bool checkList(List<Bilangan> target, List<List<Bilangan>> num_list)
     {
         string op1 = target[0].op;
         string op2 = target[1].op;
         if(op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
         {
             return false;
-        }else if (target.Intersect(num_list).Any())
+        }else if (Periksa(target, num_list))
         {
             return true;
         }
         else
         {
-            Debug.Log(target);
+            //Debug.Log(target);
             target.Reverse();
-            Debug.Log(target);
-            if (target.Intersect(num_list).Any())
+            //Debug.Log(target);
+            if (Periksa(target, num_list))
             {
                 return true;
             }
@@ -228,13 +240,40 @@ public class Generator : MonoBehaviour
         }
     }
 
+    private List<List<Bilangan>> getCombination(List<Bilangan> bilangan)
+    {
+        List<List<Bilangan>> sudah_list = new List<List<Bilangan>>();
+        List<Bilangan> currentList = new List<Bilangan>();
+
+        for (int i=0; i<bilangan.Count(); i++)
+        {
+            for (int j=0; j < bilangan.Count(); j++)
+            {
+
+                currentList.Clear();
+                currentList.Add(bilangan[i]);
+                currentList.Add(bilangan[j]);
+
+                if (checkList(currentList, sudah_list) || bilangan[i] == bilangan[j])
+                {
+                    continue;
+                }
+                else
+                {
+                    sudah_list.Add(currentList);
+                }
+            }
+        }
+        return sudah_list;
+    }
+
     private void Start()
     {
-        List<Bilangan> bilangan = new List<Bilangan>();
+        //List<Bilangan> bilangan = new List<Bilangan>();
         //bilangan.Add(newBilangan("+5", "+"));
         //bilangan.Add(newBilangan("-3", "-"));
         //bilangan.Add(newBilangan("+9", "+"));
-        //Node root = newNode(bilangan, null,null);
+        //Node root = newNode(bilangan, null, null);
 
         //bilangan.Clear();
         //bilangan.Add(newBilangan("+5", "+"));
@@ -250,26 +289,50 @@ public class Generator : MonoBehaviour
         //bilangan.Add(newBilangan("+14", "+"));
         //bilangan.Add(newBilangan("-3", "-"));
         //(root.child).Add(newNode(bilangan, "c", root));
+        List<List<Bilangan>> bilangan = new List<List<Bilangan>>();
+        List<Bilangan> subbil = new List<Bilangan>();
 
-        bilangan.Add(newBilangan("+1", "+"));
-        bilangan.Add(newBilangan("-2", "+"));
-        bilangan.Add(newBilangan("+3", "+"));
-        bilangan.Add(newBilangan("+4", "+"));
+        subbil.Add(newBilangan("+1", "+"));
+        subbil.Add(newBilangan("-2", "+"));
 
-        List<Bilangan> bilangan2 = new List<Bilangan>();
-        bilangan2.Add(bilangan[2]);
-        bilangan2.Add(bilangan[3]);
+        bilangan.Add(subbil);
+        Debug.Log(subbil.Count);
 
-        bool hasil;
-        if (checkList(bilangan2, bilangan))
+        subbil.Clear();
+        Debug.Log(subbil.Count);
+        subbil.Add(newBilangan("+3", "+"));
+        subbil.Add(newBilangan("+4", "+"));
+        bilangan.Add(subbil);
+        Debug.Log(bilangan[0][0].bilangan);
+        Debug.Log("?????");
+        for (int i=0; i<bilangan.Count; i++)
         {
-            hasil = true;
-        }
-        else
-        {
-            hasil = false;
+            Debug.Log(bilangan[i][0].bilangan);
+            Debug.Log(bilangan[i][1].bilangan);
+            Debug.Log("__________");
         }
 
-        Debug.Log(hasil);
+        //Debug.Log(bilangan[0][0].bilangan);
+
+
+        //bool hasil;
+        //if (checkList(bilangan2, bilangan))
+        //{
+        //    hasil = true;
+        //}
+        //else
+        //{
+        //    hasil = false;
+        //}
+        //Debug.Log(hasil);
+
+        //List<List<Bilangan>> kombinasi = new List<List<Bilangan>>();
+
+        //kombinasi = getCombination(root.listBilangan);
+        //for(int i=0; i<kombinasi.Count; i++)
+        //{
+        //    Debug.Log(kombinasi[i][0].bilangan);
+        //    Debug.Log(kombinasi[i][1].bilangan);
+        //}
     }
 }
