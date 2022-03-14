@@ -200,27 +200,6 @@ public class Generator : MonoBehaviour
 
     }
 
-    public bool Terdapat(List<Bilangan> target, List<Bilangan> num_list)
-    {
-
-        int targetnum = 0;
-
-        for(int i=0; i<num_list.Count; i++)
-        {
-            if (target.Contains(num_list[i]))
-            {
-                targetnum++;
-            }
-        }
-        if(targetnum == target.Count)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
 
     public bool checkList(List<Bilangan> target, List<Bilangan> num_list)
     {
@@ -229,7 +208,7 @@ public class Generator : MonoBehaviour
         if(op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
         {
             return false;
-        }else if (target.Any(item => num_list.Contains(item)))
+        }else if (target.Intersect(num_list).Any())
         {
             return true;
         }
@@ -238,7 +217,7 @@ public class Generator : MonoBehaviour
             Debug.Log(target);
             target.Reverse();
             Debug.Log(target);
-            if (target.Any(item => num_list.Contains(item)))
+            if (target.Intersect(num_list).Any())
             {
                 return true;
             }
@@ -282,7 +261,7 @@ public class Generator : MonoBehaviour
         bilangan2.Add(bilangan[3]);
 
         bool hasil;
-        if (bilangan.Intersect(bilangan2).Any())
+        if (checkList(bilangan2, bilangan))
         {
             hasil = true;
         }
