@@ -208,7 +208,7 @@ public class Generator : MonoBehaviour
 
         if (op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
         {
-            Debug.Log("operator skip- "+target[0].bilangan.ToString() + " . " + target[1].bilangan.ToString());
+            //Debug.Log("operator skip- "+target[0].bilangan.ToString() + " . " + target[1].bilangan.ToString());
             return false;
         }
         else
@@ -219,22 +219,22 @@ public class Generator : MonoBehaviour
                 {
                     if (item.bilangan == target[0].bilangan || item.bilangan == target[1].bilangan)
                     {
-                        Debug.Log(item.bilangan.ToString() + " == " + target[0].bilangan.ToString() + " atau " + item.bilangan.ToString() + " == " + target[1].bilangan.ToString());
+                        //Debug.Log(item.bilangan.ToString() + " == " + target[0].bilangan.ToString() + " atau " + item.bilangan.ToString() + " == " + target[1].bilangan.ToString());
                         sama++;
                     }
 
                 }
             }
 
-            Debug.Log("Target count = " + target.Count);
+            //Debug.Log("Target count = " + target.Count);
             if (sama == target.Count)
             {
-                Debug.Log("COUNT SAMA");
+                //Debug.Log("COUNT SAMA");
                 return true;
             }
             else
             {
-                Debug.Log("count tidak pas/belum ada sama");
+                //Debug.Log("count tidak pas/belum ada sama");
                 return false;
             }
         }
@@ -254,33 +254,42 @@ public class Generator : MonoBehaviour
                 List<Bilangan> currentList = new List<Bilangan>();
                 currentList.Add(bilangan[i]);
                 currentList.Add(bilangan[j]);
-                Debug.Log(currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                //Debug.Log(currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                 if (bilangan[i].bilangan == bilangan[j].bilangan)
                 {
-                    Debug.LogError("SKIPPED SAMA- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                    //Debug.LogError("SKIPPED SAMA- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     continue;
                 }
                 else if (checkList(currentList, sudah_list))
                 {
-                    Debug.LogError("SKIPPED- "+currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                    //Debug.LogError("SKIPPED- "+currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     continue;
                 }
                 else
                 {
-                    Debug.LogWarning("ADDED- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     sudah_list.Add(currentList);
-                    //Debug.Log("SUDAH_LIST VALUE:");
-                    //foreach (List<Bilangan> subList in sudah_list)
-                    //{
-                    //    foreach (Bilangan item in subList)
-                    //    {
-                    //        Debug.Log(item.bilangan);
-
-                    //    }
-                    //}
-                    //Debug.Log(sudah_list[0][0].bilangan);
                 }
             }
+        }
+
+        for (int i = 0; i < sudah_list.Count-1; i++)
+        {
+            for (int j = 0; j < sudah_list.Count; j++)
+            {
+                sudah_list[i].Reverse();
+                string op1 = sudah_list[i][0].op;
+                string op2 = sudah_list[i][1].op;
+
+                if (op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
+                {
+                    continue;
+                }
+                else if (sudah_list[i][0].bilangan == sudah_list[j][0].bilangan && sudah_list[i][1].bilangan == sudah_list[j][1].bilangan)
+                {
+                    sudah_list.RemoveAt(i);
+                }
+            }
+
         }
 
         return sudah_list;
@@ -289,9 +298,8 @@ public class Generator : MonoBehaviour
     private void Start()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
-        bilangan.Add(newBilangan("+5", "+"));
+        bilangan.Add(newBilangan("+5", "*"));
         bilangan.Add(newBilangan("-3", "-"));
-        bilangan.Add(newBilangan("+9", "+"));
         Node root = newNode(bilangan, null, null);
 
         //bilangan.Clear();
@@ -345,12 +353,9 @@ public class Generator : MonoBehaviour
         List<List<Bilangan>> kombinasi = new List<List<Bilangan>>();
 
         kombinasi = getCombination(root.listBilangan);
-        Debug.Log(kombinasi.Count);
         for (int i = 0; i < kombinasi.Count; i++)
         {
-            Debug.Log(kombinasi[i][0].bilangan);
-            Debug.Log(kombinasi[i][1].bilangan);
-            Debug.Log("------");
+            Debug.Log(kombinasi[i][0].bilangan.ToString()+ kombinasi[i][0].op.ToString() + " . " + kombinasi[i][1].bilangan.ToString()+ kombinasi[i][1].op.ToString());
         }
     }
 }
