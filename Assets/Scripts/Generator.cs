@@ -295,67 +295,84 @@ public class Generator : MonoBehaviour
         return sudah_list;
     }
 
+    private void generateChildrenNodes(Node parentNode)
+    {
+        List<List<Bilangan>> combList = getCombination(parentNode.listBilangan);
+        Debug.Log("KOMBINASI TERSEDIA: " +combList.Count);
+        for(int i=0; i<combList.Count; i++)
+        {
+            List<Bilangan> bilanganlist = parentNode.listBilangan;
+            foreach (Bilangan current in combList[i]) //comblist[j] = (bilangan)(bilangan)
+            {
+                for(int j=0; j< bilanganlist.Count; j++) // KAMU CEK DISINI MASALAH NIH
+                {
+                    if (current.bilangan == combList[j][0].bilangan || current.bilangan == combList[j][1].bilangan)
+                    {
+                        Debug.LogWarning("cur combination: " + combList[j][0].bilangan.ToString() + combList[j][1].bilangan.ToString());
+                        Debug.LogWarning("cur list: ");
+                        foreach (Bilangan curr in bilanganlist)
+                        {
+                            Debug.Log(curr.bilangan.ToString());
+                        }
+                        Debug.Log("sama: " + current.bilangan.ToString()+" == "+bilanganlist[j].bilangan.ToString());
+                        Debug.Log("removing: "+bilanganlist[j].bilangan);
+                        //coba km debug disini
+                        bilanganlist.RemoveAt(j);
+                    }
+                }
+                
+            }
+            Debug.LogError("END----");
+
+            Bilangan hasilnya = Hitung(combList[i]);
+            Debug.Log("--HITUNG--: " + combList[i][0].bilangan.ToString() + " . " + combList[i][1].bilangan.ToString());
+            if (hasilnya.bilangan == "invalid")
+            {
+                break;
+            }
+            bilanganlist.Add(hasilnya);
+            if(bilanganlist.Count == 2)
+            {
+                Node aboveFinal = newNode(bilanganlist, combList[i][0].op.ToString() + combList[i][0].bilangan + " . " + combList[i][1].op.ToString() + combList[i][1].bilangan, parentNode);
+                Debug.Log("ABOVE FINAL: " + aboveFinal.listBilangan[0].bilangan.ToString() + " . " + aboveFinal.listBilangan[1].bilangan.ToString());
+
+                Bilangan finalKombinasi = Hitung(bilanganlist);
+                if (finalKombinasi.bilangan == "invalid")
+                {
+                    break;
+                }
+                List<Bilangan> bilanganfinal = new List<Bilangan>();
+                bilanganfinal.Add(finalKombinasi);
+
+                (aboveFinal.child).Add(newNode(bilanganfinal, combList[i][0].op.ToString() + combList[i][0].bilangan + " . " + combList[i][1].op.ToString() + combList[i][1].bilangan, parentNode));
+                Debug.Log("FINAL: " + aboveFinal.listBilangan[0].bilangan.ToString() + " . " + aboveFinal.listBilangan[1].bilangan.ToString());
+                (parentNode.child).Add(aboveFinal);
+            }
+            else
+            {
+                Node subParent = newNode(bilanganlist, combList[i][0].op.ToString() + combList[i][0].bilangan + " . " + combList[i][1].op.ToString() + combList[i][1].bilangan, parentNode);
+                Debug.Log("Sub: " + subParent.listBilangan[0].bilangan.ToString() + " . " + subParent.listBilangan[1].bilangan.ToString());
+                (parentNode.child).Add(subParent);
+
+                generateChildrenNodes(subParent);
+            }
+        }
+    }
+
     private void Start()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
-        bilangan.Add(newBilangan("+5", "*"));
+        bilangan.Add(newBilangan("+5", "+"));
         bilangan.Add(newBilangan("-3", "-"));
+        bilangan.Add(newBilangan("+9", "+"));
         Node root = newNode(bilangan, null, null);
 
-        //bilangan.Clear();
-        //bilangan.Add(newBilangan("+5", "+"));
-        //bilangan.Add(newBilangan("+6", "+"));
-        //(root.child).Add(newNode(bilangan, "a", root));
+        generateChildrenNodes(root);
 
-        //bilangan.Clear();
-        //bilangan.Add(newBilangan("+2", "+"));
-        //bilangan.Add(newBilangan("+9", "+"));
-        //(root.child).Add(newNode(bilangan, "b", root));
-
-        //bilangan.Clear();
-        //bilangan.Add(newBilangan("+14", "+"));
-        //bilangan.Add(newBilangan("-3", "-"));
-        //(root.child).Add(newNode(bilangan, "c", root));
-
-        //List<List<Bilangan>> bilangan = new List<List<Bilangan>>();
-
-        //bilangan.Add(new List<Bilangan> {
-        //    newBilangan("+1", "+"),
-        //    newBilangan("-2", "+")
-        //});
-        //bilangan.Add(new List<Bilangan> {
-        //    newBilangan("+3", "+"),
-        //    newBilangan("-4", "+")
-        //});
-
-        //List<Bilangan> bilangan2 = new List<Bilangan>();
-        //bilangan2.Add(newBilangan("-2", "+"));
-        //bilangan2.Add(newBilangan("-2", "+"));
-
-
-        //bool hasil = false;
-
-        //foreach (List<Bilangan> subList in bilangan)
-        //{
-        //    if (bilangan2.Intersect(subList).Any())
-        //    {
-        //        hasil = true;
-        //        break;
-        //    }
-        //    else
-        //    {
-        //        hasil = false;
-        //    }
-        //}
-
-        //Debug.Log(hasil);
-
-        List<List<Bilangan>> kombinasi = new List<List<Bilangan>>();
-
-        kombinasi = getCombination(root.listBilangan);
-        for (int i = 0; i < kombinasi.Count; i++)
+        foreach (Bilangan j in root.listBilangan)
         {
-            Debug.Log(kombinasi[i][0].bilangan.ToString()+ kombinasi[i][0].op.ToString() + " . " + kombinasi[i][1].bilangan.ToString()+ kombinasi[i][1].op.ToString());
+            Debug.Log(j.bilangan.ToString() + j.op.ToString());
+
         }
     }
 }
