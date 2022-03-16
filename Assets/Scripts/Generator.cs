@@ -343,6 +343,16 @@ public class Generator : MonoBehaviour
         }
     }
 
+    private void printSolution(Node targetLeaf)
+    {
+        Debug.Log(targetLeaf.sumber);
+        if (targetLeaf.parentNode)
+        {
+            Node currNode = targetLeaf.parentNode;
+            printSolution(currNode);
+        }
+    }
+
     private void Start()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
