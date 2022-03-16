@@ -298,34 +298,22 @@ public class Generator : MonoBehaviour
     private void generateChildrenNodes(Node parentNode)
     {
         List<List<Bilangan>> combList = getCombination(parentNode.listBilangan);
-        Debug.Log("KOMBINASI TERSEDIA: " +combList.Count);
         for(int i=0; i<combList.Count; i++)
         {
-            List<Bilangan> bilanganlist = parentNode.listBilangan;
+            List<Bilangan> bilanganlist = new List<Bilangan>(parentNode.listBilangan);
             foreach (Bilangan current in combList[i]) //comblist[j] = (bilangan)(bilangan)
             {
                 for(int j=0; j< bilanganlist.Count; j++) // KAMU CEK DISINI MASALAH NIH
                 {
-                    if (current.bilangan == combList[j][0].bilangan || current.bilangan == combList[j][1].bilangan)
+                    if ((current.bilangan == combList[j][0].bilangan && current.op == combList[j][0].op) || (current.bilangan == combList[j][1].bilangan && current.op == combList[j][1].op))
                     {
-                        Debug.LogWarning("cur combination: " + combList[j][0].bilangan.ToString() + combList[j][1].bilangan.ToString());
-                        Debug.LogWarning("cur list: ");
-                        foreach (Bilangan curr in bilanganlist)
-                        {
-                            Debug.Log(curr.bilangan.ToString());
-                        }
-                        Debug.Log("sama: " + current.bilangan.ToString()+" == "+bilanganlist[j].bilangan.ToString());
-                        Debug.Log("removing: "+bilanganlist[j].bilangan);
-                        //coba km debug disini
                         bilanganlist.RemoveAt(j);
                     }
                 }
                 
             }
-            Debug.LogError("END----");
 
             Bilangan hasilnya = Hitung(combList[i]);
-            Debug.Log("--HITUNG--: " + combList[i][0].bilangan.ToString() + " . " + combList[i][1].bilangan.ToString());
             if (hasilnya.bilangan == "invalid")
             {
                 break;
@@ -334,8 +322,6 @@ public class Generator : MonoBehaviour
             if(bilanganlist.Count == 2)
             {
                 Node aboveFinal = newNode(bilanganlist, combList[i][0].op.ToString() + combList[i][0].bilangan + " . " + combList[i][1].op.ToString() + combList[i][1].bilangan, parentNode);
-                Debug.Log("ABOVE FINAL: " + aboveFinal.listBilangan[0].bilangan.ToString() + " . " + aboveFinal.listBilangan[1].bilangan.ToString());
-
                 Bilangan finalKombinasi = Hitung(bilanganlist);
                 if (finalKombinasi.bilangan == "invalid")
                 {
@@ -345,13 +331,11 @@ public class Generator : MonoBehaviour
                 bilanganfinal.Add(finalKombinasi);
 
                 (aboveFinal.child).Add(newNode(bilanganfinal, combList[i][0].op.ToString() + combList[i][0].bilangan + " . " + combList[i][1].op.ToString() + combList[i][1].bilangan, parentNode));
-                Debug.Log("FINAL: " + aboveFinal.listBilangan[0].bilangan.ToString() + " . " + aboveFinal.listBilangan[1].bilangan.ToString());
                 (parentNode.child).Add(aboveFinal);
             }
             else
             {
                 Node subParent = newNode(bilanganlist, combList[i][0].op.ToString() + combList[i][0].bilangan + " . " + combList[i][1].op.ToString() + combList[i][1].bilangan, parentNode);
-                Debug.Log("Sub: " + subParent.listBilangan[0].bilangan.ToString() + " . " + subParent.listBilangan[1].bilangan.ToString());
                 (parentNode.child).Add(subParent);
 
                 generateChildrenNodes(subParent);
@@ -369,10 +353,12 @@ public class Generator : MonoBehaviour
 
         generateChildrenNodes(root);
 
-        foreach (Bilangan j in root.listBilangan)
+        Debug.Log("hasil: ");
+        foreach (Bilangan j in root.child[0].child[0].listBilangan)
         {
             Debug.Log(j.bilangan.ToString() + j.op.ToString());
 
         }
+
     }
 }
