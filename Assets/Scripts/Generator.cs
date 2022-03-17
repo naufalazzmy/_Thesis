@@ -346,7 +346,7 @@ public class Generator : MonoBehaviour
     private void printSolution(Node targetLeaf)
     {
         Debug.Log(targetLeaf.sumber);
-        if (targetLeaf.parentNode)
+        if (targetLeaf.parentNode != null)
         {
             Node currNode = targetLeaf.parentNode;
             printSolution(currNode);
