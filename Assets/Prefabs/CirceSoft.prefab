@@ -1198,6 +1198,7 @@ GameObject:
   m_Component:
   - component: {fileID: 70184431627233468}
   - component: {fileID: 70184431627233471}
+  - component: {fileID: 3953300361232007685}
   - component: {fileID: 70184431627233470}
   m_Layer: 0
   m_Name: CirceSoft
@@ -1247,6 +1248,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1282,6 +1284,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3953300361232007685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70184431627233465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc6bd023e0f844489e9016ca25e468f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MovementSpeed: 1
 --- !u!114 &70184431627233470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1309,8 +1324,8 @@ MonoBehaviour:
   - {fileID: 70184431788468419}
   - {fileID: 70184431225143612}
   m_Bounds:
-    m_Center: {x: 0.37249422, y: 0.2537818, z: 0}
-    m_Extent: {x: 1.27999, y: 1.2799898, z: 0}
+    m_Center: {x: 0.37249374, y: 0.2537818, z: 0}
+    m_Extent: {x: 1.27999, y: 1.2799903, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
 --- !u!1 &70184431661565117

@@ -274,6 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4194224517450027364}
   - component: {fileID: 4194224517450027367}
+  - component: {fileID: 4860689167835432206}
   - component: {fileID: 4194224517450027366}
   m_Layer: 0
   m_Name: CirceStiff
@@ -323,6 +324,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -358,6 +360,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4860689167835432206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4194224517450027361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bc6bd023e0f844489e9016ca25e468f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0.1
 --- !u!114 &4194224517450027366
 MonoBehaviour:
   m_ObjectHideFlags: 0
