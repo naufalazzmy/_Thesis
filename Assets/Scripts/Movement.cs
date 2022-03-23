@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     public float moveSpeed = 0.1f;
     Rigidbody2D rb;
     Vector2 position;
+    Vector3 rotation;
 
     private GameManager gm;
 
@@ -23,6 +24,9 @@ public class Movement : MonoBehaviour
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         position = Vector2.Lerp(transform.position, mousePosition, moveSpeed);
         rb.MovePosition(position);
+
+        var desiredRotQ = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -26f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotQ, Time.deltaTime *10f);
     }
 
     private void OnMouseDown()
