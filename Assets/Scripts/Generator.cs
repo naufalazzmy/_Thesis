@@ -5,8 +5,9 @@ using System.Linq;
 
 public class Generator : MonoBehaviour
 {
-
-    static Bilangan newBilangan(string bilangan, string op)
+    public GameObject parentObj;
+    public GameObject BilanganPrefab;
+    public Bilangan newBilangan(string bilangan, string op)
     {
         Bilangan temp = new Bilangan();
         temp.bilangan = bilangan;
@@ -25,7 +26,7 @@ public class Generator : MonoBehaviour
         return temp;
     }
 
-    private Bilangan Hitung(List<Bilangan> bilangan)
+    public Bilangan Hitung(List<Bilangan> bilangan)
     {
         float a = float.Parse(bilangan[0].bilangan);
         float b = float.Parse(bilangan[1].bilangan);
@@ -353,6 +354,53 @@ public class Generator : MonoBehaviour
         }
     }
 
+    public IEnumerator generateObject(Bilangan bil, int interval)
+    {
+        Debug.Log("waiting");
+        GameObject childObject = Instantiate(BilanganPrefab, new Vector3(0, 7.5f, 0), transform.rotation) as GameObject;
+        childObject.transform.parent = parentObj.transform;
+        float size = Random.Range(0.7f, 1f);
+        childObject.transform.localScale = new Vector3(size, size, size);
+        childObject.GetComponent<DataBilangan>().op = bil.op;
+        childObject.GetComponent<DataBilangan>().bilangan = bil.bilangan;
+
+
+        if (bil.bilangan[0] == '+')
+        {
+            GameObject posObj = childObject.transform.GetChild(0).gameObject;
+            posObj.SetActive(true);
+
+            GameObject posObjVal = posObj.transform.GetChild(0).gameObject;
+            posObjVal.GetComponent<TextMesh>().text = bil.bilangan;
+            if (bil.op == "*")
+            {
+                childObject.transform.GetChild(2).gameObject.SetActive(true);
+            }
+            else if (bil.op == "/")
+            {
+                childObject.transform.GetChild(3).gameObject.SetActive(true);
+            }
+        }
+        else if (bil.bilangan[0] == '-')
+        {
+            GameObject posObj = childObject.transform.GetChild(1).gameObject;
+            posObj.SetActive(true);
+
+            GameObject posObjVal = posObj.transform.GetChild(0).gameObject;
+            posObjVal.GetComponent<TextMesh>().text = bil.bilangan;
+            if (bil.op == "*")
+            {
+                childObject.transform.GetChild(2).gameObject.SetActive(true);
+            }
+            else if (bil.op == "/")
+            {
+                childObject.transform.GetChild(3).gameObject.SetActive(true);
+            }
+        }
+         yield return new WaitForSeconds(interval);
+        
+    }
+
     private void Start()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
@@ -362,6 +410,11 @@ public class Generator : MonoBehaviour
         Node root = newNode(bilangan, null, null);
 
         generateChildrenNodes(root);
+        foreach(Bilangan bil in bilangan)
+        {
+            StartCoroutine( generateObject(bil, 1));
+        }
+        
 
         Debug.Log("hasil: ");
         foreach (Bilangan j in root.child[0].child[0].listBilangan)

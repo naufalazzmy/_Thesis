@@ -1,8 +1,8 @@
-﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bilangan
+public class DataBilangan : MonoBehaviour
 {
     public string bilangan;
     public string op;
