@@ -354,9 +354,10 @@ public class Generator : MonoBehaviour
         }
     }
 
-    public IEnumerator generateObject(Bilangan bil, int interval)
+
+     public void generateObject(Bilangan bil)
     {
-        Debug.Log("waiting");
+        
         GameObject childObject = Instantiate(BilanganPrefab, new Vector3(0, 7.5f, 0), transform.rotation) as GameObject;
         childObject.transform.parent = parentObj.transform;
         float size = Random.Range(0.7f, 1f);
@@ -397,8 +398,16 @@ public class Generator : MonoBehaviour
                 childObject.transform.GetChild(3).gameObject.SetActive(true);
             }
         }
-         yield return new WaitForSeconds(interval);
         
+    }
+
+    IEnumerator instantiateforSec(List<Bilangan> bilangan, float time)
+    {
+        foreach (Bilangan bil in bilangan)
+        {
+            generateObject(bil);
+            yield return new WaitForSeconds(time);
+        }
     }
 
     private void Start()
@@ -410,11 +419,13 @@ public class Generator : MonoBehaviour
         Node root = newNode(bilangan, null, null);
 
         generateChildrenNodes(root);
-        foreach(Bilangan bil in bilangan)
-        {
-            StartCoroutine( generateObject(bil, 1));
-        }
-        
+
+        StartCoroutine(instantiateforSec(bilangan, 0.5f));
+        //foreach (Bilangan bil in bilangan)
+        //{
+        //   generateObject(bil);
+        //}
+
 
         Debug.Log("hasil: ");
         foreach (Bilangan j in root.child[0].child[0].listBilangan)
