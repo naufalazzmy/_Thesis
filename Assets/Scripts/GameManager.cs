@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         bilanganList.Add(obj2);
         Bilangan hasil = gen.Hitung(bilanganList);
 
-        gen.generateObject(hasil);
+        gen.generateObject(hasil, bil2.transform.position);
     }
     public void addSelected(GameObject sumber)
     {

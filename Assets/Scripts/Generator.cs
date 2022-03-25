@@ -355,10 +355,19 @@ public class Generator : MonoBehaviour
     }
 
 
-     public void generateObject(Bilangan bil)
+     public void generateObject(Bilangan bil, Vector3 pos)
     {
-        
-        GameObject childObject = Instantiate(BilanganPrefab, new Vector3(0, 7.5f, 0), transform.rotation) as GameObject;
+        GameObject childObject;
+        if (pos == Vector3.zero)
+        {
+            float posX = Random.Range(-1.8f, 2.1f);
+             childObject = Instantiate(BilanganPrefab, new Vector3(posX, 7.5f, 0), transform.rotation) as GameObject;
+        }
+        else
+        {
+             childObject = Instantiate(BilanganPrefab, pos, transform.rotation) as GameObject;
+        }
+       
         childObject.transform.parent = parentObj.transform;
         float size = Random.Range(0.7f, 1f);
         childObject.transform.localScale = new Vector3(size, size, size);
@@ -405,7 +414,7 @@ public class Generator : MonoBehaviour
     {
         foreach (Bilangan bil in bilangan)
         {
-            generateObject(bil);
+            generateObject(bil, Vector3.zero);
             yield return new WaitForSeconds(time);
         }
     }
@@ -420,7 +429,7 @@ public class Generator : MonoBehaviour
 
         generateChildrenNodes(root);
 
-        StartCoroutine(instantiateforSec(bilangan, 0.5f));
+        StartCoroutine(instantiateforSec(bilangan, 0.7f));
         //foreach (Bilangan bil in bilangan)
         //{
         //   generateObject(bil);
