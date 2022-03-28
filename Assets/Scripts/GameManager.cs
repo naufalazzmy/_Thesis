@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     public List<GameObject> SelectedBilangan = new List<GameObject>();
+    public List<List<GameObject>> historyBilangan = new List<List<GameObject>>();
     public Generator gen;
 
     // make it selected effect
@@ -41,7 +43,10 @@ public class GameManager : MonoBehaviour
         bilanganList.Add(obj2);
         Bilangan hasil = gen.Hitung(bilanganList);
 
-        gen.generateObject(hasil, bil2.transform.position);
+        // tambah ke list history
+        GameObject newObj = gen.generateObject(hasil, bil2.transform.position);
+        List<GameObject> curBilangan = new List<GameObject>() { bil1, bil2, newObj };
+        historyBilangan.Add(curBilangan);
     }
     public void addSelected(GameObject sumber)
     {
@@ -66,8 +71,28 @@ public class GameManager : MonoBehaviour
             }
 
         }
+    }
 
-       
-        
+    public void Undo()
+    {
+        List<GameObject> lastHistory = new List<GameObject>();
+        lastHistory = historyBilangan[historyBilangan.Count - 1];
+        lastHistory[0].SetActive(true);
+        lastHistory[1].SetActive(true);
+        Destroy(lastHistory[2]);
+        historyBilangan.RemoveAt(historyBilangan.Count - 1);
+    }
+
+    public void Restart()
+    {
+        foreach(List<GameObject> lastHistory in historyBilangan)
+        {
+            //List<GameObject> lastHistory = new List<GameObject>();
+            //lastHistory = historyBilangan[historyBilangan.Count - 1];
+            lastHistory[0].SetActive(true);
+            lastHistory[1].SetActive(true);
+            Destroy(lastHistory[2]);
+        }
+        historyBilangan.Clear();
     }
 }

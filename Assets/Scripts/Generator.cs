@@ -79,6 +79,7 @@ public class Generator : MonoBehaviour
         }
         else if (bOp == "-")
         {
+            b = float.Parse(bilangan[1].bilangan.Substring(1));
             if (aOp == "*")
             {
                 float hasil = a - b;
@@ -105,7 +106,9 @@ public class Generator : MonoBehaviour
             }
             else
             {
+               // Debug.Log("bilangan: "+a+" dan "+b);
                 float hasil = a - b;
+               // Debug.Log("hasil: " + hasil);
                 if (hasil >= 0)
                 {
                     return newBilangan("+" + hasil.ToString(), "+");
@@ -355,7 +358,7 @@ public class Generator : MonoBehaviour
     }
 
 
-     public void generateObject(Bilangan bil, Vector3 pos)
+     public GameObject generateObject(Bilangan bil, Vector3 pos)
     {
         GameObject childObject;
         if (pos == Vector3.zero)
@@ -407,7 +410,7 @@ public class Generator : MonoBehaviour
                 childObject.transform.GetChild(3).gameObject.SetActive(true);
             }
         }
-        
+        return childObject;
     }
 
     IEnumerator instantiateforSec(List<Bilangan> bilangan, float time)
@@ -436,12 +439,17 @@ public class Generator : MonoBehaviour
         //}
 
 
-        Debug.Log("hasil: ");
-        foreach (Bilangan j in root.child[0].child[0].listBilangan)
-        {
-            Debug.Log(j.bilangan.ToString() + j.op.ToString());
+        //Debug.Log("hasil: ");
+        //foreach (Bilangan j in root.child[0].child[0].listBilangan)
+        //{
+        //    Debug.Log(j.bilangan.ToString() + j.op.ToString());
 
-        }
-
+        //}
+        //List<Bilangan> bilangan2 = new List<Bilangan>();
+        //bilangan2.Add(newBilangan("+5", "+"));
+        //bilangan2.Add(newBilangan("-3", "-"));
+        //bilangan.Add(newBilangan("+9", "+"));
+        //Bilangan coba = Hitung(bilangan2);
+        //Debug.Log(coba.bilangan.ToString() + " | "+ coba.op.ToString());
     }
 }
