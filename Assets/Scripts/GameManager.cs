@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> SelectedBilangan = new List<GameObject>();
     public List<List<GameObject>> historyBilangan = new List<List<GameObject>>();
     public Generator gen;
+    public GameObject smoke;
+    public List<GameObject> listTarget;
 
     // make it selected effect
     private void setSelectedTrue(GameObject sumber)
@@ -34,6 +36,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //disni nih--------------
+    private void checkTarget(GameObject obj)
+    {
+        foreach(string target in listTarget){
+            if(obj.GetComponent<DataBilangan>().op == target)
+        }
+    }
+
     private void CalculateBilangan(GameObject bil1, GameObject bil2)
     {
         Bilangan obj1 = gen.newBilangan(bil1.GetComponent<DataBilangan>().bilangan, bil1.GetComponent<DataBilangan>().op);
@@ -43,11 +53,23 @@ public class GameManager : MonoBehaviour
         bilanganList.Add(obj2);
         Bilangan hasil = gen.Hitung(bilanganList);
 
-        // tambah ke list history
+        // instantiate
         GameObject newObj = gen.generateObject(hasil, bil2.transform.position);
+        checkTarget(newObj); // cek apakah ada di target
+        
+        // play smoke effect
+        Vector3 smokepos = newObj.transform.position;
+        smoke.transform.position = smokepos;
+        smoke.SetActive(true);
+        smoke.GetComponent<ParticleSystem>().Play();
+
+
+        // tambah ke list history
         List<GameObject> curBilangan = new List<GameObject>() { bil1, bil2, newObj };
         historyBilangan.Add(curBilangan);
     }
+
+
     public void addSelected(GameObject sumber)
     {
         
@@ -95,4 +117,6 @@ public class GameManager : MonoBehaviour
         }
         historyBilangan.Clear();
     }
+
+
 }

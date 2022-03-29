@@ -2,11 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Generator : MonoBehaviour
 {
     public GameObject parentObj;
     public GameObject BilanganPrefab;
+    
+    //untuk target
+    public GameObject PanelTarget;
+    public GameObject TargetPrefab;
+
+    [SerializeField]
+    private GameManager gm;
+
+
     public Bilangan newBilangan(string bilangan, string op)
     {
         Bilangan temp = new Bilangan();
@@ -422,6 +432,24 @@ public class Generator : MonoBehaviour
         }
     }
 
+    private void generateTarget(Node targetNode)
+    {
+        foreach(Bilangan bil in targetNode.listBilangan)
+        {
+            
+            GameObject target = Instantiate(TargetPrefab);
+            gm.listTarget.Add(target);
+            //target.transform.localScale = new Vector3(1f, 1f, 1f);
+            target.transform.SetParent(PanelTarget.transform);
+            target.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            target.transform.GetChild(0).GetComponent<Text>().text = bil.bilangan;
+            target.name = bil.bilangan;
+            target.GetComponent<DataBilangan>().bilangan = bil.bilangan;
+            target.GetComponent<DataBilangan>().op = bil.op;
+
+        }
+    }
+
     private void Start()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
@@ -431,25 +459,10 @@ public class Generator : MonoBehaviour
         Node root = newNode(bilangan, null, null);
 
         generateChildrenNodes(root);
+        generateTarget(root.child[0].child[0]);
+        
 
         StartCoroutine(instantiateforSec(bilangan, 0.7f));
-        //foreach (Bilangan bil in bilangan)
-        //{
-        //   generateObject(bil);
-        //}
-
-
-        //Debug.Log("hasil: ");
-        //foreach (Bilangan j in root.child[0].child[0].listBilangan)
-        //{
-        //    Debug.Log(j.bilangan.ToString() + j.op.ToString());
-
-        //}
-        //List<Bilangan> bilangan2 = new List<Bilangan>();
-        //bilangan2.Add(newBilangan("+5", "+"));
-        //bilangan2.Add(newBilangan("-3", "-"));
-        //bilangan.Add(newBilangan("+9", "+"));
-        //Bilangan coba = Hitung(bilangan2);
-        //Debug.Log(coba.bilangan.ToString() + " | "+ coba.op.ToString());
+        
     }
 }
