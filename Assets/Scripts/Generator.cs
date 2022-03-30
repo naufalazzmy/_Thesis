@@ -441,6 +441,7 @@ public class Generator : MonoBehaviour
             gm.listTarget.Add(target);
             //target.transform.localScale = new Vector3(1f, 1f, 1f);
             target.transform.SetParent(PanelTarget.transform);
+            target.GetComponent<RectTransform>().localPosition = new Vector3(target.GetComponent<RectTransform>().transform.position.x, target.GetComponent<RectTransform>().transform.position.y, 1f);
             target.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
             target.transform.GetChild(0).GetComponent<Text>().text = bil.bilangan;
             target.name = bil.bilangan;

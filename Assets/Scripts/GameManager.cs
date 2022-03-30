@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class GameManager : MonoBehaviour
     public Generator gen;
     public GameObject smoke;
     public List<GameObject> listTarget;
-
+    public int totalbenar = 0;
+    public Camera cam;
     // make it selected effect
     private void setSelectedTrue(GameObject sumber)
     {
@@ -39,8 +41,43 @@ public class GameManager : MonoBehaviour
     //disni nih--------------
     private void checkTarget(GameObject obj)
     {
-        foreach(string target in listTarget){
-            if(obj.GetComponent<DataBilangan>().op == target)
+        foreach (GameObject target in listTarget)
+        {
+            Vector3 point = cam.ScreenToWorldPoint(target.GetComponent<RectTransform>().localPosition);
+            Debug.Log("Point: " + point);
+            if (obj.GetComponent<DataBilangan>().op == target.GetComponent<DataBilangan>().op && obj.GetComponent<DataBilangan>().bilangan == target.GetComponent<DataBilangan>().bilangan)
+            {
+                // change transparancy 
+                Image objimage = target.GetComponent<Image>();
+                Color newAlpha = objimage.color;
+                if(objimage.color.a == 1f)
+                {
+                    newAlpha.a = 0.3451f;
+                    objimage.color = newAlpha;
+
+                    GameObject partikel = target.transform.GetChild(1).gameObject;
+                    partikel.SetActive(false);
+                    totalbenar = totalbenar - 1;
+
+                }
+                else
+                {
+                    GameObject objCHild = obj.transform.GetChild(4).gameObject;
+                    objCHild.transform.GetChild(0).gameObject.GetComponent<TextMesh>().text = obj.GetComponent<DataBilangan>().bilangan;
+                    objCHild.SetActive(true);
+
+                    newAlpha.a = 1f;
+                    objimage.color = newAlpha;
+
+                    GameObject partikel = target.transform.GetChild(1).gameObject;
+                    partikel.SetActive(true);
+                    partikel.GetComponent<ParticleSystem>().Play();
+                    
+
+                    totalbenar = totalbenar + 1;
+                }
+
+            }
         }
     }
 
@@ -100,8 +137,13 @@ public class GameManager : MonoBehaviour
         List<GameObject> lastHistory = new List<GameObject>();
         lastHistory = historyBilangan[historyBilangan.Count - 1];
         lastHistory[0].SetActive(true);
+        checkTarget(lastHistory[0]);
+        
         lastHistory[1].SetActive(true);
+        checkTarget(lastHistory[1]);
+        
         Destroy(lastHistory[2]);
+        checkTarget(lastHistory[2]);
         historyBilangan.RemoveAt(historyBilangan.Count - 1);
     }
 
@@ -115,7 +157,24 @@ public class GameManager : MonoBehaviour
             lastHistory[1].SetActive(true);
             Destroy(lastHistory[2]);
         }
+        foreach (GameObject target in listTarget)
+        {
+            // change transparancy 
+            Image objimage = target.GetComponent<Image>();
+            Color newAlpha = objimage.color;
+            newAlpha.a = 0.3451f;
+            objimage.color = newAlpha;
+        }
+        totalbenar = 0;
         historyBilangan.Clear();
+    }
+
+    private void Update()
+    {
+        if(totalbenar == listTarget.Count)
+        {
+            Debug.Log("LEVEL COMPLETE");
+        }
     }
 
 
