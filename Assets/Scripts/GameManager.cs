@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public int totalbenar = 0;
     public Camera cam;
     // make it selected effect
+
+
     private void setSelectedTrue(GameObject sumber)
     {
         if (sumber.GetComponent<DataBilangan>().bilangan[0] == '+')
@@ -43,8 +45,8 @@ public class GameManager : MonoBehaviour
     {
         foreach (GameObject target in listTarget)
         {
-            Vector3 point = cam.ScreenToWorldPoint(target.GetComponent<RectTransform>().localPosition);
-            Debug.Log("Point: " + point);
+            //Vector3 point = cam.ScreenToWorldPoint(target.GetComponent<RectTransform>().localPosition);
+           // Debug.Log("Point: " + point);
             if (obj.GetComponent<DataBilangan>().op == target.GetComponent<DataBilangan>().op && obj.GetComponent<DataBilangan>().bilangan == target.GetComponent<DataBilangan>().bilangan)
             {
                 // change transparancy 
@@ -175,6 +177,23 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("LEVEL COMPLETE");
         }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+            if (hit.collider != null)
+            {
+                Debug.Log(hit.collider.gameObject.name);
+            }
+            else
+            {
+                setSelectedFalse(SelectedBilangan[0]);
+                SelectedBilangan.Clear();
+            }
+        }
+
     }
 
 

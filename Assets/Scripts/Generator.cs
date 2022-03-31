@@ -386,6 +386,7 @@ public class Generator : MonoBehaviour
         childObject.transform.localScale = new Vector3(size, size, size);
         childObject.GetComponent<DataBilangan>().op = bil.op;
         childObject.GetComponent<DataBilangan>().bilangan = bil.bilangan;
+        childObject.name = bil.bilangan;
 
 
         if (bil.bilangan[0] == '+')
@@ -453,15 +454,22 @@ public class Generator : MonoBehaviour
 
     private void Start()
     {
+        //List<Bilangan> bilangan = new List<Bilangan>();
+        //bilangan.Add(newBilangan("+5", "+"));
+        //bilangan.Add(newBilangan("-3", "-"));
+        //bilangan.Add(newBilangan("+9", "+"));
+        //Node root = newNode(bilangan, null, null);
+
         List<Bilangan> bilangan = new List<Bilangan>();
-        bilangan.Add(newBilangan("+5", "+"));
-        bilangan.Add(newBilangan("-3", "-"));
-        bilangan.Add(newBilangan("+9", "+"));
+        bilangan.Add(newBilangan("+3", "*"));
+        bilangan.Add(newBilangan("+2", "+"));
+        bilangan.Add(newBilangan("-5", "-"));
+        bilangan.Add(newBilangan("+11", "+"));
         Node root = newNode(bilangan, null, null);
 
         generateChildrenNodes(root);
-        generateTarget(root.child[0].child[0]);
-        
+        //generateTarget(root.child[0].child[0]);
+        generateTarget(root.child[4].child[0]);
 
         StartCoroutine(instantiateforSec(bilangan, 0.7f));
         
