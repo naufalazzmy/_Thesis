@@ -4,17 +4,20 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class TutorialManager : MonoBehaviour
 {
     public List<GameObject> SelectedBilangan = new List<GameObject>();
     public List<List<GameObject>> historyBilangan = new List<List<GameObject>>();
-    public Generator gen;
+    public GeneratorManual gen;
     public GameObject smoke;
     public List<GameObject> listTarget;
     public int totalbenar = 0;
     public Camera cam;
-    // make it selected effect
-
+    // dibawah ini baru
+    public GameObject confetti;
+    public Animator tirai;
+    public bool isComplete = false;
+    private bool conffectiplayed;
 
     private void setSelectedTrue(GameObject sumber)
     {
@@ -46,13 +49,13 @@ public class GameManager : MonoBehaviour
         foreach (GameObject target in listTarget)
         {
             //Vector3 point = cam.ScreenToWorldPoint(target.GetComponent<RectTransform>().localPosition);
-           // Debug.Log("Point: " + point);
+            // Debug.Log("Point: " + point);
             if (obj.GetComponent<DataBilangan>().op == target.GetComponent<DataBilangan>().op && obj.GetComponent<DataBilangan>().bilangan == target.GetComponent<DataBilangan>().bilangan)
             {
                 // change transparancy 
                 Image objimage = target.GetComponent<Image>();
                 Color newAlpha = objimage.color;
-                if(objimage.color.a == 1f)
+                if (objimage.color.a == 1f)
                 {
                     newAlpha.a = 0.3451f;
                     objimage.color = newAlpha;
@@ -74,7 +77,7 @@ public class GameManager : MonoBehaviour
                     GameObject partikel = target.transform.GetChild(1).gameObject;
                     partikel.SetActive(true);
                     partikel.GetComponent<ParticleSystem>().Play();
-                    
+
 
                     totalbenar = totalbenar + 1;
                 }
@@ -95,7 +98,7 @@ public class GameManager : MonoBehaviour
         // instantiate
         GameObject newObj = gen.generateObject(hasil, bil2.transform.position);
         checkTarget(newObj); // cek apakah ada di target
-        
+
         // play smoke effect
         Vector3 smokepos = newObj.transform.position;
         smoke.transform.position = smokepos;
@@ -111,7 +114,7 @@ public class GameManager : MonoBehaviour
 
     public void addSelected(GameObject sumber)
     {
-        
+
         if (!(SelectedBilangan.Contains(sumber))) //cek dulu sumber ini sudah ada apa belum dalem list
         {
             if (SelectedBilangan.Count >= 1)  // terus if kalo sudah ada total 2 dalam list, kalkulasi terus kosongin
@@ -140,10 +143,10 @@ public class GameManager : MonoBehaviour
         lastHistory = historyBilangan[historyBilangan.Count - 1];
         lastHistory[0].SetActive(true);
         checkTarget(lastHistory[0]);
-        
+
         lastHistory[1].SetActive(true);
         checkTarget(lastHistory[1]);
-        
+
         Destroy(lastHistory[2]);
         checkTarget(lastHistory[2]);
         historyBilangan.RemoveAt(historyBilangan.Count - 1);
@@ -151,7 +154,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        foreach(List<GameObject> lastHistory in historyBilangan)
+        foreach (List<GameObject> lastHistory in historyBilangan)
         {
             //List<GameObject> lastHistory = new List<GameObject>();
             //lastHistory = historyBilangan[historyBilangan.Count - 1];
@@ -170,12 +173,30 @@ public class GameManager : MonoBehaviour
         totalbenar = 0;
         historyBilangan.Clear();
     }
+    private void Start()
+    {
+        
+    }
 
     private void Update()
     {
-        if(totalbenar == listTarget.Count)
+        if (totalbenar == listTarget.Count)
         {
             Debug.Log("LEVEL COMPLETE");
+            isComplete = true;
+        }
+
+        if (isComplete)
+        {
+            // play conffeti
+            confetti.SetActive(true);
+            if (!conffectiplayed)
+            {
+
+                confetti.GetComponent<ParticleSystem>().Play();
+                conffectiplayed = true;
+            }
+            tirai.SetTrigger("close");
         }
 
 
@@ -185,7 +206,7 @@ public class GameManager : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
             if (hit.collider != null)
             {
-               // Debug.Log(hit.collider.gameObject.name);
+                // Debug.Log(hit.collider.gameObject.name);
             }
             else
             {
