@@ -11690,6 +11690,7 @@ MonoBehaviour:
   confetti: {fileID: 605225923}
   tirai: {fileID: 723813646}
   isComplete: 0
+  nextSceneTarget: tutorial 2
 --- !u!114 &942272062
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class TutorialManager : MonoBehaviour
     public Animator tirai;
     public bool isComplete = false;
     private bool conffectiplayed;
+
+    public string nextSceneTarget;
 
     private void setSelectedTrue(GameObject sumber)
     {
@@ -173,9 +176,10 @@ public class TutorialManager : MonoBehaviour
         totalbenar = 0;
         historyBilangan.Clear();
     }
-    private void Start()
+    IEnumerator nextScene(string sceneTarget,float time)
     {
-        
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(sceneTarget);
     }
 
     private void Update()
@@ -197,6 +201,7 @@ public class TutorialManager : MonoBehaviour
                 conffectiplayed = true;
             }
             tirai.SetTrigger("close");
+            StartCoroutine(nextScene(nextSceneTarget, 4f));
         }
 
 

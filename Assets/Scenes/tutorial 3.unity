@@ -5461,7 +5461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -222.99997, y: -111.34003}
+  m_AnchoredPosition: {x: -223, y: -111.34003}
   m_SizeDelta: {x: -726.664, y: 222.4607}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &294362055
@@ -10699,7 +10699,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -282.99997, y: 0}
+  m_AnchoredPosition: {x: -283, y: 0}
   m_SizeDelta: {x: -506.4192, y: 293.5835}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &637717046
@@ -11504,6 +11504,7 @@ MonoBehaviour:
   confetti: {fileID: 605225923}
   tirai: {fileID: 723813646}
   isComplete: 0
+  nextSceneTarget: tutorial 4
 --- !u!114 &942272062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11721,7 +11722,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -239.99997, y: -154}
+  m_AnchoredPosition: {x: -240, y: -154}
   m_SizeDelta: {x: -217.53912, y: 489.27295}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1164364377
