@@ -175,7 +175,7 @@ public class GameManager : MonoBehaviour
     {
         if(totalbenar == listTarget.Count)
         {
-            Debug.Log("LEVEL COMPLETE");
+           // Debug.Log("LEVEL COMPLETE");
         }
 
 

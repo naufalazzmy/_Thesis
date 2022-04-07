@@ -27,7 +27,7 @@ public class Generator : MonoBehaviour
 
 
     // Utility function to create a new tree node
-    static Node newNode(List<Bilangan> listBilangan, string sumber, Node parentNode)
+    public Node newNode(List<Bilangan> listBilangan, string sumber, Node parentNode)
     {
         Node temp = new Node();
         temp.listBilangan = listBilangan;
@@ -231,9 +231,14 @@ public class Generator : MonoBehaviour
             {
                 foreach (Bilangan item in subList)
                 {
-                    if (item.bilangan == target[0].bilangan || item.bilangan == target[1].bilangan)
+                    if (item.bilangan == target[0].bilangan )
                     {
-                        //Debug.Log(item.bilangan.ToString() + " == " + target[0].bilangan.ToString() + " atau " + item.bilangan.ToString() + " == " + target[1].bilangan.ToString());
+                        Debug.Log(item.bilangan.ToString() + " == " + target[0].bilangan.ToString() );
+                        sama++;
+                    }
+                    else if(item.bilangan == target[1].bilangan)
+                    {
+                        Debug.Log(" atau " + item.bilangan.ToString() + " == " + target[1].bilangan.ToString());
                         sama++;
                     }
 
@@ -260,7 +265,7 @@ public class Generator : MonoBehaviour
     {
         List<List<Bilangan>> sudah_list = new List<List<Bilangan>>();
 
-        //Debug.Log(bilangan.Count);
+        Debug.LogWarning("Bilangan Count: "+bilangan.Count);
         for (int i=0; i<bilangan.Count(); i++)
         {
             for (int j=0; j < bilangan.Count(); j++)
@@ -268,15 +273,15 @@ public class Generator : MonoBehaviour
                 List<Bilangan> currentList = new List<Bilangan>();
                 currentList.Add(bilangan[i]);
                 currentList.Add(bilangan[j]);
-                //Debug.Log(currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                Debug.Log(currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                 if (bilangan[i].bilangan == bilangan[j].bilangan)
                 {
-                    //Debug.LogError("SKIPPED SAMA- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                   Debug.LogError("SKIPPED SAMA- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     continue;
                 }
                 else if (checkList(currentList, sudah_list))
                 {
-                    //Debug.LogError("SKIPPED- "+currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                    Debug.LogError("SKIPPED-sudah"+currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     continue;
                 }
                 else
@@ -285,6 +290,7 @@ public class Generator : MonoBehaviour
                 }
             }
         }
+        Debug.LogWarning("SELESE FOR");
 
         for (int i = 0; i < sudah_list.Count-1; i++)
         {
@@ -305,11 +311,21 @@ public class Generator : MonoBehaviour
             }
 
         }
+        
+
+        //foreach(List<Bilangan> lisbil in sudah_list)
+        //{
+        //    Debug.LogWarning("newComb");
+        //    foreach(Bilangan bil in lisbil)
+        //    {
+        //        Debug.Log(bil.bilangan);
+        //    }
+        //}
 
         return sudah_list;
     }
 
-    private void generateChildrenNodes(Node parentNode)
+    public void generateChildrenNodes(Node parentNode)
     {
         List<List<Bilangan>> combList = getCombination(parentNode.listBilangan);
         for(int i=0; i<combList.Count; i++)
@@ -354,16 +370,6 @@ public class Generator : MonoBehaviour
 
                 generateChildrenNodes(subParent);
             }
-        }
-    }
-
-    private void printSolution(Node targetLeaf)
-    {
-        Debug.Log(targetLeaf.sumber);
-        if (targetLeaf.parentNode != null)
-        {
-            Node currNode = targetLeaf.parentNode;
-            printSolution(currNode);
         }
     }
 
@@ -424,7 +430,7 @@ public class Generator : MonoBehaviour
         return childObject;
     }
 
-    IEnumerator instantiateforSec(List<Bilangan> bilangan, float time)
+    public IEnumerator instantiateforSec(List<Bilangan> bilangan, float time)
     {
         foreach (Bilangan bil in bilangan)
         {
@@ -433,7 +439,7 @@ public class Generator : MonoBehaviour
         }
     }
 
-    private void generateTarget(Node targetNode)
+    public void generateTarget(Node targetNode)
     {
         foreach(Bilangan bil in targetNode.listBilangan)
         {
@@ -452,26 +458,40 @@ public class Generator : MonoBehaviour
         }
     }
 
+
+    public void printSolution(Node targetLeaf)
+    {
+        Debug.Log(targetLeaf.sumber);
+        if (targetLeaf.parentNode != null)
+        {
+            Node currNode = targetLeaf.parentNode;
+            printSolution(currNode);
+        }
+    }
+
     private void Start()
     {
-        //List<Bilangan> bilangan = new List<Bilangan>();
-        //bilangan.Add(newBilangan("+5", "+"));
-        //bilangan.Add(newBilangan("-3", "-"));
-        //bilangan.Add(newBilangan("+9", "+"));
-        //Node root = newNode(bilangan, null, null);
-
         List<Bilangan> bilangan = new List<Bilangan>();
-        bilangan.Add(newBilangan("+3", "*"));
-        bilangan.Add(newBilangan("+2", "+"));
-        bilangan.Add(newBilangan("-5", "-"));
-        bilangan.Add(newBilangan("+11", "+"));
+        bilangan.Add(newBilangan("+9", "+"));
+        bilangan.Add(newBilangan("-3", "-"));
+        bilangan.Add(newBilangan("+8", "+"));
+        bilangan.Add(newBilangan("-2", "-"));
         Node root = newNode(bilangan, null, null);
 
-        generateChildrenNodes(root);
-        //generateTarget(root.child[0].child[0]);
-        generateTarget(root.child[4].child[0]);
+        //List<Bilangan> bilangan = new List<Bilangan>();
+        //bilangan.Add(newBilangan("+3", "*"));
+        //bilangan.Add(newBilangan("+2", "+"));
+        //bilangan.Add(newBilangan("-5", "-"));
+        //bilangan.Add(newBilangan("+11", "+"));
+        //Node root = newNode(bilangan, null, null);
 
+        getCombination(root.listBilangan);
+        //generateChildrenNodes(root);
+        //Debug.Log("Total Child: "+root.child.Count);
+
+        //generateTarget(root.child[2].child[0]);
+        //printSolution(root.child[2].child[0]);
         StartCoroutine(instantiateforSec(bilangan, 0.7f));
-        
+
     }
 }
