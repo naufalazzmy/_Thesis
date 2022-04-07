@@ -48,7 +48,7 @@ public class SoalHandler : MonoBehaviour
         
         for (int i = 0; i < jumlahTambah; i++)
         {
-            float randNum = Random.Range(1, 10); // disini randomnya
+            float randNum = Random.Range(1, 10); // disini randomnya TODO mu
             bilangan.Add(gen.newBilangan("+" + randNum.ToString(), "+"));
         }
         for (int i = 0; i < jumlahKurang; i++)
@@ -92,16 +92,17 @@ public class SoalHandler : MonoBehaviour
 
         int totalCombination = root.listBilangan.Count; // 4,3,2,1.
 
-        //for (int i = 0; i < totalCombination - 2; i++)
-        //{
+        // TODO MU: Sebaiknya km atur depth dan check apa bener semuanya ga contain root bilangan?
+        for (int i = 0; i < totalCombination - 1; i++)
+        {
 
-        //    int targetchild = Random.Range(0, targetNode.child.Count);
-        //    targetNode = targetNode.child[targetchild];
-        //}
+            int targetchild = Random.Range(0, targetNode.child.Count);
+            targetNode = targetNode.child[targetchild];
+        }
 
-        ////disini buat set target!!
-        gen.generateTarget(root.child[0].child[0]);
-        gen.printSolution(root.child[0].child[0]);
+        
+        gen.generateTarget(targetNode);
+        gen.printSolution(targetNode);
 
         StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
     }

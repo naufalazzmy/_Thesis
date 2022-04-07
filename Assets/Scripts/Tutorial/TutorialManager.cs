@@ -17,6 +17,7 @@ public class TutorialManager : MonoBehaviour
     // dibawah ini baru
     public GameObject confetti;
     public Animator tirai;
+    public Animator skipPromt;
     public bool isComplete = false;
     private bool conffectiplayed;
 
@@ -182,11 +183,18 @@ public class TutorialManager : MonoBehaviour
         SceneManager.LoadScene(sceneTarget);
     }
 
+    public void skipSoal()
+    {
+        tirai.SetTrigger("close");
+        skipPromt.SetTrigger("close");
+        StartCoroutine(nextScene(nextSceneTarget, 1f));
+    }
+
     private void Update()
     {
         if (totalbenar == listTarget.Count)
         {
-            Debug.Log("LEVEL COMPLETE");
+            //Debug.Log("LEVEL COMPLETE");
             isComplete = true;
         }
 

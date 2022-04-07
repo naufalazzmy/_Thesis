@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,12 @@ public class GameManager : MonoBehaviour
     public Camera cam;
     // make it selected effect
 
+    public GameObject confetti;
+    public Animator tirai;
+    public bool isComplete = false;
+    private bool conffectiplayed;
+
+    public string nextSceneTarget;
 
     private void setSelectedTrue(GameObject sumber)
     {
@@ -171,11 +178,32 @@ public class GameManager : MonoBehaviour
         historyBilangan.Clear();
     }
 
+    IEnumerator nextScene(string sceneTarget, float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(sceneTarget);
+    }
+
     private void Update()
     {
         if(totalbenar == listTarget.Count)
         {
-           // Debug.Log("LEVEL COMPLETE");
+            // Debug.Log("LEVEL COMPLETE");
+            isComplete = true;
+        }
+
+        if (isComplete)
+        {
+            // play conffeti
+            confetti.SetActive(true);
+            if (!conffectiplayed)
+            {
+
+                confetti.GetComponent<ParticleSystem>().Play();
+                conffectiplayed = true;
+            }
+            tirai.SetTrigger("close");
+            StartCoroutine(nextScene(nextSceneTarget, 4f));
         }
 
 

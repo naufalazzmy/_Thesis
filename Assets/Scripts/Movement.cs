@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("Touched");
+       // Debug.Log("Touched");
         gm.addSelected(this.gameObject);
     }
 }

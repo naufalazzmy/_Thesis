@@ -486,34 +486,34 @@ public class Generator : MonoBehaviour
 
     private void Start()
     {
-        List<Bilangan> bilangan = new List<Bilangan>();
-        bilangan.Add(newBilangan("+3", "+"));
-        bilangan.Add(newBilangan("+3", "*"));
-        bilangan.Add(newBilangan("+4", "/"));
-        bilangan.Add(newBilangan("+5", "+"));
-        Node root = newNode(bilangan, null, null);
-
         //List<Bilangan> bilangan = new List<Bilangan>();
+        //bilangan.Add(newBilangan("+3", "+"));
         //bilangan.Add(newBilangan("+3", "*"));
-        //bilangan.Add(newBilangan("+2", "+"));
-        //bilangan.Add(newBilangan("-5", "-"));
-        //bilangan.Add(newBilangan("+11", "+"));
+        //bilangan.Add(newBilangan("+4", "/"));
+        //bilangan.Add(newBilangan("+5", "+"));
         //Node root = newNode(bilangan, null, null);
 
-        //getCombination(root.listBilangan);
+        ////List<Bilangan> bilangan = new List<Bilangan>();
+        ////bilangan.Add(newBilangan("+3", "*"));
+        ////bilangan.Add(newBilangan("+2", "+"));
+        ////bilangan.Add(newBilangan("-5", "-"));
+        ////bilangan.Add(newBilangan("+11", "+"));
+        ////Node root = newNode(bilangan, null, null);
+
+        ////getCombination(root.listBilangan);
         
-        generateChildrenNodes(root);
-        //Debug.Log("Total Child: "+root.child[0].child[0].child.Count); //ENTAH YA SAYA BINUNG ANJM DISINI!!
+        //generateChildrenNodes(root);
+        ////Debug.Log("Total Child: "+root.child[0].child[0].child.Count); //ENTAH YA SAYA BINUNG ANJM DISINI!!
 
-        //foreach (Bilangan bil in root.child[0].child[0].listBilangan)
-        //{
-        //    Debug.Log(bil.bilangan);
-        //}
+        ////foreach (Bilangan bil in root.child[0].child[0].listBilangan)
+        ////{
+        ////    Debug.Log(bil.bilangan);
+        ////}
 
 
-        generateTarget(root.child[2].child[2].child[0]);
-        printSolution(root.child[2].child[2].child[0]);
-        StartCoroutine(instantiateforSec(bilangan, 0.7f));
+        //generateTarget(root.child[2].child[2].child[0]);
+        //printSolution(root.child[2].child[2].child[0]);
+        //StartCoroutine(instantiateforSec(bilangan, 0.7f));
 
     }
 }
