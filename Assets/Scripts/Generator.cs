@@ -216,10 +216,11 @@ public class Generator : MonoBehaviour
 
     private bool checkList(List<Bilangan> target, List<List<Bilangan>> num_list)
     {
+        //Debug.LogWarning("Check List...");
         string op1 = target[0].op;
         string op2 = target[1].op;
         int sama = 0;
-
+        
         if (op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
         {
             //Debug.Log("operator skip- "+target[0].bilangan.ToString() + " . " + target[1].bilangan.ToString());
@@ -233,39 +234,46 @@ public class Generator : MonoBehaviour
                 {
                     if (item.bilangan == target[0].bilangan )
                     {
-                        Debug.Log(item.bilangan.ToString() + " == " + target[0].bilangan.ToString() );
+                       // Debug.Log(item.bilangan.ToString() + " == " + target[0].bilangan.ToString() );
                         sama++;
                     }
                     else if(item.bilangan == target[1].bilangan)
                     {
-                        Debug.Log(" atau " + item.bilangan.ToString() + " == " + target[1].bilangan.ToString());
+                        //Debug.Log(" atau " + item.bilangan.ToString() + " == " + target[1].bilangan.ToString());
                         sama++;
                     }
 
                 }
+                if (sama == target.Count)
+                {
+                    //Debug.Log("COUNT SAMA");
+                    return true;
+                }
+                sama = 0;
             }
 
             //Debug.Log("Target count = " + target.Count);
-            if (sama == target.Count)
-            {
-                //Debug.Log("COUNT SAMA");
-                return true;
-            }
-            else
-            {
-                //Debug.Log("count tidak pas/belum ada sama");
-                return false;
-            }
+            //if (sama == target.Count)
+            //{
+            //    //Debug.Log("COUNT SAMA");
+            //    return true;
+            //}
+            //else
+            //{
+            //    //Debug.Log("count tidak pas/belum ada sama");
+            //    return false;
+            //}
         }
-        
-        
+        return false;
+
+
     }
 
     private List<List<Bilangan>> getCombination(List<Bilangan> bilangan)
     {
         List<List<Bilangan>> sudah_list = new List<List<Bilangan>>();
 
-        Debug.LogWarning("Bilangan Count: "+bilangan.Count);
+       // Debug.LogWarning("Bilangan Count: "+bilangan.Count);
         for (int i=0; i<bilangan.Count(); i++)
         {
             for (int j=0; j < bilangan.Count(); j++)
@@ -273,15 +281,15 @@ public class Generator : MonoBehaviour
                 List<Bilangan> currentList = new List<Bilangan>();
                 currentList.Add(bilangan[i]);
                 currentList.Add(bilangan[j]);
-                Debug.Log(currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+              // Debug.Log(currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                 if (bilangan[i].bilangan == bilangan[j].bilangan)
                 {
-                   Debug.LogError("SKIPPED SAMA- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                 // Debug.LogError("SKIPPED SAMA- " + currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     continue;
                 }
                 else if (checkList(currentList, sudah_list))
                 {
-                    Debug.LogError("SKIPPED-sudah"+currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
+                 // Debug.LogError("SKIPPED-sudah"+currentList[0].bilangan.ToString() + " . " + currentList[1].bilangan.ToString());
                     continue;
                 }
                 else
@@ -290,33 +298,34 @@ public class Generator : MonoBehaviour
                 }
             }
         }
-        Debug.LogWarning("SELESE FOR");
 
-        for (int i = 0; i < sudah_list.Count-1; i++)
-        {
-            for (int j = 0; j < sudah_list.Count; j++)
-            {
-                sudah_list[i].Reverse();
-                string op1 = sudah_list[i][0].op;
-                string op2 = sudah_list[i][1].op;
+        //Debug.LogWarning("INI TOTALNYA: " + sudah_list.Count);
+        // ini buat apaaaaa?
+        //for (int i = 0; i < sudah_list.Count-1; i++)
+        //{
+        //    for (int j = 0; j < sudah_list.Count; j++)
+        //    {
+        //        sudah_list[i].Reverse();
+        //        string op1 = sudah_list[i][0].op;
+        //        string op2 = sudah_list[i][1].op;
 
-                if (op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
-                {
-                    continue;
-                }
-                else if (sudah_list[i][0].bilangan == sudah_list[j][0].bilangan && sudah_list[i][1].bilangan == sudah_list[j][1].bilangan)
-                {
-                    sudah_list.RemoveAt(i);
-                }
-            }
+        //        if (op1 == "/" || op1 == "*" || op2 == "/" || op2 == "*")
+        //        {
+        //            continue;
+        //        }
+        //        else if (sudah_list[i][0].bilangan == sudah_list[j][0].bilangan && sudah_list[i][1].bilangan == sudah_list[j][1].bilangan)
+        //        {
+        //            sudah_list.RemoveAt(i);
+        //        }
+        //    }
 
-        }
-        
+        //}
 
-        //foreach(List<Bilangan> lisbil in sudah_list)
+
+        //foreach (List<Bilangan> lisbil in sudah_list)
         //{
         //    Debug.LogWarning("newComb");
-        //    foreach(Bilangan bil in lisbil)
+        //    foreach (Bilangan bil in lisbil)
         //    {
         //        Debug.Log(bil.bilangan);
         //    }
@@ -485,9 +494,9 @@ public class Generator : MonoBehaviour
         //bilangan.Add(newBilangan("+11", "+"));
         //Node root = newNode(bilangan, null, null);
 
-        getCombination(root.listBilangan);
-        //generateChildrenNodes(root);
-        //Debug.Log("Total Child: "+root.child.Count);
+        // getCombination(root.listBilangan);
+        generateChildrenNodes(root);
+        Debug.Log("Total Child: "+root.child[0].child.Count); //ENTAH YA SAYA BINUNG ANJM DISINI!!
 
         //generateTarget(root.child[2].child[0]);
         //printSolution(root.child[2].child[0]);
