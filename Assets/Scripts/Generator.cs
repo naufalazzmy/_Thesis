@@ -269,7 +269,7 @@ public class Generator : MonoBehaviour
 
     }
 
-    private List<List<Bilangan>> getCombination(List<Bilangan> bilangan)
+    private List<List<Bilangan>> getCombination(List<Bilangan> bilangan) // fungsi ini buat ambil kombinasi 2 bilangan yang bisa di eksekusi
     {
         List<List<Bilangan>> sudah_list = new List<List<Bilangan>>();
 
@@ -299,9 +299,10 @@ public class Generator : MonoBehaviour
             }
         }
 
+
         //Debug.LogWarning("INI TOTALNYA: " + sudah_list.Count);
         // ini buat apaaaaa?
-        //for (int i = 0; i < sudah_list.Count-1; i++)
+        //for (int i = 0; i < sudah_list.Count - 1; i++)
         //{
         //    for (int j = 0; j < sudah_list.Count; j++)
         //    {
@@ -340,11 +341,16 @@ public class Generator : MonoBehaviour
         for(int i=0; i<combList.Count; i++)
         {
             List<Bilangan> bilanganlist = new List<Bilangan>(parentNode.listBilangan);
-            foreach (Bilangan current in combList[i]) //comblist[j] = (bilangan)(bilangan)
+            foreach (Bilangan current in combList[i]) //comblist[j] = (bilangan)(bilangan) || (+2)(-4)
             {
+                // cek setiap element di kombinasi apakah ada di listbilangan parent, kalo ada hapus
                 for(int j=0; j< bilanganlist.Count; j++) // KAMU CEK DISINI MASALAH NIH
                 {
-                    if ((current.bilangan == combList[j][0].bilangan && current.op == combList[j][0].op) || (current.bilangan == combList[j][1].bilangan && current.op == combList[j][1].op))
+                    //if ((current.bilangan == combList[j][0].bilangan && current.op == combList[j][0].op) || (current.bilangan == combList[j][1].bilangan && current.op == combList[j][1].op))
+                    //{
+                    //    bilanganlist.RemoveAt(j);
+                    //}
+                    if(current.bilangan == bilanganlist[j].bilangan && current.op == bilanganlist[j].op)
                     {
                         bilanganlist.RemoveAt(j);
                     }
@@ -481,10 +487,10 @@ public class Generator : MonoBehaviour
     private void Start()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
-        bilangan.Add(newBilangan("+9", "+"));
-        bilangan.Add(newBilangan("-3", "-"));
-        bilangan.Add(newBilangan("+8", "+"));
-        bilangan.Add(newBilangan("-2", "-"));
+        bilangan.Add(newBilangan("+3", "+"));
+        bilangan.Add(newBilangan("+3", "*"));
+        bilangan.Add(newBilangan("+4", "/"));
+        bilangan.Add(newBilangan("+5", "+"));
         Node root = newNode(bilangan, null, null);
 
         //List<Bilangan> bilangan = new List<Bilangan>();
@@ -494,12 +500,19 @@ public class Generator : MonoBehaviour
         //bilangan.Add(newBilangan("+11", "+"));
         //Node root = newNode(bilangan, null, null);
 
-        // getCombination(root.listBilangan);
+        //getCombination(root.listBilangan);
+        
         generateChildrenNodes(root);
-        Debug.Log("Total Child: "+root.child[0].child.Count); //ENTAH YA SAYA BINUNG ANJM DISINI!!
+        //Debug.Log("Total Child: "+root.child[0].child[0].child.Count); //ENTAH YA SAYA BINUNG ANJM DISINI!!
 
-        //generateTarget(root.child[2].child[0]);
-        //printSolution(root.child[2].child[0]);
+        //foreach (Bilangan bil in root.child[0].child[0].listBilangan)
+        //{
+        //    Debug.Log(bil.bilangan);
+        //}
+
+
+        generateTarget(root.child[2].child[2].child[0]);
+        printSolution(root.child[2].child[2].child[0]);
         StartCoroutine(instantiateforSec(bilangan, 0.7f));
 
     }
