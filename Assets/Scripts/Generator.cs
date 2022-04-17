@@ -16,6 +16,9 @@ public class Generator : MonoBehaviour
     [SerializeField]
     private GameManager gm;
 
+    public Text kuncijawaban;
+
+
 
     public Bilangan newBilangan(string bilangan, string op)
     {
@@ -476,9 +479,12 @@ public class Generator : MonoBehaviour
 
     public void printSolution(Node targetLeaf)
     {
-        Debug.Log(targetLeaf.sumber);
+
+       
+       // Debug.Log(targetLeaf.sumber);
         if (targetLeaf.parentNode != null)
         {
+            kuncijawaban.text += targetLeaf.sumber.ToString() + "\n";
             Node currNode = targetLeaf.parentNode;
             printSolution(currNode);
         }

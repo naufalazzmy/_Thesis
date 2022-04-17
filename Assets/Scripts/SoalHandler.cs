@@ -88,8 +88,19 @@ public class SoalHandler : MonoBehaviour
         Node root = gen.newNode(bilangan, null, null);
         gen.generateChildrenNodes(root);
 
-        Node targetNode = root;
+        generateTarget(root);
+        
+        
 
+
+
+        StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
+        getDifficulty();
+    }
+
+    public void generateTarget(Node root)
+    {
+        Node targetNode = root;
         int totalCombination = root.listBilangan.Count; // 4,3,2,1.
 
         // TODO MU: Sebaiknya km atur depth dan check apa bener semuanya ga contain root bilangan?
@@ -100,10 +111,13 @@ public class SoalHandler : MonoBehaviour
             targetNode = targetNode.child[targetchild];
         }
 
-        
+
         gen.generateTarget(targetNode);
         gen.printSolution(targetNode);
+    }
 
-        StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
+    public void getDifficulty()
+    {
+        Debug.Log("Difficulty: 3.33f");
     }
 }

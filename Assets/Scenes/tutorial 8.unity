@@ -11609,6 +11609,7 @@ MonoBehaviour:
   cam: {fileID: 519420031}
   confetti: {fileID: 605225923}
   tirai: {fileID: 723813646}
+  skipPromt: {fileID: 0}
   isComplete: 0
   nextSceneTarget: Menu
 --- !u!114 &942272062
@@ -11940,7 +11941,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Tutorial Selesai.
+  m_Text: 'Tutorial Selesai ;)
 
     Selamat bermain !'
 --- !u!222 &1165660300

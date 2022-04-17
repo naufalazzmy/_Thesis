@@ -18,10 +18,12 @@ public class GameManager : MonoBehaviour
 
     public GameObject confetti;
     public Animator tirai;
+    public Animator skipPromt;
     public bool isComplete = false;
     private bool conffectiplayed;
 
     public string nextSceneTarget;
+
 
     private void setSelectedTrue(GameObject sumber)
     {
@@ -176,6 +178,19 @@ public class GameManager : MonoBehaviour
         }
         totalbenar = 0;
         historyBilangan.Clear();
+    }
+
+    public void skipSoal()
+    {
+        tirai.SetTrigger("close");
+        skipPromt.SetTrigger("close");
+        StartCoroutine(nextScene(nextSceneTarget, 1f));
+    }
+
+    public void keluarGame()
+    {
+        tirai.SetTrigger("close");
+        StartCoroutine(nextScene("Menu", 1f));
     }
 
     IEnumerator nextScene(string sceneTarget, float time)
