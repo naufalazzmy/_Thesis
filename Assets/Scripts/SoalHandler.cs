@@ -9,39 +9,44 @@ public class SoalHandler : MonoBehaviour
     public int jumlahKali;
     public int jumlahBagi;
 
-    //private int jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
-    //private int jumlahOperand;
+    public float sumKali;
+
+    public int jumlahBlok;
+    public int jumlahOperand;
 
     private Generator gen;
     public List<float> ListBilangan;
     
     private void Start()
     {
+        jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
+        setJumlahOperand();
+
         gen = this.gameObject.GetComponent<Generator>();
-        //    setJumlahOperand();
+        
        // Debug.Log(gen);
         buatSoal();
     }
 
-    //private void setJumlahOperand()
-    //{
-    //    if(jumlahTambah > 0)
-    //    {
-    //        jumlahOperand++;
-    //    }
-    //    if (jumlahKurang > 0)
-    //    {
-    //        jumlahOperand++;
-    //    }
-    //    if (jumlahKali > 0)
-    //    {
-    //        jumlahOperand++;
-    //    }
-    //    if (jumlahBagi > 0)
-    //    {
-    //        jumlahOperand++;
-    //    }
-    //}
+    private void setJumlahOperand()
+    {
+        if (jumlahTambah > 0)
+        {
+            jumlahOperand++;
+        }
+        if (jumlahKurang > 0)
+        {
+            jumlahOperand++;
+        }
+        if (jumlahKali > 0)
+        {
+            jumlahOperand++;
+        }
+        if (jumlahBagi > 0)
+        {
+            jumlahOperand++;
+        }
+    }
 
     public void buatSoal()
     {
@@ -63,6 +68,7 @@ public class SoalHandler : MonoBehaviour
         {
             float randNum = Random.Range(1, 10); // disini randomnya
             int isPos = Random.Range(1, 2); // get ini positive apa negative wkwkw
+            sumKali += randNum;
             ListBilangan.Add(randNum);
             if (isPos == 1)
             {
@@ -127,10 +133,17 @@ public class SoalHandler : MonoBehaviour
             totalSum += c;
         }
 
-        float be = Mathf.Log10(totalSum) / ListBilangan.Count;
-        float es = 3 / 8;//searchdepth
-        float oh = 3 / 4;//operator
+        //float be = Mathf.Log10(totalSum) / ListBilangan.Count;
+        //float es = 3 / 8;//searchdepth
+        //float oh = 3 / 4;//operator
 
-        Debug.Log(be + es + oh);
+
+
+        float je = (Mathf.Log10(jumlahOperand) * totalSum) / jumlahBlok;
+        float ka = (jumlahKali/ jumlahBlok) * (sumKali/totalSum); //ini baru untuk kali saja
+        float detphSearch = 3 / 8;
+        Debug.Log((je + ka + detphSearch)/3); //KOK BISA SALAH COK?
+
+      //  Debug.Log(be + es + oh);
     }
 }
