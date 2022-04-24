@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -124,6 +125,17 @@ public class SoalHandler : MonoBehaviour
         gen.printSolution(targetNode);
     }
 
+    private int factorial(int a)
+    {
+        int fact = 1;
+        for(int x=1; x <= a; x++)
+        {
+            fact *= x;
+        }
+
+        return fact;
+    }
+
     public void getDifficulty()
     {
         float totalSum = 0;
@@ -133,16 +145,23 @@ public class SoalHandler : MonoBehaviour
             totalSum += c;
         }
 
+        float z1 = (factorial(ListBilangan.Count) / factorial(2) * factorial((ListBilangan.Count - 2)));
+        float z2 = ListBilangan.Count * totalSum / 72;
+        float maxi = ListBilangan.Max();
+        float mini = ListBilangan.Min();
+        float z3 = 1 - ((maxi - mini) / 9);
+
+
         //float be = Mathf.Log10(totalSum) / ListBilangan.Count;
         //float es = 3 / 8;//searchdepth
         //float oh = 3 / 4;//operator
 
 
 
-        float je = (Mathf.Log10(jumlahOperand) * totalSum) / jumlahBlok;
-        float ka = (jumlahKali/ jumlahBlok) * (sumKali/totalSum); //ini baru untuk kali saja
-        float detphSearch = 3 / 8;
-        Debug.Log((je + ka + detphSearch)/3); //KOK BISA SALAH COK?
+        //float je = (Mathf.Log10(jumlahOperand) * totalSum) / jumlahBlok;
+        //float ka = (jumlahKali/ jumlahBlok) * (sumKali/totalSum); //ini baru untuk kali saja
+        //float detphSearch = 3 / 8;
+        Debug.Log((z1+z2+z3)/3); //KOK BISA SALAH COK?
 
       //  Debug.Log(be + es + oh);
     }
