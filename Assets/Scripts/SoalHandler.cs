@@ -145,11 +145,12 @@ public class SoalHandler : MonoBehaviour
             totalSum += c;
         }
 
-        float z1 = (factorial(ListBilangan.Count) / factorial(2) * factorial((ListBilangan.Count - 2)));
-        float z2 = ListBilangan.Count * totalSum / 72;
+        float z1 = (factorial(jumlahBlok) / (factorial(2) * factorial((jumlahBlok - 2))));
+        float z2 = ListBilangan.Count * totalSum / 72f;
         float maxi = ListBilangan.Max();
         float mini = ListBilangan.Min();
-        float z3 = 1 - ((maxi - mini) / 9);
+        float z3 = 1 - ((maxi - mini) / 9f);
+        float z4 = jumlahOperand / 4f;
 
 
         //float be = Mathf.Log10(totalSum) / ListBilangan.Count;
@@ -161,7 +162,9 @@ public class SoalHandler : MonoBehaviour
         //float je = (Mathf.Log10(jumlahOperand) * totalSum) / jumlahBlok;
         //float ka = (jumlahKali/ jumlahBlok) * (sumKali/totalSum); //ini baru untuk kali saja
         //float detphSearch = 3 / 8;
-        Debug.Log((z1+z2+z3)/3); //KOK BISA SALAH COK?
+        
+        Debug.Log((z1/28)+"-"+z2+"-"+z3+"-"+z4);
+        Debug.Log(((z1/28)+z2+z3+z4)/4); //KOK BISA SALAH COK?
 
       //  Debug.Log(be + es + oh);
     }
