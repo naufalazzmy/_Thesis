@@ -15,8 +15,14 @@ public class SoalHandler : MonoBehaviour
     public int jumlahBlok;
     public int jumlahOperand;
 
-    private Generator gen;
+    
     public List<float> ListBilangan;
+
+
+
+    public float curDifficulty = 0f;
+
+    private Generator gen;
     
     private void Start()
     {
@@ -82,7 +88,7 @@ public class SoalHandler : MonoBehaviour
             }
             
         }
-        for (int i = 0; i < jumlahBagi; i++)
+        for (int i = 0; i < jumlahBagi; i++) // PEMBAGIAN INI TRICKY SEKALI, jadi 0.00002 bisa
         {
             float randNum = Random.Range(1, 10); // disini randomnya
             int isPos = Random.Range(1, 2); // get ini positive apa negative wkwkw
@@ -113,6 +119,10 @@ public class SoalHandler : MonoBehaviour
         int totalCombination = root.listBilangan.Count; // 4,3,2,1.
 
         // TODO MU: Sebaiknya km atur depth dan check apa bener semuanya ga contain root bilangan?
+        // dan check operatornya ga ada yang * di depan
+        // check kalo bisa targetnya ga ada komaan
+        // dan kayaknya depth itu berpengaruh si
+        
         for (int i = 0; i < totalCombination - 1; i++)
         {
 
@@ -123,6 +133,11 @@ public class SoalHandler : MonoBehaviour
 
         gen.generateTarget(targetNode);
         gen.printSolution(targetNode);
+    }
+
+    private float getCombination(int jumlahBlok)
+    {
+        return (factorial(jumlahBlok) / (factorial(2) * factorial((jumlahBlok - 2))));
     }
 
     private int factorial(int a)
@@ -144,28 +159,25 @@ public class SoalHandler : MonoBehaviour
         {
             totalSum += c;
         }
+        Debug.Log(totalSum);
+        Debug.Log(jumlahBlok);
 
-        float z1 = (factorial(jumlahBlok) / (factorial(2) * factorial((jumlahBlok - 2))));
-        float z2 = ListBilangan.Count * totalSum / 72f;
+        float z1 = getCombination(jumlahBlok)/28f;
+        float z2 = (jumlahBlok * totalSum) / 72f; // ini masih lebih dari 1
         float maxi = ListBilangan.Max();
         float mini = ListBilangan.Min();
         float z3 = 1 - ((maxi - mini) / 9f);
         float z4 = jumlahOperand / 4f;
 
-
-        //float be = Mathf.Log10(totalSum) / ListBilangan.Count;
-        //float es = 3 / 8;//searchdepth
-        //float oh = 3 / 4;//operator
-
-
-
-        //float je = (Mathf.Log10(jumlahOperand) * totalSum) / jumlahBlok;
-        //float ka = (jumlahKali/ jumlahBlok) * (sumKali/totalSum); //ini baru untuk kali saja
-        //float detphSearch = 3 / 8;
         
-        Debug.Log((z1/28)+"-"+z2+"-"+z3+"-"+z4);
-        Debug.Log(((z1/28)+z2+z3+z4)/4); //KOK BISA SALAH COK?
+        Debug.Log((z1)+"-"+z2+"-"+z3+"-"+z4);
+        Debug.Log(((z1)+z2+z3+z4)/4);
 
-      //  Debug.Log(be + es + oh);
+        curDifficulty = ((z1) + z2 + z3 + z4)/ 4;
+    }
+
+    public void getScore()
+    {
+        // sum bilangan * 10 + second waktu (sisa) + 500 per operator * jumlah depth <= kalo dia bener
     }
 }
