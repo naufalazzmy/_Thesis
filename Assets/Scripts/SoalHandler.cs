@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class SoalHandler : MonoBehaviour
 {
-    public int jumlahTambah;
-    public int jumlahKurang;
-    public int jumlahKali;
-    public int jumlahBagi;
 
     public float sumKali;
 
@@ -21,7 +17,13 @@ public class SoalHandler : MonoBehaviour
 
     private Generator gen;
 
-          
+    public int jumlahTambah;
+    public int jumlahKurang;
+    public int jumlahKali;
+    public int jumlahBagi;
+
+
+
     private void Start()
     {
         jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
@@ -29,13 +31,31 @@ public class SoalHandler : MonoBehaviour
 
         gen = this.gameObject.GetComponent<Generator>();
 
-        // Debug.Log(gen);
+        generateMainBlok();
         List<Bilangan> bilanganObj =  BuatSoal();
         float difficultyIndex = getDifficulty();
         Debug.Log(difficultyIndex);
         GenerateSoal(bilanganObj);
         // TODO: Check difficultynya
         // kalo bener yaudah generate soalnya
+    }
+
+    private void generateMainBlok()
+    {
+        jumlahBlok = Random.Range(3, 8);
+        // TODO: lanjutin ....
+
+        //check dulu jumlahblok dapet berapa,
+        // jumlah balok biasa harus setngah atau lebih daripada jumlah operator, contoh 3. balok 2 op 1| contoh 4 balok 3 op 1, atau balok 2 op 2
+
+        //ATAU MAX OP masing masing 1
+
+        // if 3 op max 1
+        // if 4 op max 2
+        // if op 6 max 3
+        // if op 8 max 4
+
+
     }
 
     private void setJumlahOperand()
