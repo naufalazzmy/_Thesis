@@ -27,14 +27,14 @@ public class SoalHandler : MonoBehaviour
     private void Start()
     {
         jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
-        setJumlahOperand();
+        
 
         gen = this.gameObject.GetComponent<Generator>();
 
         generateMainBlok();
+        
         List<Bilangan> bilanganObj =  BuatSoal();
         float difficultyIndex = getDifficulty();
-        Debug.Log(difficultyIndex);
         GenerateSoal(bilanganObj);
         // TODO: Check difficultynya
         // kalo bener yaudah generate soalnya
@@ -42,11 +42,102 @@ public class SoalHandler : MonoBehaviour
 
     private void generateMainBlok()
     {
-        jumlahBlok = Random.Range(3, 8);
+        jumlahBlok = Random.Range(3, 6);
+        Debug.Log("jumlah blok: " + jumlahBlok);
+        int maxOperatorCount;
         // TODO: lanjutin ....
 
-        //check dulu jumlahblok dapet berapa,
+        // check dulu jumlahblok dapet berapa,
         // jumlah balok biasa harus setngah atau lebih daripada jumlah operator, contoh 3. balok 2 op 1| contoh 4 balok 3 op 1, atau balok 2 op 2
+        if(jumlahBlok == 3)
+        {
+            maxOperatorCount = 1;
+            Debug.Log("jumlah operator: " + maxOperatorCount);
+            jumlahKali = maxOperatorCount;
+
+            jumlahTambah = 1;
+            jumlahKurang = 1;
+        }
+        else if(jumlahBlok == 4)
+        {
+            maxOperatorCount = Random.Range(1, 2);
+            Debug.Log("jumlah operator: " + maxOperatorCount);
+            jumlahKali = maxOperatorCount;
+
+            int jumlahblokkeluar = jumlahBlok - maxOperatorCount;
+            jumlahTambah = 1;
+            jumlahKurang = 1;
+            jumlahblokkeluar = jumlahblokkeluar - 2;
+            while (jumlahblokkeluar >= 1)
+            {
+                Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
+                int rand = Random.Range(1, 2);
+                if(rand == 1)
+                {
+                    jumlahTambah++;
+                    jumlahblokkeluar--;
+                }
+                else
+                {
+                    jumlahKurang++;
+                    jumlahblokkeluar--;
+                }
+            }
+        }
+        else if(jumlahBlok == 5 || jumlahBlok == 6)
+        {
+            maxOperatorCount = Random.Range(1, 3);
+            Debug.Log("jumlah operator: " + maxOperatorCount);
+            jumlahKali = maxOperatorCount;
+
+            int jumlahblokkeluar = jumlahBlok - maxOperatorCount;
+            jumlahTambah = 1;
+            jumlahKurang = 1;
+            jumlahblokkeluar = jumlahblokkeluar - 2;
+            while (jumlahblokkeluar >= 1)
+            {
+                Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
+                int rand = Random.Range(1, 2);
+                if (rand == 1)
+                {
+                    jumlahTambah++;
+                    jumlahblokkeluar--;
+                }
+                else
+                {
+                    jumlahKurang++;
+                    jumlahblokkeluar--;
+                }
+            }
+        }
+        else if(jumlahBlok == 7 || jumlahBlok == 8)
+        {
+            maxOperatorCount = Random.Range(1, 4);
+            Debug.Log("jumlah operator: " + maxOperatorCount);
+            jumlahKali = maxOperatorCount;
+
+            int jumlahblokkeluar = jumlahBlok - maxOperatorCount;
+            jumlahTambah = 1;
+            jumlahKurang = 1;
+            jumlahblokkeluar = jumlahblokkeluar - 2;
+            while (jumlahblokkeluar >= 1)
+            {
+                Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
+                int rand = Random.Range(1, 2);
+                if (rand == 1)
+                {
+                    jumlahTambah++;
+                    jumlahblokkeluar--;
+                }
+                else
+                {
+                    jumlahKurang++;
+                    jumlahblokkeluar--;
+                }
+            }
+        }
+
+        setJumlahOperand();
 
         //ATAU MAX OP masing masing 1
 
@@ -139,6 +230,7 @@ public class SoalHandler : MonoBehaviour
         // dan check operatornya ga ada yang * di depan
         // check kalo bisa targetnya ga ada komaan
         // dan kayaknya depth itu berpengaruh si
+        // todo, kalo pembagian, lihat nilai pembagiannya, blaklfdsjjoekjr ... salah
         
         for (int i = 0; i < totalCombination - 1; i++)
         {
@@ -182,18 +274,18 @@ public class SoalHandler : MonoBehaviour
         Debug.Log(jumlahBlok);
 
         float z1 = getCombination(jumlahBlok)/28f;
-        float z2 = (jumlahBlok * totalSum) / 72f; // ini masih lebih dari 1
+        float z2 = ((totalSum) / 72f) * 0.25f; // ini masih lebih dari 1
         float maxi = ListBilangan.Max();
         float mini = ListBilangan.Min();
-        float z3 = 1 - ((maxi - mini) / 9f);
-        float z4 = jumlahOperand / 4f;
+        float z3 = (1 - ((maxi - mini) / 9f)) * 0.2f; // range cari
+        float z4 = (jumlahOperand / 4f) * 0.35f;
 
 
         
         Debug.Log((z1)+"-"+z2+"-"+z3+"-"+z4);
-        Debug.Log(((z1)+z2+z3+z4)/4);
-
-        curDifficulty = ((z1) + z2 + z3 + z4)/ 4;
+        Debug.Log((z1+z2+z3+z4)/1.85f);
+        Debug.Log("----------------");
+        curDifficulty = (z1 + z2 + z3 + z4)/ 1.85f;
         return curDifficulty;
     }
 
