@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
     public Animator tirai;
+    public GameObject inputPanel;
+    public GameObject inputfield;
+    public GameLoger loger;
 
     IEnumerator nextScene(string sceneTarget, float time)
     {
@@ -23,5 +27,16 @@ public class Menu : MonoBehaviour
     {
         tirai.SetTrigger("close");
         StartCoroutine(nextScene("MainScene", 2f));
+    }
+
+    public void InitNama()
+    {
+        string nama;
+        nama = inputfield.GetComponent<Text>().text;
+        if(nama != null || nama != "")
+        {
+            loger.pemain = nama;
+            inputPanel.SetActive(false);
+        }
     }
 }

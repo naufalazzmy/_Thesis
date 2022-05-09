@@ -24,6 +24,22 @@ public class GameManager : MonoBehaviour
 
     public string nextSceneTarget;
 
+    private string waktuKerja;
+    private float startTime;
+
+    private int restartTimes;
+    private int undoTimes;
+
+    private GameLoger gl;
+    public DebugManager sendLog;
+
+    private void Start()
+    {
+        startTime = Time.time;
+        gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
+        sendLog = GameObject.Find("Debuger").GetComponent<DebugManager>();
+    }
+
 
     private void setSelectedTrue(GameObject sumber)
     {
@@ -145,6 +161,7 @@ public class GameManager : MonoBehaviour
 
     public void Undo()
     {
+        undoTimes++;
         List<GameObject> lastHistory = new List<GameObject>();
         lastHistory = historyBilangan[historyBilangan.Count - 1];
         lastHistory[0].SetActive(true);
@@ -160,6 +177,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        restartTimes++;
         foreach(List<GameObject> lastHistory in historyBilangan)
         {
             //List<GameObject> lastHistory = new List<GameObject>();
@@ -182,6 +200,18 @@ public class GameManager : MonoBehaviour
 
     public void skipSoal()
     {
+        sendLog.Log("INDEX: " + gl.indexSoal);
+        sendLog.Log("SCHEMA: " + gl.schema);
+        sendLog.Log("Z1: " + gl.z1);
+        sendLog.Log("Z2: " + gl.z2);
+        sendLog.Log("Z3: " + gl.z3);
+        sendLog.Log("Z4: " + gl.z4);
+        sendLog.Log("DIFF: " + gl.difficulty);
+        sendLog.Log("STATUS: SKIPPED");
+        sendLog.Log("TOTAL UNDO: "+restartTimes);
+        sendLog.Log("TOTAL RESTART: "+undoTimes);
+        sendLog.Log("WAKTU: " + waktuKerja + "\n");
+
         tirai.SetTrigger("close");
         skipPromt.SetTrigger("close");
         StartCoroutine(nextScene(nextSceneTarget, 1f));
@@ -213,14 +243,36 @@ public class GameManager : MonoBehaviour
             confetti.SetActive(true);
             if (!conffectiplayed)
             {
+                if(waktuKerja != null || waktuKerja != "" || waktuKerja != " ")
+                {
+                    sendLog.Log("INDEX: " + gl.indexSoal);
+                    sendLog.Log("SCHEMA: " + gl.schema);
+                    sendLog.Log("Z1: " + gl.z1);
+                    sendLog.Log("Z2: " + gl.z2);
+                    sendLog.Log("Z3: " + gl.z3);
+                    sendLog.Log("Z4: " + gl.z4);
+                    sendLog.Log("DIFF: " + gl.difficulty);
+                    sendLog.Log("STATUS: SUCCESS");
+                    sendLog.Log("TOTAL UNDO: " + restartTimes);
+                    sendLog.Log("TOTAL RESTART: " + undoTimes);
+                    sendLog.Log("WAKTU: " + waktuKerja + "\n");
+                }
+                
 
                 confetti.GetComponent<ParticleSystem>().Play();
                 conffectiplayed = true;
             }
+
+
+
             tirai.SetTrigger("close");
             StartCoroutine(nextScene(nextSceneTarget, 4f));
         }
-
+        else
+        {
+            float t = Time.time - startTime;
+            waktuKerja = t.ToString("f1");
+        }
 
         if (Input.GetMouseButtonDown(0))
         {

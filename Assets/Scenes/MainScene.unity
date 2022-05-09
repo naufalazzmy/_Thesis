@@ -400,7 +400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -84.99994, y: 0}
+  m_AnchoredPosition: {x: -84.99992, y: 0}
   m_SizeDelta: {x: -620.9637, y: 142.6864}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &73358413
@@ -5685,7 +5685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -222.99994, y: -111.34003}
+  m_AnchoredPosition: {x: -222.99992, y: -111.34003}
   m_SizeDelta: {x: -726.664, y: 222.4607}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &294362055
@@ -6378,15 +6378,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b2d14c569a6fc48ad02a067a040c97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumlahTambah: 2
-  jumlahKurang: 2
-  jumlahKali: 1
-  jumlahBagi: 0
   sumKali: 0
   jumlahBlok: 0
   jumlahOperand: 0
   ListBilangan: []
   curDifficulty: 0
+  jumlahTambah: 2
+  jumlahKurang: 2
+  jumlahKali: 1
+  jumlahBagi: 0
 --- !u!1 &656173497
 GameObject:
   m_ObjectHideFlags: 0
@@ -7351,6 +7351,7 @@ MonoBehaviour:
   skipPromt: {fileID: 58212582}
   isComplete: 0
   nextSceneTarget: MainScene
+  sendLog: {fileID: 0}
 --- !u!4 &1147808370
 Transform:
   m_ObjectHideFlags: 0
@@ -7492,7 +7493,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -239.99994, y: -154}
+  m_AnchoredPosition: {x: -239.99992, y: -154}
   m_SizeDelta: {x: -217.53912, y: 489.27295}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1164364377
@@ -8021,6 +8022,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1420637772}
   m_CullTransparentMesh: 1
+--- !u!1 &1452727263
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1452727265}
+  - component: {fileID: 1452727264}
+  m_Layer: 0
+  m_Name: Debuger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1452727264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452727263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae662aeb0db7dd748a3eda8dea746cb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filepath: 
+  gameLogerScript: {fileID: 0}
+--- !u!4 &1452727265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452727263}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.000002861023, y: 6.2932973, z: 100}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1457613966
 GameObject:
   m_ObjectHideFlags: 0
