@@ -226,181 +226,35 @@ public class SoalHandler : MonoBehaviour
         return bilangan;
     }
 
-    public void generateTarget(Node root)
+    public List<Node> getLastNodes(Node root, int desiredDeep, List<Node> nodes, int deep)
     {
-        Node targetNode = root;
-        int totalCombination = root.listBilangan.Count; // 4,3,2,1.
-
-        // TODO MU: Sebaiknya km atur depth dan check apa bener semuanya ga contain root bilangan?
-        // dan check operatornya ga ada yang * di depan
-        // check kalo bisa targetnya ga ada komaan
-        // dan kayaknya depth itu berpengaruh si
-        // todo, kalo pembagian, lihat nilai pembagiannya, blaklfdsjjoekjr ... salah
-
-        for (int i = 0; i < totalCombination - 1; i++)
+        desiredDeep -= 1;
+        foreach (var nd in root.child)
         {
-            int targetchild = Random.Range(0, targetNode.child.Count);
-            targetNode = targetNode.child[targetchild];
+            if (deep < desiredDeep && nd.child.Count > 0)
+            {
+                getLastNodes(nd, desiredDeep, nodes, deep + 1);
+            }
+            else
+            {
+                nodes.Add(nd);
+            }
         }
-        //if(jumlahBlok == 3)
-        //{
-        //    int tryCount = 0;
-        //    bool founded = false;
-        //    int targetchild = 0;
 
-        //    while(tryCount < 100)
-        //    {
-        //        Debug.LogError("Try count: " + tryCount);
-        //        // level 1
-        //        List<int> level1IndexList = new List<int>();
-        //        for (int i = 0; i < targetNode.child.Count; i++)
-        //        {
-        //            level1IndexList.Add(i);
-        //        }
-        //        ShuffleIndex(level1IndexList);
+        return nodes.Where(n => n.listBilangan.Any(b => b.op == "*" || b.op == "/") == false).ToList();
+    }
 
-        //        while (!founded)
-        //        {
-        //            targetchild = level1IndexList[0];
-        //            if (targetNode.child[targetchild] != null)
-        //            {
-        //                targetNode = targetNode.child[targetchild];
-        //                // level 2
-        //                List<int> level2IndexList = new List<int>();
-        //                for (int i = 0; i < targetNode.child.Count; i++)
-        //                {
-        //                    level2IndexList.Add(i);
-        //                }
-        //                ShuffleIndex(level2IndexList);
+    public Node generateTarget(Node root)
+    {
 
-        //                while (!founded)
-        //                {
-        //                    targetchild = level2IndexList[0];
-        //                    if (targetNode.child[targetchild] != null && notIncludeOp(targetNode.child[targetchild]))
-        //                    {
-        //                        targetNode = targetNode.child[targetchild];
-        //                        founded = true;
-        //                    }
-        //                    else
-        //                    {
-        //                        level2IndexList.RemoveAt(0);
-        //                        Debug.LogWarning("next target index..");
-        //                        if (level2IndexList.Count <= 0)
-        //                        {
-        //                            Debug.LogError("udah cape nemu di level ini ga ada");
-        //                            break;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            else
-        //            {
-        //                level1IndexList.RemoveAt(0);
-        //                if (level1IndexList.Count <= 0)
-        //                {
-        //                    Debug.LogError("udah cape nemu di level 1 ini ga ada");
-        //                    tryCount++;
-        //                    break;
-        //                }
-        //            }
-        //            //-------------iter
-        //        }
-        //    }
-        //}else if (jumlahBlok == 4){
-        //    Debug.LogError("eh 4");
-        //    bool founded = false;
-        //    int targetchild = 0;
+        var lastNodes = getLastNodes(root, 1, new List<Node>(), 0);
 
-        //    // level 1
-        //    List<int> level1IndexList = new List<int>();
-        //    for (int i = 0; i < targetNode.child.Count; i++)
-        //    {
-        //        level1IndexList.Add(i);
-        //    }
-        //    ShuffleIndex(level1IndexList);
+        int rnd = Random.Range(0, lastNodes.Count);
+        var targetNode = lastNodes[rnd];
 
-        //    while (!founded)
-        //    {
-        //        if(level1IndexList.Count <= 0)
-        //        {
-        //            targetchild = level1IndexList[0];
-        //            if (targetNode.child[targetchild] != null)
-        //            {
-        //                targetNode = targetNode.child[targetchild];
-        //                // level 2
-        //                List<int> level2IndexList = new List<int>();
-        //                for (int i = 0; i < targetNode.child.Count; i++)
-        //                {
-        //                    level2IndexList.Add(i);
-        //                }
-        //                ShuffleIndex(level2IndexList);
-
-        //                while (!founded)
-        //                {
-        //                    targetchild = level2IndexList[0];
-        //                    if (targetNode.child[targetchild] != null)
-        //                    {
-        //                        targetNode = targetNode.child[targetchild];
-
-        //                        List<int> level3IndexList = new List<int>();
-        //                        for (int i = 0; i < targetNode.child.Count; i++)
-        //                        {
-        //                            level3IndexList.Add(i);
-        //                        }
-        //                        ShuffleIndex(level3IndexList);
-
-        //                        while (!founded)
-        //                        {
-        //                            targetchild = level3IndexList[0];
-        //                            if (targetNode.child[targetchild] != null && notIncludeOp(targetNode.child[targetchild]))
-        //                            {
-        //                                targetNode = targetNode.child[targetchild];
-        //                                founded = true;
-        //                            }
-        //                            else
-        //                            {
-        //                                level3IndexList.RemoveAt(0);
-        //                                Debug.LogWarning("next target index..");
-        //                                if (level3IndexList.Count <= 0)
-        //                                {
-        //                                    level2IndexList.RemoveAt(0);
-        //                                    Debug.LogError("udah cape nemu di level ini ga ada");
-        //                                    break;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        level2IndexList.RemoveAt(0);
-        //                        Debug.LogWarning("next target index..");
-        //                        if (level2IndexList.Count <= 0)
-        //                        {
-        //                            level1IndexList.RemoveAt(0);
-        //                            Debug.LogError("udah cape nemu di level ini ga ada");
-        //                            break;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            else
-        //            {
-        //                level1IndexList.RemoveAt(0);
-        //            }
-        //            //-------------iter
-        //        }
-        //        else
-        //        {
-        //            Debug.LogError("CAPEK 4");
-        //            break;
-        //        }
-
-        //    }
-        //}
+        return targetNode;
 
 
-        gen.generateTarget(targetNode);
-        gen.printSolution(targetNode);
 
 
     }
@@ -500,8 +354,11 @@ public class SoalHandler : MonoBehaviour
         Node root = gen.newNode(bilangan, null, null);
         gen.generateChildrenNodes(root);
 
-        generateTarget(root);
-        
+        Node target = generateTarget(root);
+
+        gen.generateTarget(target);
+        gen.printSolution(target);
+
         StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
     }
 
