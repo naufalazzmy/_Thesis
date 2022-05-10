@@ -46,8 +46,8 @@ public class SoalHandler : MonoBehaviour
                 List<Bilangan> bilanganObj = BuatSoal();
                 float difficultyIndex = getDifficulty();
 
-                float minTreshold = gl.prevSuccessDifficulty + 0.015f; //0.515 
-                float maxTreshold = gl.prevSuccessDifficulty + 0.1f; // 0.6
+                float minTreshold = gl.prevDifficulty + 0.015f; //0.515 
+                float maxTreshold = gl.prevDifficulty + 0.1f; // 0.6
 
                 if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold)
                 {
@@ -72,8 +72,8 @@ public class SoalHandler : MonoBehaviour
                 List<Bilangan> bilanganObj = BuatSoal();
                 float difficultyIndex = getDifficulty();
 
-                float minTreshold = gl.prevSuccessDifficulty - 0.015f; //0.447 
-                float maxTreshold = gl.prevSuccessDifficulty - 0.1f; // 0.362  -   0.462
+                float minTreshold = gl.prevDifficulty - 0.015f; //0.447 
+                float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462
 
                 if (difficultyIndex <= minTreshold && difficultyIndex >= maxTreshold)
                 {
@@ -116,14 +116,17 @@ public class SoalHandler : MonoBehaviour
         //    Debug.Log("Init jumlah balok?");
         //    jumlahBlok = Random.Range(3, 6);
         //}
-        if(gl.prevSuccessDifficulty < 0.46f)
+        if(gl.prevDifficulty < 0.46f)
         {
+            Debug.LogWarning("3 blok");
             jumlahBlok = 3;
-        }else if(gl.prevSuccessDifficulty >= 0.46f && gl.prevSuccessDifficulty <= 0.65f)
+        }else if(gl.prevDifficulty >= 0.46f && gl.prevDifficulty <= 0.65f)
         {
+            Debug.LogWarning("4 blok");
             jumlahBlok = 4;
-        }else if(gl.prevSuccessDifficulty > 0.65f)
+        }else if(gl.prevDifficulty > 0.65f)
         {
+            Debug.LogWarning("5 blok");
             jumlahBlok = 5;
         }
         
@@ -308,66 +311,68 @@ public class SoalHandler : MonoBehaviour
     public List<Bilangan> BuatSoal()
     {
         List<Bilangan> bilangan = new List<Bilangan>();
-       
-        bool founded = false;
-        int cobaCount = 0;
-        if(gl.prevSum == 0)
-        {
-            bilangan = generateSoalBilangan(bilangan);
-            return bilangan;
-        }
-        else if(gl.prevStatus == "SUCCESS")
-        {
-            while (!founded)
-            {
-                cobaCount++;
-                
+        bilangan = generateSoalBilangan(bilangan);
+        //return bilangan;
 
-                bilangan = generateSoalBilangan(bilangan);
+        //bool founded = false;
+        //int cobaCount = 0;
+        //if(gl.prevSum == 0)
+        //{
+        //    bilangan = generateSoalBilangan(bilangan);
+        //    return bilangan;
+        //}
+        //else if(gl.prevStatus == "SUCCESS")
+        //{
+        //    while (!founded)
+        //    {
+        //        cobaCount++;
 
-                float bilSum = 0;
-                foreach (float bil in ListBilangan)
-                {
-                    bilSum = bilSum + bil;
-                }
 
-                if (bilSum >= gl.prevSum && bilSum <= gl.prevSum * 2)
-                {
-                    return bilangan;
-                }
-                else if (cobaCount >= 1000)
-                {
-                    Debug.LogWarning("CAPEK SUM");
-                    return bilangan;
-                }
-            }
+        //        bilangan = generateSoalBilangan(bilangan);
 
-        }
-        else if(gl.prevStatus == "SKIPPED")
-        {
-            while (!founded)
-            {
-                cobaCount++;
-                float bilSum = 0;
+        //        float bilSum = 0;
+        //        foreach (float bil in ListBilangan)
+        //        {
+        //            bilSum = bilSum + bil;
+        //        }
 
-                bilangan = generateSoalBilangan(bilangan);
+        //        if (bilSum >= gl.prevSum && bilSum <= gl.prevSum * 2)
+        //        {
+        //            return bilangan;
+        //        }
+        //        else if (cobaCount >= 1000)
+        //        {
+        //            Debug.LogWarning("CAPEK SUM");
+        //            return bilangan;
+        //        }
+        //    }
 
-                foreach (float bil in ListBilangan)
-                {
-                    bilSum = bilSum + bil;
-                }
+        //}
+        //else if(gl.prevStatus == "SKIPPED")
+        //{
+        //    while (!founded)
+        //    {
+        //        cobaCount++;
+        //        float bilSum = 0;
 
-                if (bilSum <= gl.prevSum)
-                { 
-                    return bilangan;
-                }
-                else if (cobaCount >= 1000)
-                {
-                    Debug.LogWarning("CAPEK SUM");
-                    return bilangan;
-                }
-            }
-        }
+        //        bilangan = generateSoalBilangan(bilangan);
+
+        //        foreach (float bil in ListBilangan)
+        //        {
+        //            bilSum = bilSum + bil;
+        //        }
+
+        //        if (bilSum <= gl.prevSum)
+        //        { 
+        //            return bilangan;
+        //        }
+        //        else if (cobaCount >= 1000)
+        //        {
+        //            Debug.LogWarning("CAPEK SUM");
+        //            return bilangan;
+        //        }
+        //    }
+        //}
 
         return bilangan;
 
