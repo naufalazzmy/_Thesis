@@ -565,7 +565,7 @@ public class SoalHandler : MonoBehaviour
         Node target = generateTarget(root);
 
         gen.generateTarget(target);
-        gen.printSolution(target);
+        //gen.printSolution(target);
 
         StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
     }

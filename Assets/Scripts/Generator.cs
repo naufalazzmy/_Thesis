@@ -477,18 +477,18 @@ public class Generator : MonoBehaviour
     }
 
 
-    public void printSolution(Node targetLeaf)
-    {
+    //public void printSolution(Node targetLeaf)
+    //{
 
        
-       // Debug.Log(targetLeaf.sumber);
-        if (targetLeaf.parentNode != null)
-        {
-            kuncijawaban.text += targetLeaf.sumber.ToString() + "\n";
-            Node currNode = targetLeaf.parentNode;
-            printSolution(currNode);
-        }
-    }
+    //   // Debug.Log(targetLeaf.sumber);
+    //    if (targetLeaf.parentNode != null)
+    //    {
+    //        kuncijawaban.text += targetLeaf.sumber.ToString() + "\n";
+    //        Node currNode = targetLeaf.parentNode;
+    //        printSolution(currNode);
+    //    }
+    //}
 
     private void Start()
     {
