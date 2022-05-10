@@ -72,8 +72,8 @@ public class SoalHandler : MonoBehaviour
                 List<Bilangan> bilanganObj = BuatSoal();
                 float difficultyIndex = getDifficulty();
 
-                float minTreshold = gl.prevDifficulty - 0.015f; //0.447 
-                float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462
+                float minTreshold = gl.prevDifficulty - 0.015f; //0.447 || 0.015
+                float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462 || 0.1
 
                 if (difficultyIndex <= minTreshold && difficultyIndex >= maxTreshold)
                 {
@@ -116,13 +116,13 @@ public class SoalHandler : MonoBehaviour
             Debug.Log("Init jumlah balok?");
             jumlahBlok = Random.Range(3, 6);
         }
-        else if(gl.prevDifficulty < 0.46f)
+        else if(gl.prevDifficulty < 0.56f) //46
         {
             jumlahBlok = 3;
-        }else if(gl.prevDifficulty >= 0.46f && gl.prevDifficulty <= 0.65f)
+        }else if(gl.prevDifficulty >= 0.56f && gl.prevDifficulty <= 0.75f) //0.46 - 0.65
         {
             jumlahBlok = 4;
-        }else if(gl.prevDifficulty > 0.65f)
+        }else if(gl.prevDifficulty > 0.75f) //0.65
         {
             jumlahBlok = 5;
         }
@@ -270,19 +270,19 @@ public class SoalHandler : MonoBehaviour
         ListBilangan.Clear();
         for (int i = 0; i < jumlahTambah; i++)
         {
-            float randNum = Random.Range(1, 20); // disini randomnya TODO mu
+            float randNum = Random.Range(1, 10); // disini randomnya TODO mu
             bilangan.Add(gen.newBilangan("+" + randNum.ToString(), "+"));
             ListBilangan.Add(randNum);
         }
         for (int i = 0; i < jumlahKurang; i++)
         {
-            float randNum = Random.Range(1, 20); // disini randomnya
+            float randNum = Random.Range(1, 10); // disini randomnya
             bilangan.Add(gen.newBilangan("-" + randNum.ToString(), "-"));
             ListBilangan.Add(randNum);
         }
         for (int i = 0; i < jumlahKali; i++)
         {
-            float randNum = Random.Range(1, 20); // disini randomnya
+            float randNum = Random.Range(1, 10); // disini randomnya
             int isPos = Random.Range(1, 3); // get ini positive apa negative wkwkw
             sumKali += randNum;
             ListBilangan.Add(randNum);
@@ -298,7 +298,7 @@ public class SoalHandler : MonoBehaviour
         }
         for (int i = 0; i < jumlahBagi; i++) // PEMBAGIAN INI TRICKY SEKALI, jadi 0.00002 bisa
         {
-            float randNum = Random.Range(1, 20); // disini randomnya
+            float randNum = Random.Range(1, 10); // disini randomnya
             int isPos = Random.Range(1, 3); // get ini positive apa negative wkwkw
             ListBilangan.Add(randNum);
             if (isPos == 1)
@@ -523,12 +523,14 @@ public class SoalHandler : MonoBehaviour
         }
         //Debug.Log(totalSum);
         //Debug.Log(jumlahBlok);
+        
+        // last weight(20) = z4[0.3] z3 [0.2] z1,z2 [1]
 
          z1 = getCombination(jumlahBlok) / 10; // 10=>5 | 28 => 8
-         z2 = ((totalSum) / 100f) * 1f; // ini masih lebih dari 1 |72=>8|45=>5(9max)
+         z2 = ((totalSum) / 45f) * 1f; // ini masih lebih dari 1 |72=>8|45=>5(9max)
         float maxi = ListBilangan.Max();
         float mini = ListBilangan.Min();
-         z3 = (1 - ((maxi - mini) / 20f)) * 0.2f; // range cari INI KOK BISA MINUS BGST [pembaginya itu maximal dari nilai 1 balok yang bisa dihasilkan]
+         z3 = (1 - ((maxi - mini) / 9f)) * 0.5f; // range cari INI KOK BISA MINUS BGST [pembaginya itu maximal dari nilai 1 balok yang bisa dihasilkan]
          z4 = (jumlahOperand / 4f) * 0.3f;
 
 
@@ -536,7 +538,7 @@ public class SoalHandler : MonoBehaviour
         //Debug.Log((z1) + "-" + z2 + "-" + z3 + "-" + z4); //z1, z4, z2, z3
         //Debug.Log((z1 + z2 + z3 + z4) / 2.5f);
         //Debug.Log("----------------");
-        curDifficulty = (z1 + z2 + z3 + z4) / 2.5f;
+        curDifficulty = (z1 + z2 + z3 + z4) / 2.8f;
 
 
         gl.z1 = z1;
