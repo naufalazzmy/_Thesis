@@ -212,6 +212,10 @@ public class GameManager : MonoBehaviour
         sendLog.Log("TOTAL RESTART: "+undoTimes);
         sendLog.Log("WAKTU: " + waktuKerja + "\n");
 
+        gl.prevDifficulty = gl.difficulty;
+        gl.prevSum = gl.currentSum;
+        gl.prevStatus = "SKIPPED";
+
         tirai.SetTrigger("close");
         skipPromt.SetTrigger("close");
         StartCoroutine(nextScene(nextSceneTarget, 1f));
@@ -256,6 +260,11 @@ public class GameManager : MonoBehaviour
                     sendLog.Log("TOTAL UNDO: " + restartTimes);
                     sendLog.Log("TOTAL RESTART: " + undoTimes);
                     sendLog.Log("WAKTU: " + waktuKerja + "\n");
+
+                    gl.prevSuccessDifficulty = gl.difficulty;
+                    gl.prevDifficulty = gl.difficulty;
+                    gl.prevSum = gl.currentSum;
+                    gl.prevStatus = "SUCCESS";
                 }
                 
 

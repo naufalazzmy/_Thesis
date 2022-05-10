@@ -30,25 +30,104 @@ public class SoalHandler : MonoBehaviour
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         gl.indexSoal = gl.indexSoal + 1; // init index soal
 
-
         jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
-        
 
         gen = this.gameObject.GetComponent<Generator>();
 
-        generateMainBlok();
+        bool founded = false;
+        int cobaCount = 0;
 
-        List<Bilangan> bilanganObj = BuatSoal();
-        float difficultyIndex = getDifficulty();
-        GenerateSoal(bilanganObj);
+        if (gl.prevStatus == "SUCCESS")
+        {
+            while (!founded)
+            {
+                cobaCount++;
+                generateMainBlok();
+                List<Bilangan> bilanganObj = BuatSoal();
+                float difficultyIndex = getDifficulty();
+
+                float minTreshold = gl.prevSuccessDifficulty + 0.015f; //0.515 
+                float maxTreshold = gl.prevSuccessDifficulty + 0.1f; // 0.6
+
+                if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold)
+                {
+                    Debug.Log("COBA COUNT: " + cobaCount);
+                    GenerateSoal(bilanganObj);
+                    founded = true;
+                }
+                else if (cobaCount >= 1000)
+                {
+                    GenerateSoal(bilanganObj);
+                    Debug.LogWarning("CAPEK NYARI SUMPAH");
+                    break;
+                }
+            }
+        }
+        else if(gl.prevStatus == "SKIPPED")
+        {
+            while (!founded)
+            {
+                cobaCount++;
+                generateMainBlok();
+                List<Bilangan> bilanganObj = BuatSoal();
+                float difficultyIndex = getDifficulty();
+
+                float minTreshold = gl.prevSuccessDifficulty - 0.015f; //0.447 
+                float maxTreshold = gl.prevSuccessDifficulty - 0.1f; // 0.362  -   0.462
+
+                if (difficultyIndex <= minTreshold && difficultyIndex >= maxTreshold)
+                {
+                    Debug.Log("COBA COUNT: " + cobaCount);
+                    GenerateSoal(bilanganObj);
+                    founded = true;
+                }
+                else if (cobaCount >= 1000)
+                {
+                    GenerateSoal(bilanganObj);
+                    Debug.LogWarning("CAPEK NYARI SUMPAH");
+                    break;
+                }
+            }
+        }
+        else
+        {
+            //Debug.LogWarning("INIT START?");
+
+            generateMainBlok();
+            List<Bilangan> bilanganObj = BuatSoal();
+            float difficultyIndex = getDifficulty();
+            GenerateSoal(bilanganObj);
+        }
+
+        //generateMainBlok();
+        //List<Bilangan> bilanganObj = BuatSoal();
+        //float difficultyIndex = getDifficulty();
+
+
+        //GenerateSoal(bilanganObj);
         // TODO: Check difficultynya
         // kalo bener yaudah generate soalnya
     }
 
     private void generateMainBlok()
     {
-        jumlahBlok = Random.Range(3, 5);
-       // Debug.Log("jumlah blok: " + jumlahBlok);
+        //if (gl.prevSuccessDifficulty == 0f)
+        //{
+        //    Debug.Log("Init jumlah balok?");
+        //    jumlahBlok = Random.Range(3, 6);
+        //}
+        if(gl.prevSuccessDifficulty < 0.46f)
+        {
+            jumlahBlok = 3;
+        }else if(gl.prevSuccessDifficulty >= 0.46f && gl.prevSuccessDifficulty <= 0.65f)
+        {
+            jumlahBlok = 4;
+        }else if(gl.prevSuccessDifficulty > 0.65f)
+        {
+            jumlahBlok = 5;
+        }
+        
+        //Debug.Log("jumlah blok: " + jumlahBlok);
         int maxOperatorCount;
         // TODO: lanjutin ....
 
@@ -92,7 +171,7 @@ public class SoalHandler : MonoBehaviour
         else if(jumlahBlok == 5 || jumlahBlok == 6)
         {
             maxOperatorCount = Random.Range(1, 3);
-            Debug.Log("jumlah operator: " + maxOperatorCount);
+           // Debug.Log("jumlah operator: " + maxOperatorCount);
             jumlahKali = maxOperatorCount;
 
             int jumlahblokkeluar = jumlahBlok - maxOperatorCount;
@@ -101,7 +180,7 @@ public class SoalHandler : MonoBehaviour
             jumlahblokkeluar = jumlahblokkeluar - 2;
             while (jumlahblokkeluar >= 1)
             {
-                Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
+                //Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
                 int rand = Random.Range(1, 2);
                 if (rand == 1)
                 {
@@ -118,7 +197,7 @@ public class SoalHandler : MonoBehaviour
         else if(jumlahBlok == 7 || jumlahBlok == 8)
         {
             maxOperatorCount = Random.Range(1, 4);
-            Debug.Log("jumlah operator: " + maxOperatorCount);
+            //Debug.Log("jumlah operator: " + maxOperatorCount);
             jumlahKali = maxOperatorCount;
 
             int jumlahblokkeluar = jumlahBlok - maxOperatorCount;
@@ -127,7 +206,7 @@ public class SoalHandler : MonoBehaviour
             jumlahblokkeluar = jumlahblokkeluar - 2;
             while (jumlahblokkeluar >= 1)
             {
-                Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
+               // Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
                 int rand = Random.Range(1, 2);
                 if (rand == 1)
                 {
@@ -156,6 +235,7 @@ public class SoalHandler : MonoBehaviour
 
     private void setJumlahOperand()
     {
+        jumlahOperand = 0;
         if (jumlahTambah > 0)
         {
             jumlahOperand++;
@@ -174,10 +254,9 @@ public class SoalHandler : MonoBehaviour
         }
     }
 
-    public List<Bilangan> BuatSoal()
+    private List<Bilangan> generateSoalBilangan(List<Bilangan> bilangan)
     {
-        List<Bilangan> bilangan = new List<Bilangan>();
-
+        ListBilangan.Clear();
         for (int i = 0; i < jumlahTambah; i++)
         {
             float randNum = Random.Range(1, 20); // disini randomnya TODO mu
@@ -226,6 +305,120 @@ public class SoalHandler : MonoBehaviour
         return bilangan;
     }
 
+    public List<Bilangan> BuatSoal()
+    {
+        List<Bilangan> bilangan = new List<Bilangan>();
+       
+        bool founded = false;
+        int cobaCount = 0;
+        if(gl.prevSum == 0)
+        {
+            bilangan = generateSoalBilangan(bilangan);
+            return bilangan;
+        }
+        else if(gl.prevStatus == "SUCCESS")
+        {
+            while (!founded)
+            {
+                cobaCount++;
+                
+
+                bilangan = generateSoalBilangan(bilangan);
+
+                float bilSum = 0;
+                foreach (float bil in ListBilangan)
+                {
+                    bilSum = bilSum + bil;
+                }
+
+                if (bilSum >= gl.prevSum && bilSum <= gl.prevSum * 2)
+                {
+                    return bilangan;
+                }
+                else if (cobaCount >= 1000)
+                {
+                    Debug.LogWarning("CAPEK SUM");
+                    return bilangan;
+                }
+            }
+
+        }
+        else if(gl.prevStatus == "SKIPPED")
+        {
+            while (!founded)
+            {
+                cobaCount++;
+                float bilSum = 0;
+
+                bilangan = generateSoalBilangan(bilangan);
+
+                foreach (float bil in ListBilangan)
+                {
+                    bilSum = bilSum + bil;
+                }
+
+                if (bilSum <= gl.prevSum)
+                { 
+                    return bilangan;
+                }
+                else if (cobaCount >= 1000)
+                {
+                    Debug.LogWarning("CAPEK SUM");
+                    return bilangan;
+                }
+            }
+        }
+
+        return bilangan;
+
+        //for (int i = 0; i < jumlahTambah; i++)
+        //{
+        //    float randNum = Random.Range(1, 20); // disini randomnya TODO mu
+        //    bilangan.Add(gen.newBilangan("+" + randNum.ToString(), "+"));
+        //    ListBilangan.Add(randNum);
+        //}
+        //for (int i = 0; i < jumlahKurang; i++)
+        //{
+        //    float randNum = Random.Range(1, 20); // disini randomnya
+        //    bilangan.Add(gen.newBilangan("-" + randNum.ToString(), "-"));
+        //    ListBilangan.Add(randNum);
+        //}
+        //for (int i = 0; i < jumlahKali; i++)
+        //{
+        //    float randNum = Random.Range(1, 20); // disini randomnya
+        //    int isPos = Random.Range(1, 2); // get ini positive apa negative wkwkw
+        //    sumKali += randNum;
+        //    ListBilangan.Add(randNum);
+        //    if (isPos == 1)
+        //    {
+        //        bilangan.Add(gen.newBilangan("+" + randNum.ToString(), "*"));
+
+        //    }
+        //    else
+        //    {
+        //        bilangan.Add(gen.newBilangan("-" + randNum.ToString(), "*"));
+        //    }
+
+        //}
+        //for (int i = 0; i < jumlahBagi; i++) // PEMBAGIAN INI TRICKY SEKALI, jadi 0.00002 bisa
+        //{
+        //    float randNum = Random.Range(1, 20); // disini randomnya
+        //    int isPos = Random.Range(1, 2); // get ini positive apa negative wkwkw
+        //    ListBilangan.Add(randNum);
+        //    if (isPos == 1)
+        //    {
+        //        bilangan.Add(gen.newBilangan("+" + randNum.ToString(), "/"));
+        //    }
+        //    else
+        //    {
+        //        bilangan.Add(gen.newBilangan("-" + randNum.ToString(), "/"));
+        //    }
+
+        //}
+
+        //return bilangan;
+    }
+
     public List<Node> getLastNodes(Node root, int desiredDeep, List<Node> nodes, int deep)
     {
         desiredDeep -= 1;
@@ -247,16 +440,12 @@ public class SoalHandler : MonoBehaviour
     public Node generateTarget(Node root)
     {
 
-        var lastNodes = getLastNodes(root, 1, new List<Node>(), 0);
+        var lastNodes = getLastNodes(root, jumlahBlok, new List<Node>(), 0); // jumlah balok itu total depth yang bakal dicari
 
         int rnd = Random.Range(0, lastNodes.Count);
         var targetNode = lastNodes[rnd];
 
         return targetNode;
-
-
-
-
     }
 
     private bool notIncludeOp(Node node)
@@ -310,6 +499,10 @@ public class SoalHandler : MonoBehaviour
 
     private float getDifficulty()
     {
+        float z1 = 0;
+        float z2 = 0;
+        float z3 = 0;
+        float z4 = 0;
         float totalSum = 0;
 
         foreach (float c in ListBilangan)
@@ -319,29 +512,32 @@ public class SoalHandler : MonoBehaviour
         //Debug.Log(totalSum);
         //Debug.Log(jumlahBlok);
 
-        float z1 = getCombination(jumlahBlok)/10; // 10=>5 | 28 => 8
-        float z2 = ((totalSum) / 100f) * 0.40f; // ini masih lebih dari 1 |72=>8|45=>5(9max)
+         z1 = getCombination(jumlahBlok) / 10; // 10=>5 | 28 => 8
+         z2 = ((totalSum) / 100f) * 1f; // ini masih lebih dari 1 |72=>8|45=>5(9max)
         float maxi = ListBilangan.Max();
         float mini = ListBilangan.Min();
-        float z3 = (1 - ((maxi - mini) / 9f)) * 0.30f; // range cari INI KOK BISA MINUS BGST
-        float z4 = (jumlahOperand / 4f) * 0.45f;
+         z3 = (1 - ((maxi - mini) / 20f)) * 0.2f; // range cari INI KOK BISA MINUS BGST [pembaginya itu maximal dari nilai 1 balok yang bisa dihasilkan]
+         z4 = (jumlahOperand / 4f) * 0.3f;
 
 
-        
-        Debug.Log((z1)+"-"+z2+"-"+z3+"-"+z4); //z1, z4, z2, z3
-        Debug.Log((z1+z2+z3+z4)/1.85f);
-        Debug.Log("----------------");
-        curDifficulty = (z1 + z2 + z3 + z4)/ 2.15f;
+
+        //Debug.Log((z1) + "-" + z2 + "-" + z3 + "-" + z4); //z1, z4, z2, z3
+        //Debug.Log((z1 + z2 + z3 + z4) / 2.5f);
+        //Debug.Log("----------------");
+        curDifficulty = (z1 + z2 + z3 + z4) / 2.5f;
+
 
         gl.z1 = z1;
         gl.z2 = z2;
         gl.z3 = z3;
         gl.z4 = z4;
+        gl.currentSum = totalSum;
         gl.difficulty = curDifficulty; // LOG
 
 
         return curDifficulty;
     }
+
 
     public void getScore()
     {

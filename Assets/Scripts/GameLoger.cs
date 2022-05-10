@@ -16,6 +16,12 @@ public class GameLoger : MonoBehaviour
     public float difficulty;
     public string status;
 
+    public float prevDifficulty;
+    public float prevSuccessDifficulty;
+    public string prevStatus;
+    public float currentSum;
+    public float prevSum;
+
     void Start()
     {
         if (instance != null)

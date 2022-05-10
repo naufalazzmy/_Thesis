@@ -32,7 +32,7 @@ public class DebugManager : MonoBehaviour
     {
         try
         {
-            filepath = Application.persistentDataPath + Path.DirectorySeparatorChar + gameLogerScript.pemain + "-Log.txt";
+            filepath = Application.persistentDataPath + Path.DirectorySeparatorChar + gameLogerScript.pemain + "-[UJIAN].txt";
 
             Log("attempting writing log file: " + filepath);
 
@@ -55,6 +55,6 @@ public class DebugManager : MonoBehaviour
             sw.Close();
         }
 
-        Debug.Log(message);
+        //Debug.Log(message);
     }
 }
