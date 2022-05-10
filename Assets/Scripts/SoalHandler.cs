@@ -111,22 +111,19 @@ public class SoalHandler : MonoBehaviour
 
     private void generateMainBlok()
     {
-        //if (gl.prevSuccessDifficulty == 0f)
-        //{
-        //    Debug.Log("Init jumlah balok?");
-        //    jumlahBlok = Random.Range(3, 6);
-        //}
-        if(gl.prevDifficulty < 0.46f)
+        if (gl.prevDifficulty == 0f)
         {
-            Debug.LogWarning("3 blok");
+            Debug.Log("Init jumlah balok?");
+            jumlahBlok = Random.Range(3, 6);
+        }
+        else if(gl.prevDifficulty < 0.46f)
+        {
             jumlahBlok = 3;
         }else if(gl.prevDifficulty >= 0.46f && gl.prevDifficulty <= 0.65f)
         {
-            Debug.LogWarning("4 blok");
             jumlahBlok = 4;
         }else if(gl.prevDifficulty > 0.65f)
         {
-            Debug.LogWarning("5 blok");
             jumlahBlok = 5;
         }
         
@@ -138,12 +135,23 @@ public class SoalHandler : MonoBehaviour
         // jumlah balok biasa harus setngah atau lebih daripada jumlah operator, contoh 3. balok 2 op 1| contoh 4 balok 3 op 1, atau balok 2 op 2
         if(jumlahBlok == 3)
         {
-            maxOperatorCount = 1;
+            if(gl.prevDifficulty <= 0.3)
+            {
+                maxOperatorCount = 0;
+                jumlahTambah = 2;
+                jumlahKurang = 1;
+            }
+            else
+            {
+                maxOperatorCount = 1;
+                jumlahTambah = 1;
+                jumlahKurang = 1;
+            }
+            
             //Debug.Log("jumlah operator: " + maxOperatorCount);
             jumlahKali = maxOperatorCount;
 
-            jumlahTambah = 1;
-            jumlahKurang = 1;
+
         }
         else if(jumlahBlok == 4)
         {
@@ -275,13 +283,12 @@ public class SoalHandler : MonoBehaviour
         for (int i = 0; i < jumlahKali; i++)
         {
             float randNum = Random.Range(1, 20); // disini randomnya
-            int isPos = Random.Range(1, 2); // get ini positive apa negative wkwkw
+            int isPos = Random.Range(1, 3); // get ini positive apa negative wkwkw
             sumKali += randNum;
             ListBilangan.Add(randNum);
             if (isPos == 1)
             {
                 bilangan.Add(gen.newBilangan("+" + randNum.ToString(), "*"));
-
             }
             else
             {
@@ -292,7 +299,7 @@ public class SoalHandler : MonoBehaviour
         for (int i = 0; i < jumlahBagi; i++) // PEMBAGIAN INI TRICKY SEKALI, jadi 0.00002 bisa
         {
             float randNum = Random.Range(1, 20); // disini randomnya
-            int isPos = Random.Range(1, 2); // get ini positive apa negative wkwkw
+            int isPos = Random.Range(1, 3); // get ini positive apa negative wkwkw
             ListBilangan.Add(randNum);
             if (isPos == 1)
             {

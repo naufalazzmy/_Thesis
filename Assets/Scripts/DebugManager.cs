@@ -55,6 +55,6 @@ public class DebugManager : MonoBehaviour
             sw.Close();
         }
 
-        //Debug.Log(message);
+        Debug.Log(message);
     }
 }
