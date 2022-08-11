@@ -19,10 +19,13 @@ public class SoalHandler : MonoBehaviour
 
     private Generator gen;
 
+
     public int jumlahTambah;
     public int jumlahKurang;
     public int jumlahKali;
     public int jumlahBagi;
+    public int lifeCount = 0;
+
 
 
     private void Start()
@@ -111,21 +114,29 @@ public class SoalHandler : MonoBehaviour
 
     private void generateMainBlok()
     {
+        
+
         if (gl.prevDifficulty == 0f)
         {
-            Debug.Log("Init jumlah balok?");
+            //Debug.Log("Init jumlah balok?");
+            lifeCount = 3;
             jumlahBlok = Random.Range(3, 6);
         }
         else if(gl.prevDifficulty < 0.56f) //46
         {
+            lifeCount = 3;
             jumlahBlok = 3;
         }else if(gl.prevDifficulty >= 0.56f && gl.prevDifficulty <= 0.75f) //0.46 - 0.65
         {
+            lifeCount = 3;
             jumlahBlok = 4;
         }else if(gl.prevDifficulty > 0.75f) //0.65
         {
+            lifeCount = 3;
             jumlahBlok = 5;
         }
+
+        gen.GenerateLife(lifeCount);
         
         //Debug.Log("jumlah blok: " + jumlahBlok);
         int maxOperatorCount;

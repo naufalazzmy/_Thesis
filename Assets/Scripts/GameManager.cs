@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     // make it selected effect
 
     public GameObject confetti;
+    public GameObject lifePannel;
     public Animator tirai;
     public Animator skipPromt;
     public bool isComplete = false;
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     private GameLoger gl;
     public DebugManager sendLog;
+    public SoalHandler sh;
 
     private void Start()
     {
@@ -196,6 +198,20 @@ public class GameManager : MonoBehaviour
         }
         totalbenar = 0;
         historyBilangan.Clear();
+
+        if(restartTimes > sh.lifeCount)
+        {
+
+            restartTimes--;
+            //TODO: Km cek ini skip soalnya, dulu dia close dulu yang anim panelnya, terus kok heartnya waktu error bisa jadi nambah banyak?
+            // kayaknya waktu ganti scene life prefabnyha ga kereset
+            skipSoal();
+        }
+        else
+        {
+            Destroy(lifePannel.transform.GetChild(0).gameObject);
+        }
+       
     }
 
     public void skipSoal()
@@ -217,7 +233,7 @@ public class GameManager : MonoBehaviour
         gl.prevStatus = "SKIPPED";
 
         tirai.SetTrigger("close");
-        skipPromt.SetTrigger("close");
+        //skipPromt.SetTrigger("close");
         StartCoroutine(nextScene(nextSceneTarget, 1f));
     }
 
