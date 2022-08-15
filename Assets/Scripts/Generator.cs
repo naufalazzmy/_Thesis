@@ -350,13 +350,8 @@ public class Generator : MonoBehaviour
             List<Bilangan> bilanganlist = new List<Bilangan>(parentNode.listBilangan);
             foreach (Bilangan current in combList[i]) //comblist[j] = (bilangan)(bilangan) || (+2)(-4)
             {
-                // cek setiap element di kombinasi apakah ada di listbilangan parent, kalo ada hapus
                 for(int j=0; j< bilanganlist.Count; j++) // KAMU CEK DISINI MASALAH NIH
                 {
-                    //if ((current.bilangan == combList[j][0].bilangan && current.op == combList[j][0].op) || (current.bilangan == combList[j][1].bilangan && current.op == combList[j][1].op))
-                    //{
-                    //    bilanganlist.RemoveAt(j);
-                    //}
                     if(current.bilangan == bilanganlist[j].bilangan && current.op == bilanganlist[j].op)
                     {
                         bilanganlist.RemoveAt(j);
