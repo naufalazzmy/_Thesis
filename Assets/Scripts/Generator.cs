@@ -43,14 +43,13 @@ public class Generator : MonoBehaviour
         return temp;
     }
 
-    public Bilangan Hitung(List<Bilangan> bilangan)
+    public Bilangan Hitung(List<Bilangan> bilangan) // max ada dua bilangan. makanya dibuat list
     {
         float a = float.Parse(bilangan[0].bilangan);
         float b = float.Parse(bilangan[1].bilangan);
 
         string aOp = bilangan[0].op;
         string bOp = bilangan[1].op;
-
         if(a.ToString() == "0" || a.ToString() == "0.0" || b.ToString() == "0" || b.ToString() == "0.0")
         {
             return newBilangan("invalid", "invalid");

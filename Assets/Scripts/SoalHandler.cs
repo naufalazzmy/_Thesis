@@ -26,6 +26,8 @@ public class SoalHandler : MonoBehaviour
     private int jumlahBagi;
     public int lifeCount = 0;
 
+    public string solusi = "";
+
 
 
     private void Start()
@@ -46,7 +48,7 @@ public class SoalHandler : MonoBehaviour
             {
                 cobaCount++;
                 generateMainBlok();
-                List<Bilangan> bilanganObj = BuatSoal();
+                List<Bilangan> bilanganObj = BuatSoal(); // disni ancang ancang difficulty dihitung
                 float difficultyIndex = getDifficulty();
 
                 float minTreshold = gl.prevDifficulty + 0.015f; //0.515 
@@ -502,26 +504,146 @@ public class SoalHandler : MonoBehaviour
     }
 
 
-    public void getScore()
+    public Node getTarget(List<Bilangan> bilangan)
     {
+        bool isPembagian = false;
+        int pembagianIndex = 0;
+        //check pembagian
+        for(int i=0; i< bilangan.Count; i++)
+        {
+            if (bilangan[i].op == "/")
+            {
+                isPembagian = true;
+                pembagianIndex = i;
+                break;
+            }
+        }
 
+        if (isPembagian) // ini belum di check dia harusnya sama sama genap, pastiin juga operator bagi itu maximal 1
+        {
+            Debug.LogWarning("ADA BAGI");
+            List<Bilangan> bilanganTemp = new List<Bilangan>(bilangan);
+            List<Bilangan> tempSumbagi = new List<Bilangan>();
+            
+            solusi += "(" + bilanganTemp[pembagianIndex].bilangan + bilanganTemp[pembagianIndex].op;
+            tempSumbagi.Add(bilanganTemp[pembagianIndex]);
+            bilanganTemp.RemoveAt(pembagianIndex);
+
+            int randi = Random.Range(0, bilanganTemp.Count + 1);
+            solusi += " " + bilanganTemp[randi].bilangan + bilanganTemp[randi].op+") ";
+            tempSumbagi.Add(bilanganTemp[randi]);
+            bilanganTemp.RemoveAt(randi);
+
+
+            tempSumbagi.Reverse(0, 2);
+
+            Bilangan newBilBagi = gen.Hitung(tempSumbagi);
+            bilanganTemp.Add(newBilBagi);
+            Debug.LogWarning(bilanganTemp.Count);
+
+            while (bilanganTemp.Count > 1)
+            {
+                List<Bilangan> tempSum = new List<Bilangan>();
+                Debug.LogWarning("random 1");
+                int rand = Random.Range(0, bilanganTemp.Count); //get random index untuk bilangan kedua dihitung
+                solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
+                tempSum.Add(bilanganTemp[rand]);
+                bilanganTemp.RemoveAt(rand);
+               Debug.LogWarning("END random 1");
+               Debug.LogWarning("random 2");
+                rand = Random.Range(0, bilanganTemp.Count);
+                solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
+                tempSum.Add(bilanganTemp[rand]);
+                bilanganTemp.RemoveAt(rand);
+               Debug.LogWarning("END random 2");
+
+
+                Bilangan newBil = gen.Hitung(tempSum);
+                bilanganTemp.Add(newBil);
+            }
+
+            //for (int i = 0; i < bilanganTemp.Count; i++) //ini nih kayaknya salah nanti
+            //{
+            //    List<Bilangan> tempSum = new List<Bilangan>(bilangan);
+
+            //    int rand = Random.Range(0, bilanganTemp.Count + 1); //get random index untuk bilangan kedua dihitung
+            //    solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
+            //    tempSum.Add(bilanganTemp[rand]);
+            //    bilanganTemp.RemoveAt(rand);
+
+            //    rand = Random.Range(0, bilanganTemp.Count + 1);
+            //    solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
+            //    tempSum.Add(bilanganTemp[rand]);
+            //    bilanganTemp.RemoveAt(rand);
+
+
+            //    Bilangan newBil = gen.Hitung(tempSum);
+            //    bilanganTemp.Add(newBil);
+            //}
+            //Debug.LogWarning(bilanganTemp.Count);
+            return gen.newNode(bilanganTemp, null, null);
+        }
+        else
+        {
+            Debug.LogWarning("NONE BAGI");
+            List<Bilangan> bilanganTemp = new List<Bilangan>(bilangan);
+            Debug.LogWarning(bilanganTemp.Count);
+            while (bilanganTemp.Count > 1)
+            {
+                List<Bilangan> tempSum = new List<Bilangan>();
+               Debug.LogWarning("random 1");
+                int rand = Random.Range(0, bilanganTemp.Count); //get random index untuk bilangan kedua dihitung
+                solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
+                tempSum.Add(bilanganTemp[rand]);
+                bilanganTemp.RemoveAt(rand);
+               Debug.LogWarning("END random 1");
+               Debug.LogWarning("random 2");
+                rand = Random.Range(0, bilanganTemp.Count);
+                solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
+                tempSum.Add(bilanganTemp[rand]);
+                bilanganTemp.RemoveAt(rand);
+              Debug.LogWarning("END random 2");
+
+                Bilangan newBil = gen.Hitung(tempSum);
+                bilanganTemp.Add(newBil);
+               Debug.LogWarning(bilanganTemp.Count);
+            }
+            //for (int i = 0; i < bilanganTemp.Count; i++) //ini nih kayaknya salah nanti 3 2
+            //{
+            //    List<Bilangan> tempSum = new List<Bilangan>();
+
+            //    int rand = Random.Range(0, bilanganTemp.Count + 1); //get random index untuk bilangan kedua dihitung
+            //    solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
+            //    tempSum.Add(bilanganTemp[rand]);
+            //    bilanganTemp.RemoveAt(rand);
+                
+            //    rand = Random.Range(0, bilanganTemp.Count + 1);
+            //    solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
+            //    tempSum.Add(bilanganTemp[rand]);
+            //    bilanganTemp.RemoveAt(rand);
+
+
+            //    Bilangan newBil = gen.Hitung(tempSum);
+            //    bilanganTemp.Add(newBil);
+            //}
+            return gen.newNode(bilanganTemp, null, null);
+        }
+    
     }
 
     public void GenerateSoal(List<Bilangan> bilangan)
     {
-        
-        Node root = gen.newNode(bilangan, null, null);
-        gen.generateChildrenNodes(root);
+        // disini tree sudah dilibatkan
+        //Node root = gen.newNode(bilangan, null, null);
+        //gen.generateChildrenNodes(root);
+        //Node target = generateTarget(root);
 
-        Node target = generateTarget(root);
-
+        Node target = getTarget(bilangan);
+        Debug.LogWarning(solusi);
         gen.generateTarget(target);
         //gen.printSolution(target);
         gen.GenerateLife(lifeCount); // ini error karna ga di clean, setiap cari solusi dia nambah
         StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
     }
 
-
-
-    
 }
