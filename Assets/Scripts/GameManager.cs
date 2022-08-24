@@ -203,8 +203,6 @@ public class GameManager : MonoBehaviour
         {
 
             restartTimes--;
-            //TODO: Km cek ini skip soalnya, dulu dia close dulu yang anim panelnya, terus kok heartnya waktu error bisa jadi nambah banyak?
-            // kayaknya waktu ganti scene life prefabnyha ga kereset
             skipSoal();
         }
         else

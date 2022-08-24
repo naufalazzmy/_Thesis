@@ -32,6 +32,7 @@ public class SoalHandler : MonoBehaviour
 
     private void Start()
     {
+
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         gl.indexSoal = gl.indexSoal + 1; // init index soal
 
@@ -46,23 +47,30 @@ public class SoalHandler : MonoBehaviour
         {
             while (!founded)
             {
+                Debug.LogError("-RESTART-");
                 cobaCount++;
                 generateMainBlok();
                 List<Bilangan> bilanganObj = BuatSoal(); // disni ancang ancang difficulty dihitung
                 float difficultyIndex = getDifficulty();
+                Node target = getTarget(bilanganObj);
+
+                if(target == null)
+                {
+                    Debug.LogError("TARGET NULL");
+                }
 
                 float minTreshold = gl.prevDifficulty + 0.015f; //0.515 
                 float maxTreshold = gl.prevDifficulty + 0.1f; // 0.6
 
-                if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold)
+                if ((difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold) && target != null)
                 {
                     Debug.Log("COBA COUNT: " + cobaCount);
-                    GenerateSoal(bilanganObj);
+                    GenerateSoal(bilanganObj, target);
                     founded = true;
                 }
                 else if (cobaCount >= 1000)
                 {
-                    GenerateSoal(bilanganObj);
+                    GenerateSoal(bilanganObj, target);
                     Debug.LogWarning("CAPEK NYARI SUMPAH");
                     break;
                 }
@@ -70,25 +78,28 @@ public class SoalHandler : MonoBehaviour
         }
         else if(gl.prevStatus == "SKIPPED")
         {
+            
             while (!founded)
             {
+                Debug.LogError("-RESTART-");
                 cobaCount++;
                 generateMainBlok();
                 List<Bilangan> bilanganObj = BuatSoal();
                 float difficultyIndex = getDifficulty();
+                Node target = getTarget(bilanganObj);
 
                 float minTreshold = gl.prevDifficulty - 0.015f; //0.447 || 0.015
                 float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462 || 0.1
 
-                if (difficultyIndex <= minTreshold && difficultyIndex >= maxTreshold)
+                if (difficultyIndex <= minTreshold && difficultyIndex >= maxTreshold && target != null)
                 {
                     Debug.Log("COBA COUNT: " + cobaCount);
-                    GenerateSoal(bilanganObj);
+                    GenerateSoal(bilanganObj, target);
                     founded = true;
                 }
                 else if (cobaCount >= 1000)
                 {
-                    GenerateSoal(bilanganObj);
+                    GenerateSoal(bilanganObj, target);
                     Debug.LogWarning("CAPEK NYARI SUMPAH");
                     break;
                 }
@@ -96,12 +107,15 @@ public class SoalHandler : MonoBehaviour
         }
         else
         {
+            Debug.LogError("-RESTART-");
             //Debug.LogWarning("INIT START?");
 
             generateMainBlok();
+            
             List<Bilangan> bilanganObj = BuatSoal();
+            Node target = getTarget(bilanganObj);
             float difficultyIndex = getDifficulty();
-            GenerateSoal(bilanganObj);
+            GenerateSoal(bilanganObj, target);
         }
     }
 
@@ -169,18 +183,28 @@ public class SoalHandler : MonoBehaviour
         else if(jumlahBlok == 4)
         {
             maxOperatorCount = Random.Range(1, 2);
-            
+            bool isBagiMax = false;
+            int rand = 0;
             for(int i=0; i<maxOperatorCount; i++)
             {
-                int rand = Random.Range(1, 2); // asign apakah operator bagi/kali
+                if (!isBagiMax)
+                {
+                    rand = Random.Range(1, 2); // asign apakah operator bagi/kali
+                }
+                else
+                {
+                    rand = 1;
+                }
+                
                 if (rand == 1)
                 {
                     jumlahKali = maxOperatorCount;
                 }
                 else
                 {
-            
+                    Debug.LogError("bagi maxed");
                     jumlahBagi = maxOperatorCount;
+                    isBagiMax = true;
                 }
             }
 
@@ -207,18 +231,28 @@ public class SoalHandler : MonoBehaviour
         else if(jumlahBlok == 5 || jumlahBlok == 6)
         {
             maxOperatorCount = Random.Range(1, 3);
-            // Debug.Log("jumlah operator: " + maxOperatorCount);
+            bool isBagiMax = false;
+            int rand = 0;
             for (int i = 0; i < maxOperatorCount; i++)
             {
-                int rand = Random.Range(1, 2); // asign apakah operator bagi/kali
+                if (!isBagiMax)
+                {
+                    rand = Random.Range(1, 2); // asign apakah operator bagi/kali
+                }
+                else
+                {
+                    rand = 1;
+                }
+
                 if (rand == 1)
                 {
                     jumlahKali = maxOperatorCount;
                 }
                 else
                 {
-                    
+                    Debug.LogError("bagi maxed");
                     jumlahBagi = maxOperatorCount;
+                    isBagiMax = true;
                 }
             }
 
@@ -229,7 +263,7 @@ public class SoalHandler : MonoBehaviour
             while (jumlahblokkeluar >= 1)
             {
                 //Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
-                int rand = Random.Range(1, 3);
+                rand = Random.Range(1, 3);
                 if (rand == 1)
                 {
                     jumlahTambah++;
@@ -245,18 +279,28 @@ public class SoalHandler : MonoBehaviour
         else if(jumlahBlok == 7 || jumlahBlok == 8)
         {
             maxOperatorCount = Random.Range(1, 4);
-            //Debug.Log("jumlah operator: " + maxOperatorCount);
+            bool isBagiMax = false;
+            int rand = 0;
             for (int i = 0; i < maxOperatorCount; i++)
             {
-                int rand = Random.Range(1, 3); // asign apakah operator bagi/kali
+                if (!isBagiMax)
+                {
+                    rand = Random.Range(1, 3); // asign apakah operator bagi/kali
+                }
+                else
+                {
+                    rand = 1;
+                }
+
                 if (rand == 1)
                 {
                     jumlahKali = maxOperatorCount;
                 }
                 else
                 {
-                    Debug.LogWarning("BAGI");
+                    Debug.LogError("bagi maxed");
                     jumlahBagi = maxOperatorCount;
+                    isBagiMax = true;
                 }
             }
 
@@ -267,7 +311,7 @@ public class SoalHandler : MonoBehaviour
             while (jumlahblokkeluar >= 1)
             {
                // Debug.Log("Current jumlah blok: " + jumlahblokkeluar);
-                int rand = Random.Range(1, 2);
+                rand = Random.Range(1, 2);
                 if (rand == 1)
                 {
                     jumlahTambah++;
@@ -498,55 +542,88 @@ public class SoalHandler : MonoBehaviour
     public Node getTarget(List<Bilangan> bilangan)
     {
         bool isPembagian = false;
-        int pembagianIndex = 0;
+        List<int> pembagianIndexes = new List<int>();
         //check pembagian
         for(int i=0; i< bilangan.Count; i++)
         {
+            string s = bilangan[i].bilangan;
+            s.Remove(0, 1);
+            int x = int.Parse(s);
             if (bilangan[i].op == "/")
             {
                 isPembagian = true;
-                pembagianIndex = i;
-                break;
+                if(x % 2 != 0){
+                    return null;
+                }
+            }
+            if (x % 2 == 0 && bilangan[i].op != "*")
+            {
+                pembagianIndexes.Add(i);
+                
             }
         }
 
-        if (isPembagian) // ini belum di check dia harusnya sama sama genap, pastiin juga operator bagi itu maximal 1
+        string bilGenap = "";
+        for (int i = 0; i < pembagianIndexes.Count; i++)
         {
-            Debug.LogWarning("ADA BAGI");
+            bilGenap += bilangan[pembagianIndexes[i]].bilangan.ToString() + " | ";
+        }
+        Debug.Log("Bilangan Genap: " + bilGenap);
+
+
+        if (isPembagian) // ini belum di check dia harusnya sama sama genap, pastiin juga operator bagi itu maximal 1 [done saat generate jumlah balok]
+        {
+
+            //validate genap > 1
+            if(pembagianIndexes.Count <= 1)
+            {
+                
+                solusi = "";
+                return null;
+            }
+
+
+            Debug.Log("ADA BAGI "+ pembagianIndexes.Count);
             List<Bilangan> bilanganTemp = new List<Bilangan>(bilangan);
             List<Bilangan> tempSumbagi = new List<Bilangan>();
             
-            solusi += "(" + bilanganTemp[pembagianIndex].bilangan + bilanganTemp[pembagianIndex].op;
-            tempSumbagi.Add(bilanganTemp[pembagianIndex]);
-            bilanganTemp.RemoveAt(pembagianIndex);
+            solusi += "(" + bilanganTemp[pembagianIndexes[0]].bilangan + bilanganTemp[pembagianIndexes[0]].op;
+            Debug.Log("solusi added 1");
+            tempSumbagi.Add(bilanganTemp[pembagianIndexes[0]]);
+            Debug.Log("sumbagi added 1");
+            bilanganTemp.RemoveAt(pembagianIndexes[0]);
+            Debug.Log("temp removed 1");
 
-            int randi = Random.Range(0, bilanganTemp.Count + 1);
-            solusi += " " + bilanganTemp[randi].bilangan + bilanganTemp[randi].op+") ";
-            tempSumbagi.Add(bilanganTemp[randi]);
-            bilanganTemp.RemoveAt(randi);
+            //int randi = Random.Range(0, bilanganTemp.Count + 1);
+            solusi += " " + bilanganTemp[pembagianIndexes[1]].bilangan + bilanganTemp[pembagianIndexes[1]].op+") ";
+            Debug.Log("solusi added 2");
+            tempSumbagi.Add(bilanganTemp[pembagianIndexes[1]]);
+            Debug.Log("sumbagi added 2");
+            bilanganTemp.RemoveAt(pembagianIndexes[1]);
+            Debug.Log("temp removed 2");
 
 
             tempSumbagi.Reverse(0, 2);
-
-            Bilangan newBilBagi = gen.Hitung(tempSumbagi);
+            Debug.Log(tempSumbagi[0].bilangan + " | " + tempSumbagi[1].bilangan);
+            Bilangan newBilBagi = gen.Hitung(tempSumbagi); //TODO: ga bener ini pembagiannya, mungkin salah indexes sih kayaknya pang
             bilanganTemp.Add(newBilBagi);
-            Debug.LogWarning(bilanganTemp.Count);
+           // Debug.LogWarning(bilanganTemp.Count);
 
             while (bilanganTemp.Count > 1)
             {
                 List<Bilangan> tempSum = new List<Bilangan>();
-                Debug.LogWarning("random 1");
+                //Debug.LogWarning("random 1");
                 int rand = Random.Range(0, bilanganTemp.Count); //get random index untuk bilangan kedua dihitung
                 solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
                 tempSum.Add(bilanganTemp[rand]);
                 bilanganTemp.RemoveAt(rand);
-               Debug.LogWarning("END random 1");
-               Debug.LogWarning("random 2");
+              // Debug.LogWarning("END random 1");
+              // Debug.LogWarning("random 2");
                 rand = Random.Range(0, bilanganTemp.Count);
                 solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
                 tempSum.Add(bilanganTemp[rand]);
                 bilanganTemp.RemoveAt(rand);
-               Debug.LogWarning("END random 2");
+               //Debug.LogWarning("END random 2");
 
 
                 Bilangan newBil = gen.Hitung(tempSum);
@@ -556,37 +633,38 @@ public class SoalHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("NONE BAGI");
+            Debug.Log("NONE BAGI");
+            solusi = "";
             List<Bilangan> bilanganTemp = new List<Bilangan>(bilangan);
-            Debug.LogWarning(bilanganTemp.Count);
+           // Debug.LogWarning(bilanganTemp.Count);
             while (bilanganTemp.Count > 1)
             {
                 List<Bilangan> tempSum = new List<Bilangan>();
-               Debug.LogWarning("random 1");
+               //Debug.LogWarning("random 1");
                 int rand = Random.Range(0, bilanganTemp.Count); //get random index untuk bilangan kedua dihitung
                 solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
                 tempSum.Add(bilanganTemp[rand]);
                 bilanganTemp.RemoveAt(rand);
-               Debug.LogWarning("END random 1");
-               Debug.LogWarning("random 2");
+              // Debug.LogWarning("END random 1");
+               //Debug.LogWarning("random 2");
                 rand = Random.Range(0, bilanganTemp.Count);
                 solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
                 tempSum.Add(bilanganTemp[rand]);
                 bilanganTemp.RemoveAt(rand);
-              Debug.LogWarning("END random 2");
-
+                //Debug.LogWarning("END random 2");
+               //Debug.Log(tempSum[0].bilangan + " | " + tempSum[1].bilangan);
                 Bilangan newBil = gen.Hitung(tempSum);
                 bilanganTemp.Add(newBil);
-               Debug.LogWarning(bilanganTemp.Count);
+               //Debug.LogWarning(bilanganTemp.Count);
             }
             return gen.newNode(bilanganTemp, null, null);
         }
     
     }
 
-    public void GenerateSoal(List<Bilangan> bilangan)
+    public void GenerateSoal(List<Bilangan> bilangan, Node target)
     {
-       Node target = getTarget(bilangan); 
+       
         Debug.LogWarning(solusi);
         gen.generateTarget(target);
         gen.GenerateLife(lifeCount); 
