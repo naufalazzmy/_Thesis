@@ -103,15 +103,6 @@ public class SoalHandler : MonoBehaviour
             float difficultyIndex = getDifficulty();
             GenerateSoal(bilanganObj);
         }
-
-        //generateMainBlok();
-        //List<Bilangan> bilanganObj = BuatSoal();
-        //float difficultyIndex = getDifficulty();
-
-
-        //GenerateSoal(bilanganObj);
-        // TODO: Check difficultynya
-        // kalo bener yaudah generate soalnya
     }
 
     private void generateMainBlok()
@@ -290,7 +281,7 @@ public class SoalHandler : MonoBehaviour
             }
         }
 
-        setJumlahOperand();
+        setJumlahOperand(); //cuman sekedar indikator
 
         //ATAU MAX OP masing masing 1
 
@@ -561,26 +552,6 @@ public class SoalHandler : MonoBehaviour
                 Bilangan newBil = gen.Hitung(tempSum);
                 bilanganTemp.Add(newBil);
             }
-
-            //for (int i = 0; i < bilanganTemp.Count; i++) //ini nih kayaknya salah nanti
-            //{
-            //    List<Bilangan> tempSum = new List<Bilangan>(bilangan);
-
-            //    int rand = Random.Range(0, bilanganTemp.Count + 1); //get random index untuk bilangan kedua dihitung
-            //    solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
-            //    tempSum.Add(bilanganTemp[rand]);
-            //    bilanganTemp.RemoveAt(rand);
-
-            //    rand = Random.Range(0, bilanganTemp.Count + 1);
-            //    solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
-            //    tempSum.Add(bilanganTemp[rand]);
-            //    bilanganTemp.RemoveAt(rand);
-
-
-            //    Bilangan newBil = gen.Hitung(tempSum);
-            //    bilanganTemp.Add(newBil);
-            //}
-            //Debug.LogWarning(bilanganTemp.Count);
             return gen.newNode(bilanganTemp, null, null);
         }
         else
@@ -608,24 +579,6 @@ public class SoalHandler : MonoBehaviour
                 bilanganTemp.Add(newBil);
                Debug.LogWarning(bilanganTemp.Count);
             }
-            //for (int i = 0; i < bilanganTemp.Count; i++) //ini nih kayaknya salah nanti 3 2
-            //{
-            //    List<Bilangan> tempSum = new List<Bilangan>();
-
-            //    int rand = Random.Range(0, bilanganTemp.Count + 1); //get random index untuk bilangan kedua dihitung
-            //    solusi += "(" + bilanganTemp[rand].bilangan + bilanganTemp[rand].op;
-            //    tempSum.Add(bilanganTemp[rand]);
-            //    bilanganTemp.RemoveAt(rand);
-                
-            //    rand = Random.Range(0, bilanganTemp.Count + 1);
-            //    solusi += " " + bilanganTemp[rand].bilangan + bilanganTemp[rand].op + ") ";
-            //    tempSum.Add(bilanganTemp[rand]);
-            //    bilanganTemp.RemoveAt(rand);
-
-
-            //    Bilangan newBil = gen.Hitung(tempSum);
-            //    bilanganTemp.Add(newBil);
-            //}
             return gen.newNode(bilanganTemp, null, null);
         }
     
@@ -633,16 +586,10 @@ public class SoalHandler : MonoBehaviour
 
     public void GenerateSoal(List<Bilangan> bilangan)
     {
-        // disini tree sudah dilibatkan
-        //Node root = gen.newNode(bilangan, null, null);
-        //gen.generateChildrenNodes(root);
-        //Node target = generateTarget(root);
-
-        Node target = getTarget(bilangan);
+       Node target = getTarget(bilangan); 
         Debug.LogWarning(solusi);
         gen.generateTarget(target);
-        //gen.printSolution(target);
-        gen.GenerateLife(lifeCount); // ini error karna ga di clean, setiap cari solusi dia nambah
+        gen.GenerateLife(lifeCount); 
         StartCoroutine(gen.instantiateforSec(bilangan, 0.7f));
     }
 
