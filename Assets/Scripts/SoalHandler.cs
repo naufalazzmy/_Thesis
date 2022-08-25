@@ -538,74 +538,94 @@ public class SoalHandler : MonoBehaviour
         return curDifficulty;
     }
 
+    // cuman buat check remove multiple
+    private static bool ShouldRemove(int i)
+    {
+        return ((i % 2) == 0);
+    }
+
 
     public Node getTarget(List<Bilangan> bilangan)
     {
         bool isPembagian = false;
         List<int> pembagianIndexes = new List<int>();
+        int mainPembagianIndex = 0;
         //check pembagian
-        for(int i=0; i< bilangan.Count; i++)
+        for (int i = 0; i < bilangan.Count; i++)
         {
             string s = bilangan[i].bilangan;
             s.Remove(0, 1);
             int x = int.Parse(s);
-            if (bilangan[i].op == "/")
+            if (bilangan[i].op == "/" && !isPembagian) // buat ambil index pembagian pertama
             {
                 isPembagian = true;
-                if(x % 2 != 0){
-                    return null;
-                }
+                mainPembagianIndex = i;
             }
-            if (x % 2 == 0 && bilangan[i].op != "*")
+            else if (x % 2 == 0 && bilangan[i].op != "*") // buat ambil semua bilangna genap yang bukan operator *
             {
                 pembagianIndexes.Add(i);
-                
+            }
+            if (x % 2 != 0 && bilangan[i].op == "/") //buat larang ada pembagian yang ganjil.
+            {
+                return null;
             }
         }
 
         string bilGenap = "";
         for (int i = 0; i < pembagianIndexes.Count; i++)
         {
-            bilGenap += bilangan[pembagianIndexes[i]].bilangan.ToString() + " | ";
+            bilGenap += bilangan[pembagianIndexes[i]].bilangan.ToString() + bilangan[pembagianIndexes[i]].op.ToString() + " | ";
         }
-        Debug.Log("Bilangan Genap: " + bilGenap);
+
 
 
         if (isPembagian) // ini belum di check dia harusnya sama sama genap, pastiin juga operator bagi itu maximal 1 [done saat generate jumlah balok]
         {
 
             //validate genap > 1
-            if(pembagianIndexes.Count <= 1)
+            if (pembagianIndexes.Count <= 1)
             {
-                
+
                 solusi = "";
                 return null;
             }
 
+            Debug.Log("Bilangan Genap: " + bilGenap);
+            Debug.Log("pembagi: " + bilangan[pembagianIndexes[0]].bilangan + bilangan[pembagianIndexes[0]].op);
+            Debug.Log("Main pembagi: " + bilangan[mainPembagianIndex].bilangan + bilangan[mainPembagianIndex].op);
 
-            Debug.Log("ADA BAGI "+ pembagianIndexes.Count);
+
+            Debug.Log("ADA BAGI " + pembagianIndexes.Count);
             List<Bilangan> bilanganTemp = new List<Bilangan>(bilangan);
             List<Bilangan> tempSumbagi = new List<Bilangan>();
-            
+
             solusi += "(" + bilanganTemp[pembagianIndexes[0]].bilangan + bilanganTemp[pembagianIndexes[0]].op;
             Debug.Log("solusi added 1");
             tempSumbagi.Add(bilanganTemp[pembagianIndexes[0]]);
             Debug.Log("sumbagi added 1");
-            bilanganTemp.RemoveAt(pembagianIndexes[0]);
-            Debug.Log("temp removed 1");
 
-            //int randi = Random.Range(0, bilanganTemp.Count + 1);
-            solusi += " " + bilanganTemp[pembagianIndexes[1]].bilangan + bilanganTemp[pembagianIndexes[1]].op+") ";
+
+            //dibawah sini sih salahnya
+            solusi += " " + bilanganTemp[mainPembagianIndex].bilangan + bilanganTemp[mainPembagianIndex].op + ") ";
             Debug.Log("solusi added 2");
-            tempSumbagi.Add(bilanganTemp[pembagianIndexes[1]]);
+            tempSumbagi.Add(bilanganTemp[mainPembagianIndex]);
             Debug.Log("sumbagi added 2");
-            bilanganTemp.RemoveAt(pembagianIndexes[1]);
-            Debug.Log("temp removed 2");
 
 
-            tempSumbagi.Reverse(0, 2);
+
+            Debug.Log("Remving all index");
+            bilanganTemp.RemoveAll(t => (t.bilangan == bilanganTemp[pembagianIndexes[0]].bilangan && t.op == bilanganTemp[pembagianIndexes[0]].op) || (t.bilangan == bilanganTemp[mainPembagianIndex].bilangan && t.op == bilanganTemp[mainPembagianIndex].op));
+            //bilanganTemp.RemoveAt(pembagianIndexes[0]);
+            //bilanganTemp.Remove(bilanganTemp[pembagianIndexes[0]]);
+            //Debug.Log("temp removed 1");
+            //bilanganTemp.RemoveAt(mainPembagianIndex);
+           // bilanganTemp.Remove(bilanganTemp[mainPembagianIndex]);
+            //Debug.Log("temp removed 2");
+
+
+            //tempSumbagi.Reverse(0, 2);
             Debug.Log(tempSumbagi[0].bilangan + " | " + tempSumbagi[1].bilangan);
-            Bilangan newBilBagi = gen.Hitung(tempSumbagi); //TODO: ga bener ini pembagiannya, mungkin salah indexes sih kayaknya pang
+            Bilangan newBilBagi = gen.Hitung(tempSumbagi); 
             bilanganTemp.Add(newBilBagi);
            // Debug.LogWarning(bilanganTemp.Count);
 
