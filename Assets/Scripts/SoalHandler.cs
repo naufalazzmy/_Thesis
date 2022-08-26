@@ -649,6 +649,10 @@ public class SoalHandler : MonoBehaviour
                 Bilangan newBil = gen.Hitung(tempSum);
                 bilanganTemp.Add(newBil);
             }
+            if(bilanganTemp[0].op == "/" || bilanganTemp[0].op == "*") // biar ga ada bilangan akhir itu operator
+            {
+                return null;
+            }
             return gen.newNode(bilanganTemp, null, null);
         }
         else
