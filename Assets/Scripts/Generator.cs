@@ -50,11 +50,15 @@ public class Generator : MonoBehaviour
 
         string aOp = bilangan[0].op;
         string bOp = bilangan[1].op;
-        if(a.ToString() == "0" || a.ToString() == "0.0" || b.ToString() == "0" || b.ToString() == "0.0")
+        //if(a.ToString() == "0" || a.ToString() == "0.0" || b.ToString() == "0" || b.ToString() == "0.0")
+        //{
+        //    return newBilangan("invalid", "invalid");
+        //}
+        if (b.ToString() == "0" && bOp.ToString() == "/")
         {
-            return newBilangan("invalid", "invalid");
+            return newBilangan("invalid", "invalid"); //prevent biar gabisa dibagi 0
         }
-        else if(bOp == "+")
+        else if (bOp == "+")
         {
             if(aOp == "*")
             {

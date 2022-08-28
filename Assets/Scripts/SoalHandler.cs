@@ -547,6 +547,7 @@ public class SoalHandler : MonoBehaviour
 
     public Node getTarget(List<Bilangan> bilangan)
     {
+        solusi = "";
         bool isPembagian = false;
         List<int> pembagianIndexes = new List<int>();
         int mainPembagianIndex = 0;
@@ -581,12 +582,12 @@ public class SoalHandler : MonoBehaviour
 
         if (isPembagian) // ini belum di check dia harusnya sama sama genap, pastiin juga operator bagi itu maximal 1 [done saat generate jumlah balok]
         {
-
+            
             //validate genap > 1
             if (pembagianIndexes.Count <= 1)
             {
 
-                solusi = "";
+
                 return null;
             }
 
@@ -626,6 +627,12 @@ public class SoalHandler : MonoBehaviour
             //tempSumbagi.Reverse(0, 2);
             Debug.Log(tempSumbagi[0].bilangan + " | " + tempSumbagi[1].bilangan);
             Bilangan newBilBagi = gen.Hitung(tempSumbagi); 
+            
+            if(newBilBagi.op == "invalid")
+            {
+                return null;
+            }
+
             bilanganTemp.Add(newBilBagi);
            // Debug.LogWarning(bilanganTemp.Count);
 
@@ -647,6 +654,10 @@ public class SoalHandler : MonoBehaviour
 
 
                 Bilangan newBil = gen.Hitung(tempSum);
+                if (newBil.op == "invalid")
+                {
+                    return null;
+                }
                 bilanganTemp.Add(newBil);
             }
             if(bilanganTemp[0].op == "/" || bilanganTemp[0].op == "*") // biar ga ada bilangan akhir itu operator
@@ -658,7 +669,7 @@ public class SoalHandler : MonoBehaviour
         else
         {
             Debug.Log("NONE BAGI");
-            solusi = "";
+            //solusi = "";
             List<Bilangan> bilanganTemp = new List<Bilangan>(bilangan);
            // Debug.LogWarning(bilanganTemp.Count);
             while (bilanganTemp.Count > 1)
@@ -678,6 +689,10 @@ public class SoalHandler : MonoBehaviour
                 //Debug.LogWarning("END random 2");
                //Debug.Log(tempSum[0].bilangan + " | " + tempSum[1].bilangan);
                 Bilangan newBil = gen.Hitung(tempSum);
+                if (newBil.op == "invalid")
+                {
+                    return null;
+                }
                 bilanganTemp.Add(newBil);
                //Debug.LogWarning(bilanganTemp.Count);
             }
