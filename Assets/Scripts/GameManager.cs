@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     // make it selected effect
 
     public GameObject confetti;
-    public GameObject lifePannel;
+    //public GameObject lifePannel;
+    public Text lifeCount;
     public Animator tirai;
     public Animator skipPromt;
     public bool isComplete = false;
@@ -35,11 +36,39 @@ public class GameManager : MonoBehaviour
     public DebugManager sendLog;
     public SoalHandler sh;
 
+    //forDebugger
+    public bool isDebug = false;
+    public GameObject prevDiffText;
+    public GameObject prevPerformanceText;
+    public GameObject currDiffText;
+    public GameObject solutionText;
+    
+
+
     private void Start()
     {
         startTime = Time.time;
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         sendLog = GameObject.Find("Debuger").GetComponent<DebugManager>();
+        prevDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevDifficulty.ToString();
+       // prevPerformanceText.GetComponent<Text>().text = gl.prevPerformanceText.ToString();
+        currDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.difficulty.ToString();
+        solutionText.GetComponent<Text>().text = sh.solusi.ToString();
+
+        if (isDebug)
+        {
+            prevDiffText.gameObject.SetActive(true);
+            prevPerformanceText.gameObject.SetActive(true);
+            currDiffText.gameObject.SetActive(true);
+            solutionText.gameObject.SetActive(true);
+        }
+        else
+        {
+            prevDiffText.gameObject.SetActive(false);
+            prevPerformanceText.gameObject.SetActive(false);
+            currDiffText.gameObject.SetActive(false);
+            solutionText.gameObject.SetActive(false);
+        }
     }
 
 
@@ -207,10 +236,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Destroy(lifePannel.transform.GetChild(0).gameObject);
+            int currentLife = sh.lifeCount - restartTimes;
+            lifeCount.text = currentLife.ToString();
+           // Destroy(lifePannel.transform.GetChild(0).gameObject);
         }
        
     }
+
+
 
     public void skipSoal()
     {

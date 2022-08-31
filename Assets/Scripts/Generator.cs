@@ -14,13 +14,14 @@ public class Generator : MonoBehaviour
     public GameObject TargetPrefab;
 
     //untuk life
-    public GameObject panelLife;
-    public GameObject lifePrefab;
+    //public GameObject panelLife;
+    //public GameObject lifePrefab;
+    public Text lifeCount;
 
     [SerializeField]
     private GameManager gm;
 
-    public Text kuncijawaban;
+    //public Text kuncijawaban;
 
 
 
@@ -480,13 +481,15 @@ public class Generator : MonoBehaviour
 
     public void GenerateLife(int life)
     {
-        for (int i = 0; i < life; i++)
-        {
-            GameObject target = Instantiate(lifePrefab);
-            target.transform.SetParent(panelLife.transform);
-            target.GetComponent<RectTransform>().localPosition = new Vector3(target.GetComponent<RectTransform>().transform.position.x, target.GetComponent<RectTransform>().transform.position.y, 1f);
-            //target.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
-        }
+        lifeCount.text = life.ToString();
+        //for (int i = 0; i < life; i++)
+        //{
+        //    GameObject target = Instantiate(lifePrefab);
+        //    target.transform.SetParent(panelLife.transform);
+        //    target.GetComponent<RectTransform>().localPosition = new Vector3(target.GetComponent<RectTransform>().transform.position.x, target.GetComponent<RectTransform>().transform.position.y, 1f);
+        //    //target.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+        //}
+
     }
 
 
@@ -494,7 +497,7 @@ public class Generator : MonoBehaviour
     //public void printSolution(Node targetLeaf)
     //{
 
-       
+
     //   // Debug.Log(targetLeaf.sumber);
     //    if (targetLeaf.parentNode != null)
     //    {
