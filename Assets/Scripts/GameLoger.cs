@@ -18,6 +18,8 @@ public class GameLoger : MonoBehaviour
 
     public float prevDifficulty;
     public float prevSuccessDifficulty;
+    public float prevPerformance;
+
     public string prevStatus;
     public float currentSum;
     public float prevSum;

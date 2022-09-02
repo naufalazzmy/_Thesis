@@ -51,7 +51,17 @@ public class GameManager : MonoBehaviour
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         sendLog = GameObject.Find("Debuger").GetComponent<DebugManager>();
         prevDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevDifficulty.ToString();
-       // prevPerformanceText.GetComponent<Text>().text = gl.prevPerformanceText.ToString();
+        prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevPerformance.ToString();
+
+        if (gl.prevStatus == "SUCCESS")
+        {
+            prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text += " (+)";
+        }
+        else
+        {
+            prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text += " (-)";
+        }
+
         currDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.difficulty.ToString();
         solutionText.GetComponent<Text>().text = sh.solusi.ToString();
 
@@ -262,7 +272,13 @@ public class GameManager : MonoBehaviour
         gl.prevDifficulty = gl.difficulty;
         gl.prevSum = gl.currentSum;
         gl.prevStatus = "SKIPPED";
-
+        
+        if(gl.prevPerformance == 0 )
+        {
+            Debug.LogWarning("skiped with gl: " + gl.prevPerformance);
+            gl.prevPerformance = 0.1f; //untuk initial difficulty kalo soal pertama dia gagal
+        }
+        
         tirai.SetTrigger("close");
         //skipPromt.SetTrigger("close");
         StartCoroutine(nextScene(nextSceneTarget, 1f));
@@ -312,6 +328,11 @@ public class GameManager : MonoBehaviour
                     gl.prevDifficulty = gl.difficulty;
                     gl.prevSum = gl.currentSum;
                     gl.prevStatus = "SUCCESS";
+
+                    //kalkulasi performa player
+                    int currentLife = sh.lifeCount - restartTimes;
+                    float performance = (float)currentLife / (float)sh.lifeCount;
+                    gl.prevPerformance = performance * 0.1f; //biar jadi 0.0n dst...
                 }
                 
 
