@@ -41,8 +41,11 @@ public class GameManager : MonoBehaviour
     public GameObject prevDiffText;
     public GameObject prevPerformanceText;
     public GameObject currDiffText;
+    public GameObject targetDiffText;
+
     public GameObject solutionText;
     
+
 
 
     private void Start()
@@ -52,6 +55,7 @@ public class GameManager : MonoBehaviour
         sendLog = GameObject.Find("Debuger").GetComponent<DebugManager>();
         prevDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevDifficulty.ToString();
         prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevPerformance.ToString();
+        targetDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.targetDifficulty.ToString();
 
         if (gl.prevStatus == "SUCCESS")
         {
@@ -71,6 +75,7 @@ public class GameManager : MonoBehaviour
             prevPerformanceText.gameObject.SetActive(true);
             currDiffText.gameObject.SetActive(true);
             solutionText.gameObject.SetActive(true);
+            targetDiffText.gameObject.SetActive(true);
         }
         else
         {
@@ -78,6 +83,7 @@ public class GameManager : MonoBehaviour
             prevPerformanceText.gameObject.SetActive(false);
             currDiffText.gameObject.SetActive(false);
             solutionText.gameObject.SetActive(false);
+            targetDiffText.gameObject.SetActive(false);
         }
     }
 
@@ -277,8 +283,10 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("skiped with gl: " + gl.prevPerformance);
             gl.prevPerformance = 0.1f; //untuk initial difficulty kalo soal pertama dia gagal
+            
         }
-        
+        gl.targetDifficulty = gl.difficulty - gl.prevPerformance;
+
         tirai.SetTrigger("close");
         //skipPromt.SetTrigger("close");
         StartCoroutine(nextScene(nextSceneTarget, 1f));
@@ -333,6 +341,8 @@ public class GameManager : MonoBehaviour
                     int currentLife = sh.lifeCount - restartTimes;
                     float performance = (float)currentLife / (float)sh.lifeCount;
                     gl.prevPerformance = performance * 0.1f; //biar jadi 0.0n dst...
+
+                    gl.targetDifficulty = gl.difficulty + gl.prevPerformance;
                 }
                 
 

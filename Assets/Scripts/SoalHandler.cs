@@ -36,7 +36,7 @@ public class SoalHandler : MonoBehaviour
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         gl.indexSoal = gl.indexSoal + 1; // init index soal
 
-        jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
+        //jumlahBlok = jumlahTambah + jumlahKurang + jumlahKali + jumlahBagi;
 
         gen = this.gameObject.GetComponent<Generator>();
 
@@ -56,37 +56,77 @@ public class SoalHandler : MonoBehaviour
                 SetLife(difficultyIndex); //buat banyak life
                 Node target = getTarget(bilanganObj);
 
-                if(target == null)
+                //Debug.LogWarning("OPTIMIZING...");
+                Debug.LogWarning(jumlahBlok);
+                Debug.LogWarning(jumlahOperand);
+                Debug.Log("curDiff: " + difficultyIndex);
+                float q = gl.prevDifficulty + gl.prevPerformance;
+                Debug.Log("target: " + q);
+
+                if (target == null)
                 {
                     Debug.LogError("TARGET NULL");
                 }
                 else
                 {
-                    //float minTreshold = gl.prevDifficulty + 0.015f; //0.515 
+                    //float minTreshold = gl.prevDifficulty + 0.015f; //0.515 //TODO: disini ada kemungkinan dia ga nemu nemu index pas lo
                     //float maxTreshold = gl.prevDifficulty + 0.1f; // 0.6
+                    string aS = difficultyIndex.ToString().Substring(0, 3);
+                    string bS = gl.targetDifficulty.ToString().Substring(0, 3);
+                    bool optimized = false;
 
-                    // cari min max tresholdnya
-                    float targetDiff = gl.prevDifficulty + gl.prevPerformance;
-                    string diffstring = targetDiff.ToString();
-                    string cutted = diffstring.Substring(0, 4);
-
-                    float minTreshold = float.Parse(cutted);
-                    float maxTreshold = minTreshold + 0.01f;
-                    Debug.Log("SUCCESS");
-                    Debug.Log("curDiff: " + difficultyIndex);
-                    Debug.Log("prevDiff: " + gl.prevDifficulty);
-                    Debug.Log("prevformance: " + gl.prevPerformance);
-                    Debug.Log("target: " + targetDiff);
-                    Debug.Log("minTres: " + minTreshold);
-                    Debug.Log("maxTres: " + maxTreshold);
-
-
-                    if ((difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold) && target != null)
+                    if (aS == bS)
                     {
+                        while (!optimized)
+                        {
+                            cobaCount++;
+                            bilanganObj.Clear();
+                            target = null;
+                            bilanganObj = BuatSoal(); 
+                            difficultyIndex = getDifficulty(bilanganObj);
+                            SetLife(difficultyIndex); 
+                            target = getTarget(bilanganObj);
+
+                            if (target == null)
+                            {
+                                Debug.LogError("TARGET NULL");
+                            }
+                            else
+                            {
+                                // cari min max tresholdnya
+                                float targetDiff = gl.prevDifficulty + gl.prevPerformance;
+                                string diffstring = targetDiff.ToString();
+                                string cutted = diffstring.Substring(0, 4);
+
+                                float minTreshold = float.Parse(cutted);
+                                float maxTreshold = minTreshold + 0.01f; //TODO: harusnya maxnya targetnya dong? //atau gausah pake max min tres, pak pencarin optimum dlaam berapa x loop? buain fungsi baru
+                                Debug.LogWarning("OPTIMIZING...");
+                                Debug.LogWarning(jumlahBlok);
+                                Debug.LogWarning(jumlahOperand);
+                                Debug.Log("curDiff: " + difficultyIndex);
+                                //Debug.Log("prevDiff: " + gl.prevDifficulty);
+                                // Debug.Log("prevformance: " + gl.prevPerformance);
+                                Debug.Log("target: " + targetDiff);
+                                Debug.Log("minTres: " + minTreshold);
+                                Debug.Log("maxTres: " + maxTreshold);
 
 
-                        GenerateSoal(bilanganObj, target);
-                        founded = true;
+                                if ((difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold) && target != null)
+                                {
+                                    GenerateSoal(bilanganObj, target);
+                                    optimized = true;
+                                    founded = true;
+                                }
+                                else if (cobaCount >= 1000)
+                                {
+                                    GenerateSoal(bilanganObj, target);
+                                    Debug.LogWarning("CAPEK NYARI OPTIMIZED");
+                                    break;
+                                }
+                            }
+
+                            
+                        }
                     }
                     else if (cobaCount >= 1000)
                     {
@@ -94,6 +134,8 @@ public class SoalHandler : MonoBehaviour
                         Debug.LogWarning("CAPEK NYARI SUMPAH");
                         break;
                     }
+
+
                 }
 
                 
@@ -112,6 +154,13 @@ public class SoalHandler : MonoBehaviour
                 float difficultyIndex = getDifficulty(bilanganObj);
                 SetLife(difficultyIndex);
                 Node target = getTarget(bilanganObj);
+
+                Debug.LogWarning(jumlahBlok);
+                Debug.LogWarning(jumlahOperand);
+                Debug.Log("curDiff: " + difficultyIndex);
+                float q = gl.prevDifficulty + gl.prevPerformance;
+                Debug.Log("target: " + q);
+
                 if (target == null)
                 {
                     Debug.LogError("TARGET NULL");
@@ -121,26 +170,62 @@ public class SoalHandler : MonoBehaviour
                     //float minTreshold = gl.prevDifficulty - 0.015f; //0.447 || 0.015
                     //float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462 || 0.1
 
-                    float targetDiff = gl.prevDifficulty - gl.prevPerformance;
-                    string diffstring = targetDiff.ToString();
-                    string cutted = diffstring.Substring(0, 4);
-
-                    float maxTreshold = float.Parse(cutted);
-                    float minTreshold = maxTreshold - 0.01f;
-                    Debug.Log("SKIPPED");
-                    Debug.Log("curDiff: " + difficultyIndex);
-                    Debug.Log("prevDiff: " + gl.prevDifficulty);
-                    Debug.Log("prevformance: " + gl.prevPerformance);
-                    Debug.Log("target: " + targetDiff);
-                    Debug.Log("minTres: " + minTreshold);
-                    Debug.Log("maxTres: " + maxTreshold);
+                    string aS = difficultyIndex.ToString().Substring(0, 3);
+                    string bS = gl.targetDifficulty.ToString().Substring(0, 3);
+                    bool optimized = false;
 
 
-                    if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold && target != null)
+                    if (aS == bS)
                     {
-                        Debug.Log("COBA COUNT: " + cobaCount);
-                        GenerateSoal(bilanganObj, target);
-                        founded = true;
+                        while (!optimized)
+                        {
+                            cobaCount++;
+                            target = null;
+                            bilanganObj.Clear();
+                            bilanganObj = BuatSoal();
+                            difficultyIndex = getDifficulty(bilanganObj);
+                            SetLife(difficultyIndex);
+                            target = getTarget(bilanganObj);
+                            if (target == null)
+                            {
+                                Debug.LogError("TARGET NULL");
+                            }
+                            else
+                            {
+                                float targetDiff = gl.prevDifficulty - gl.prevPerformance;
+                                string diffstring = targetDiff.ToString();
+                                string cutted = diffstring.Substring(0, 4);
+
+                                float maxTreshold = float.Parse(cutted);
+                                float minTreshold = maxTreshold - 0.01f;
+                                Debug.LogWarning("OPTIMIZING..."); //TODO: optimizing ini bisa jadi dia capek nyari, karna bisa jadi memang kombinasi yang saat ini ga bisa bentuk difficulty segitu;
+                                Debug.LogWarning(jumlahBlok);
+                                Debug.LogWarning(jumlahOperand);
+                                Debug.Log("curDiff: " + difficultyIndex);
+                                Debug.Log("prevDiff: " + gl.prevDifficulty);
+                                Debug.Log("prevformance: " + gl.prevPerformance);
+                                Debug.Log("target: " + targetDiff);
+                                Debug.Log("minTres: " + minTreshold);
+                                Debug.Log("maxTres: " + maxTreshold);
+
+
+                                if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold && target != null)
+                                {
+                                    Debug.Log("COBA COUNT: " + cobaCount);
+                                    GenerateSoal(bilanganObj, target);
+                                    founded = true;
+                                    optimized = true;
+                                }
+                                else if (cobaCount >= 1000)
+                                {
+                                    GenerateSoal(bilanganObj, target);
+                                    Debug.LogWarning("CAPEK NYARI OPTIMIZED");
+                                    break;
+                                }
+                            }
+
+                            
+                        }
                     }
                     else if (cobaCount >= 1000)
                     {
@@ -148,6 +233,8 @@ public class SoalHandler : MonoBehaviour
                         Debug.LogWarning("CAPEK NYARI SUMPAH");
                         break;
                     }
+
+
                 }
 
 
@@ -204,35 +291,34 @@ public class SoalHandler : MonoBehaviour
 
     private void generateMainBlok()
     {
-        jumlahOperand = 0; //TODO: sumpah bingung ini variabel kok ada dibuat lagi di difficulty, soalnya hasilnya ga jelas
-        jumlahBlok = Random.Range(3, 6);
+        //jumlahOperand = 0; //TODO: sumpah bingung ini variabel kok ada dibuat lagi di difficulty, soalnya hasilnya ga jelas, operand / jumlah blok pasti ga bisa konsisten, kenapa ya?
+        //jumlahBlok = Random.Range(3, 6);
 
-        
+        //dibawah diff 4, jumlah balok 3
+        //diatas diff 4, jumlsh balok 4. max operator 2
+        //diatas diff 6, jumlah balok 5 max operator 3
 
-        //if (gl.prevDifficulty == 0f)
-        //{
-        //    //Debug.Log("Init jumlah balok?");
-        //    lifeCount = 3; // life countnya km sesuuaikan jumlah bloknya
-        //    jumlahBlok = Random.Range(3, 6);
-        //}
-        //else if(gl.prevDifficulty < 0.56f) //46 || EASY
-        //{
-        //    lifeCount = 3;
-        //    jumlahBlok = Random.Range(3, 6);
-        //}
-        //else if(gl.prevDifficulty >= 0.56f && gl.prevDifficulty <= 0.75f) //0.46 - 0.65 || MED
-        //{
-        //    lifeCount = 3;
-        //    jumlahBlok = Random.Range(3, 6);
-        //}
-        //else if(gl.prevDifficulty > 0.75f) //0.65 || HARD
-        //{
-        //    lifeCount = 3;
-        //    jumlahBlok = Random.Range(3, 6);
-        //}
+        if (gl.targetDifficulty == 0f)
+        {
+            //Debug.Log("Init jumlah balok?");
 
-       
-        
+            jumlahBlok = Random.Range(3, 6);
+        }
+        else if (gl.targetDifficulty < 0.4f) //46 || EASY
+        {
+            jumlahBlok = 3;
+        }
+        else if (gl.targetDifficulty >= 0.4f && gl.targetDifficulty <= 0.6f) //0.46 - 0.65 || MED
+        {
+            jumlahBlok = 4;
+        }
+        else if (gl.targetDifficulty > 0.6f) //0.65 || HARD
+        {
+            jumlahBlok = 5;
+        }
+
+
+
         //Debug.Log("jumlah blok: " + jumlahBlok);
         int maxOperatorCount;
 
@@ -240,7 +326,7 @@ public class SoalHandler : MonoBehaviour
         // jumlah balok biasa harus setngah atau lebih daripada jumlah operator, contoh 3. balok 2 op 1| contoh 4 balok 3 op 1, atau balok 2 op 2
         if(jumlahBlok == 3)
         {
-            if(gl.prevDifficulty <= 0.3) // TODO: ini km perhatiin, masak begini?
+            if(gl.targetDifficulty <= 0.27) // TODO: ini km perhatiin, ini buat set minimum
             {
                 maxOperatorCount = 0;
                 jumlahTambah = 2;
@@ -263,20 +349,30 @@ public class SoalHandler : MonoBehaviour
             {
                 jumlahBagi = maxOperatorCount;
             }
-            
+            Debug.Log("Operand harusnya: " + maxOperatorCount);
 
 
         }
         else if(jumlahBlok == 4)
         {
-            maxOperatorCount = Random.Range(1, 2);
+            //maxOperatorCount = Random.Range(1, 2);
+
             bool isBagiMax = false;
             int rand = 0;
-            for(int i=0; i<maxOperatorCount; i++)
+            if (gl.targetDifficulty <= 0.5) // TODO: ini km perhatiin, masak begini?
+            {
+                maxOperatorCount = 1;
+            }
+            else
+            {
+                maxOperatorCount = 2;
+            }
+
+            for (int i=0; i<maxOperatorCount; i++)
             {
                 if (!isBagiMax)
                 {
-                    rand = Random.Range(1, 2); // asign apakah operator bagi/kali
+                    rand = Random.Range(1, 2); // buat cari ada apakah operator bagi/kali, kalo bagi maximal 1
                 }
                 else
                 {
@@ -314,6 +410,7 @@ public class SoalHandler : MonoBehaviour
                     jumlahblokkeluar--;
                 }
             }
+            Debug.Log("Operand harusnya: " + maxOperatorCount);
         }
         else if(jumlahBlok == 5 || jumlahBlok == 6)
         {
@@ -362,6 +459,7 @@ public class SoalHandler : MonoBehaviour
                     jumlahblokkeluar--;
                 }
             }
+            Debug.Log("Operand harusnya: " + maxOperatorCount);
         }
         else if(jumlahBlok == 7 || jumlahBlok == 8)
         {
@@ -427,6 +525,8 @@ public class SoalHandler : MonoBehaviour
     private void setJumlahOperand() //dicari yang kali bagi doang
     {
         jumlahOperand = 0;
+        Debug.Log("jum Balok: " + jumlahBlok);
+        Debug.Log("jum Operand: " + jumlahOperand);
         if (jumlahTambah > 0)
         {
             //jumlahOperand++;
@@ -437,12 +537,13 @@ public class SoalHandler : MonoBehaviour
         }
         if (jumlahKali > 0)
         {
-            jumlahOperand++;
+            jumlahOperand+= jumlahKali;
         }
         if (jumlahBagi > 0)
         {
-            jumlahOperand++;
+            jumlahOperand += jumlahBagi;
         }
+        Debug.Log("Operand after: " + jumlahOperand);
         //Debug.Log("Jumlah operand: " + jumlahOperand);
     }
 
