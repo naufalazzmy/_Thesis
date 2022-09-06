@@ -123,7 +123,7 @@ public class SoalHandler : MonoBehaviour
                                 //get soal paling mendekati
                                 if(Mathf.Abs(difficultyIndex-gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty))
                                 {
-                                    soalCandidate = newCandidate(bilanganObj, target, difficultyIndex);
+                                    soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target, difficultyIndex);
                                 }
 
 
@@ -166,29 +166,30 @@ public class SoalHandler : MonoBehaviour
 
                 
                 Debug.LogWarning("-RESTART-");
-                cobaCount++;
+                
                 generateMainBlok();
                 List<Bilangan> bilanganObj = BuatSoal();
                 float difficultyIndex = getDifficulty(bilanganObj);
                 SetLife(difficultyIndex);
                 Node target = getTarget(bilanganObj);
 
-                Debug.LogWarning(jumlahBlok);
-                Debug.LogWarning(jumlahOperand);
+                //Debug.LogWarning(jumlahBlok);
+                //Debug.LogWarning(jumlahOperand);
                 Debug.Log("curDiff: " + difficultyIndex);
                 float q = gl.prevDifficulty + gl.prevPerformance;
                 Debug.Log("target: " + q);
 
                 if (target == null)
                 {
-                    Debug.LogWarning("TARGET NULL");
+                    Debug.LogError("TARGET NULL");
                 }
                 else
                 {
+                    cobaCount++;
                     //float minTreshold = gl.prevDifficulty - 0.015f; //0.447 || 0.015
                     //float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462 || 0.1
 
-                    string aS = difficultyIndex.ToString().Substring(0, 3);
+                    string aS = difficultyIndex.ToString().Substring(0, 3); //1 angka dibelakang koma (0.5..)
                     string bS = gl.targetDifficulty.ToString().Substring(0, 3);
                     bool optimized = false;
 
@@ -196,16 +197,15 @@ public class SoalHandler : MonoBehaviour
                     Debug.LogWarning("beda best: " + Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty));
                     Debug.LogWarning("curr: " + difficultyIndex);
                     Debug.LogWarning("best: " + soalCandidate.difficulty);
-
+                    if(soalCandidate.balok == null)
+                    {
+                        soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target, difficultyIndex);
+                    }
                     if (Mathf.Abs(difficultyIndex - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty))
                     {
                         soalCandidate = null; 
-                        soalCandidate = newCandidate(bilanganObj, target, difficultyIndex);
-                        Debug.LogError("best repaced to: " + soalCandidate.difficulty);
-                        foreach (Bilangan item in soalCandidate.balok)
-                        {
-                            Debug.LogError(item.bilangan + item.op);
-                        }
+                        soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target, difficultyIndex);
+
                     }
 
                     if (aS == bS)
@@ -251,12 +251,7 @@ public class SoalHandler : MonoBehaviour
                                 if (Mathf.Abs(difficultyIndex - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty))
                                 {
                                     soalCandidate = null;
-                                    soalCandidate = newCandidate(bilanganObj, target, difficultyIndex);
-                                    Debug.LogError("best repaced to: " + soalCandidate.difficulty);
-                                    foreach (Bilangan item in soalCandidate.balok)
-                                    {
-                                        Debug.LogError(item.bilangan + item.op);
-                                    }
+                                    soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target, difficultyIndex);
                                 }
 
                                 if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold && target != null)
@@ -280,13 +275,17 @@ public class SoalHandler : MonoBehaviour
                     {
                         founded = true;
                         // GenerateSoal(bilanganObj, target);
-                        foreach (Bilangan item in soalCandidate.balok)
-                        {
-                            Debug.Log(item.bilangan + item.op);
-                        }
+                        //Debug.Log("balok keluar di diff ini");
+                        //foreach (Bilangan item in soalCandidate.balok)
+                        //{
+                        //    Debug.Log(item.bilangan + item.op);
+                        //}
                         GenerateSoal(soalCandidate.balok, soalCandidate.target);
-                        Debug.Log("Best diff: " + soalCandidate.difficulty);
-                        Debug.LogWarning("CAPEK NYARI SUMPAH");
+                        gl.difficulty = soalCandidate.difficulty; // LOG
+                        //Debug.Log("set diff: " + gl.difficulty);
+                        SetLife(difficultyIndex); //hati
+                        //Debug.Log("Best diff: " + soalCandidate.difficulty);
+                        //Debug.LogWarning("CAPEK NYARI SUMPAH");
                         break;
                     }
 
@@ -406,16 +405,20 @@ public class SoalHandler : MonoBehaviour
             }
 
             //Debug.Log("jumlah operator: " + maxOperatorCount);
-            int rand = Random.Range(1, 3);
-            if(rand == 1)
+            if(maxOperatorCount == 1)
             {
-                jumlahKali = maxOperatorCount;
+                int rand = Random.Range(1, 3);
+                if (rand == 1)
+                {
+                    jumlahKali = maxOperatorCount;
+                }
+                else
+                {
+                    jumlahBagi = maxOperatorCount;
+                }
             }
-            else
-            {
-                jumlahBagi = maxOperatorCount;
-            }
-            Debug.Log("Operand harusnya: " + maxOperatorCount);
+
+            //Debug.Log("Operand harusnya: " + maxOperatorCount);
 
 
         }
@@ -592,8 +595,8 @@ public class SoalHandler : MonoBehaviour
     private void setJumlahOperand() //dicari yang kali bagi doang
     {
         jumlahOperand = 0;
-        Debug.Log("jum Balok: " + jumlahBlok);
-        Debug.Log("jum Operand: " + jumlahOperand);
+        //Debug.Log("jum Balok: " + jumlahBlok);
+        //Debug.Log("jum Operand: " + jumlahOperand);
         if (jumlahTambah > 0)
         {
             //jumlahOperand++;
@@ -610,7 +613,7 @@ public class SoalHandler : MonoBehaviour
         {
             jumlahOperand += jumlahBagi;
         }
-        Debug.Log("Operand after: " + jumlahOperand);
+        //Debug.Log("Operand after: " + jumlahOperand);
         //Debug.Log("Jumlah operand: " + jumlahOperand);
     }
 
