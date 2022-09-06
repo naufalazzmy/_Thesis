@@ -44,7 +44,8 @@ public class GameManager : MonoBehaviour
     public GameObject targetDiffText;
 
     public GameObject solutionText;
-    
+    public GameObject isFoundText;
+
 
 
 
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
         prevDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevDifficulty.ToString();
         prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevPerformance.ToString();
         targetDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.targetDifficulty.ToString();
+        isFoundText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.isFound.ToString();
 
         if (gl.prevStatus == "SUCCESS")
         {
@@ -76,6 +78,7 @@ public class GameManager : MonoBehaviour
             currDiffText.gameObject.SetActive(true);
             solutionText.gameObject.SetActive(true);
             targetDiffText.gameObject.SetActive(true);
+            isFoundText.gameObject.SetActive(true);
         }
         else
         {
@@ -84,6 +87,7 @@ public class GameManager : MonoBehaviour
             currDiffText.gameObject.SetActive(false);
             solutionText.gameObject.SetActive(false);
             targetDiffText.gameObject.SetActive(false);
+            isFoundText.gameObject.SetActive(false);
         }
     }
 

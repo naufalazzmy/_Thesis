@@ -26,6 +26,8 @@ public class GameLoger : MonoBehaviour
     public float currentSum;
     public float prevSum;
 
+    public bool isFound = false;
+
     void Start()
     {
         if (instance != null)
