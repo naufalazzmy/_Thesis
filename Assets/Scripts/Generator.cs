@@ -13,10 +13,15 @@ public class Generator : MonoBehaviour
     public GameObject PanelTarget;
     public GameObject TargetPrefab;
 
+    //untuk life
+    //public GameObject panelLife;
+    //public GameObject lifePrefab;
+    public Text lifeCount;
+
     [SerializeField]
     private GameManager gm;
 
-    public Text kuncijawaban;
+    //public Text kuncijawaban;
 
 
 
@@ -39,19 +44,22 @@ public class Generator : MonoBehaviour
         return temp;
     }
 
-    public Bilangan Hitung(List<Bilangan> bilangan)
+    public Bilangan Hitung(List<Bilangan> bilangan) // max ada dua bilangan. makanya dibuat list
     {
         float a = float.Parse(bilangan[0].bilangan);
         float b = float.Parse(bilangan[1].bilangan);
 
         string aOp = bilangan[0].op;
         string bOp = bilangan[1].op;
-
-        if(a.ToString() == "0" || a.ToString() == "0.0" || b.ToString() == "0" || b.ToString() == "0.0")
+        //if(a.ToString() == "0" || a.ToString() == "0.0" || b.ToString() == "0" || b.ToString() == "0.0")
+        //{
+        //    return newBilangan("invalid", "invalid");
+        //}
+        if (b.ToString() == "0" && bOp.ToString() == "/")
         {
-            return newBilangan("invalid", "invalid");
+            return newBilangan("invalid", "invalid"); //prevent biar gabisa dibagi 0
         }
-        else if(bOp == "+")
+        else if (bOp == "+")
         {
             if(aOp == "*")
             {
@@ -346,13 +354,8 @@ public class Generator : MonoBehaviour
             List<Bilangan> bilanganlist = new List<Bilangan>(parentNode.listBilangan);
             foreach (Bilangan current in combList[i]) //comblist[j] = (bilangan)(bilangan) || (+2)(-4)
             {
-                // cek setiap element di kombinasi apakah ada di listbilangan parent, kalo ada hapus
                 for(int j=0; j< bilanganlist.Count; j++) // KAMU CEK DISINI MASALAH NIH
                 {
-                    //if ((current.bilangan == combList[j][0].bilangan && current.op == combList[j][0].op) || (current.bilangan == combList[j][1].bilangan && current.op == combList[j][1].op))
-                    //{
-                    //    bilanganlist.RemoveAt(j);
-                    //}
                     if(current.bilangan == bilanganlist[j].bilangan && current.op == bilanganlist[j].op)
                     {
                         bilanganlist.RemoveAt(j);
@@ -476,11 +479,25 @@ public class Generator : MonoBehaviour
         }
     }
 
+    public void GenerateLife(int life)
+    {
+        lifeCount.text = life.ToString();
+        //for (int i = 0; i < life; i++)
+        //{
+        //    GameObject target = Instantiate(lifePrefab);
+        //    target.transform.SetParent(panelLife.transform);
+        //    target.GetComponent<RectTransform>().localPosition = new Vector3(target.GetComponent<RectTransform>().transform.position.x, target.GetComponent<RectTransform>().transform.position.y, 1f);
+        //    //target.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+        //}
+
+    }
+
+
 
     //public void printSolution(Node targetLeaf)
     //{
 
-       
+
     //   // Debug.Log(targetLeaf.sumber);
     //    if (targetLeaf.parentNode != null)
     //    {

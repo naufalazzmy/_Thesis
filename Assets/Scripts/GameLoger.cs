@@ -18,9 +18,18 @@ public class GameLoger : MonoBehaviour
 
     public float prevDifficulty;
     public float prevSuccessDifficulty;
+    public float prevPerformance;
+
+    public float targetDifficulty;
+
     public string prevStatus;
     public float currentSum;
     public float prevSum;
+
+    public string blokSoal;
+    public string solusiSoal;
+
+    public bool isFound = false;
 
     void Start()
     {

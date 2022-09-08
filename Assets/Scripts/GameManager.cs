@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     // make it selected effect
 
     public GameObject confetti;
+    //public GameObject lifePannel;
+    public Text lifeCount;
     public Animator tirai;
     public Animator skipPromt;
     public bool isComplete = false;
@@ -32,12 +34,61 @@ public class GameManager : MonoBehaviour
 
     private GameLoger gl;
     public DebugManager sendLog;
+    public SoalHandler sh;
+
+    //forDebugger
+    public bool isDebug = false;
+    public GameObject prevDiffText;
+    public GameObject prevPerformanceText;
+    public GameObject currDiffText;
+    public GameObject targetDiffText;
+
+    public GameObject solutionText;
+    public GameObject isFoundText;
+
+
+
 
     private void Start()
     {
         startTime = Time.time;
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         sendLog = GameObject.Find("Debuger").GetComponent<DebugManager>();
+        prevDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevDifficulty.ToString();
+        prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.prevPerformance.ToString();
+        targetDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.targetDifficulty.ToString();
+        isFoundText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.isFound.ToString();
+
+        if (gl.prevStatus == "SUCCESS")
+        {
+            prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text += " (+)";
+        }
+        else
+        {
+            prevPerformanceText.transform.GetChild(0).gameObject.GetComponent<Text>().text += " (-)";
+        }
+
+        currDiffText.transform.GetChild(0).gameObject.GetComponent<Text>().text = gl.difficulty.ToString();
+        solutionText.GetComponent<Text>().text = sh.solusi.ToString();
+
+        if (isDebug)
+        {
+            prevDiffText.gameObject.SetActive(true);
+            prevPerformanceText.gameObject.SetActive(true);
+            currDiffText.gameObject.SetActive(true);
+            solutionText.gameObject.SetActive(true);
+            targetDiffText.gameObject.SetActive(true);
+            isFoundText.gameObject.SetActive(true);
+        }
+        else
+        {
+            prevDiffText.gameObject.SetActive(false);
+            prevPerformanceText.gameObject.SetActive(false);
+            currDiffText.gameObject.SetActive(false);
+            solutionText.gameObject.SetActive(false);
+            targetDiffText.gameObject.SetActive(false);
+            isFoundText.gameObject.SetActive(false);
+        }
     }
 
 
@@ -196,17 +247,39 @@ public class GameManager : MonoBehaviour
         }
         totalbenar = 0;
         historyBilangan.Clear();
+
+        if(restartTimes > sh.lifeCount)
+        {
+
+            restartTimes--;
+            skipSoal();
+        }
+        else
+        {
+            int currentLife = sh.lifeCount - restartTimes;
+            lifeCount.text = currentLife.ToString();
+           // Destroy(lifePannel.transform.GetChild(0).gameObject);
+        }
+       
     }
+
+
 
     public void skipSoal()
     {
         sendLog.Log("INDEX: " + gl.indexSoal);
         sendLog.Log("SCHEMA: " + gl.schema);
-        sendLog.Log("Z1: " + gl.z1);
-        sendLog.Log("Z2: " + gl.z2);
-        sendLog.Log("Z3: " + gl.z3);
-        sendLog.Log("Z4: " + gl.z4);
-        sendLog.Log("DIFF: " + gl.difficulty);
+        //sendLog.Log("Z1: " + gl.z1);
+        //sendLog.Log("Z2: " + gl.z2);
+        //sendLog.Log("Z3: " + gl.z3);
+        //sendLog.Log("Z4: " + gl.z4);
+        sendLog.Log("SOAL: " + gl.blokSoal);
+        sendLog.Log("SOLUSI: " + gl.solusiSoal);
+        sendLog.Log("PREV DIFF: " + gl.prevDifficulty);
+        sendLog.Log("PREV PERFORMANCE: " + gl.prevPerformance);
+        sendLog.Log("TARGET DIFF: " + gl.targetDifficulty);
+        sendLog.Log("CURRENT DIFF: " + gl.difficulty);
+        sendLog.Log("isFound: " + gl.isFound);
         sendLog.Log("STATUS: SKIPPED");
         sendLog.Log("TOTAL UNDO: "+restartTimes);
         sendLog.Log("TOTAL RESTART: "+undoTimes);
@@ -215,9 +288,17 @@ public class GameManager : MonoBehaviour
         gl.prevDifficulty = gl.difficulty;
         gl.prevSum = gl.currentSum;
         gl.prevStatus = "SKIPPED";
+        
+        if(gl.prevPerformance == 0 )
+        {
+            Debug.LogWarning("skiped with gl: " + gl.prevPerformance);
+            gl.prevPerformance = 0.1f; //untuk initial difficulty kalo soal pertama dia gagal
+            
+        }
+        gl.targetDifficulty = gl.difficulty - gl.prevPerformance;
 
         tirai.SetTrigger("close");
-        skipPromt.SetTrigger("close");
+        //skipPromt.SetTrigger("close");
         StartCoroutine(nextScene(nextSceneTarget, 1f));
     }
 
@@ -251,11 +332,17 @@ public class GameManager : MonoBehaviour
                 {
                     sendLog.Log("INDEX: " + gl.indexSoal);
                     sendLog.Log("SCHEMA: " + gl.schema);
-                    sendLog.Log("Z1: " + gl.z1);
-                    sendLog.Log("Z2: " + gl.z2);
-                    sendLog.Log("Z3: " + gl.z3);
-                    sendLog.Log("Z4: " + gl.z4);
-                    sendLog.Log("DIFF: " + gl.difficulty);
+                    //sendLog.Log("Z1: " + gl.z1);
+                    //sendLog.Log("Z2: " + gl.z2);
+                    //sendLog.Log("Z3: " + gl.z3);
+                    //sendLog.Log("Z4: " + gl.z4);
+                    sendLog.Log("SOAL: " + gl.blokSoal);
+                    sendLog.Log("SOLUSI: " + gl.solusiSoal);
+                    sendLog.Log("PREV DIFF: " + gl.prevDifficulty);
+                    sendLog.Log("PREV PERFORMANCE: " + gl.prevPerformance);
+                    sendLog.Log("TARGET DIFF: " + gl.targetDifficulty);
+                    sendLog.Log("CURRENT DIFF: " + gl.difficulty);
+                    sendLog.Log("isFound: " + gl.isFound);
                     sendLog.Log("STATUS: SUCCESS");
                     sendLog.Log("TOTAL UNDO: " + restartTimes);
                     sendLog.Log("TOTAL RESTART: " + undoTimes);
@@ -265,6 +352,13 @@ public class GameManager : MonoBehaviour
                     gl.prevDifficulty = gl.difficulty;
                     gl.prevSum = gl.currentSum;
                     gl.prevStatus = "SUCCESS";
+
+                    //kalkulasi performa player
+                    int currentLife = sh.lifeCount - restartTimes;
+                    float performance = (float)currentLife / (float)sh.lifeCount;
+                    gl.prevPerformance = performance * 0.1f; //biar jadi 0.0n dst...
+
+                    gl.targetDifficulty = gl.difficulty + gl.prevPerformance;
                 }
                 
 
