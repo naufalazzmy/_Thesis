@@ -106,9 +106,11 @@ public class SoalHandler : MonoBehaviour
 
                     if (aS == bS)
                     {
+                        int optimizeCount = 0;
                         while (!optimized)
                         {
                             cobaCount++;
+                            optimizeCount++;
                             target = null;
                             bilanganObj.Clear();
                             bilanganObj = BuatSoal();
@@ -125,8 +127,8 @@ public class SoalHandler : MonoBehaviour
                                 string diffstring = "";
                                 string cutted = "";
 
-                                float maxTreshold = 0;
-                                float minTreshold = 0;
+                                //float maxTreshold = 0;
+                                //float minTreshold = 0;
 
                                 if (gl.prevStatus == "SKIPPED")
                                 {
@@ -134,8 +136,8 @@ public class SoalHandler : MonoBehaviour
                                     diffstring = targetDiff.ToString();
                                     cutted = diffstring.Substring(0, 4);
 
-                                    maxTreshold = float.Parse(cutted);
-                                    minTreshold = maxTreshold - 0.01f;
+                                    //maxTreshold = float.Parse(cutted);
+                                    //minTreshold = maxTreshold - 0.01f;
                                 }
                                 else if (gl.prevStatus == "SUCCESS")
                                 {
@@ -143,8 +145,8 @@ public class SoalHandler : MonoBehaviour
                                     diffstring = targetDiff.ToString();
                                     cutted = diffstring.Substring(0, 4);
 
-                                    maxTreshold = float.Parse(cutted);
-                                    minTreshold = maxTreshold + 0.01f;
+                                    //maxTreshold = float.Parse(cutted);
+                                    //minTreshold = maxTreshold + 0.01f;
                                 }
                                 Debug.LogWarning("OPTIMIZING..."); //TODO: optimizing ini bisa jadi dia capek nyari, karna bisa jadi memang kombinasi yang saat ini ga bisa bentuk difficulty segitu;
                                 Debug.LogWarning(jumlahBlok);
@@ -153,14 +155,14 @@ public class SoalHandler : MonoBehaviour
                                 Debug.Log("prevDiff: " + gl.prevDifficulty);
                                 Debug.Log("prevformance: " + gl.prevPerformance);
                                 Debug.Log("target: " + targetDiff);
-                                Debug.Log("minTres: " + minTreshold);
-                                Debug.Log("maxTres: " + maxTreshold);
+                                //Debug.Log("minTres: " + minTreshold);
+                                //Debug.Log("maxTres: " + maxTreshold);
 
 
                                 //Debug.LogWarning("beda curr: " + Mathf.Abs(difficultyIndex - gl.targetDifficulty));
                                 //Debug.LogWarning("beda best: " + Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty));
                                 Debug.LogWarning("curr: " + difficultyIndex);
-                                //Debug.LogWarning("best: " + soalCandidate.difficulty);
+                                Debug.LogWarning("best: " + soalCandidate.difficulty);
 
                                 //get soal paling mendekati
                                 if (Mathf.Abs(difficultyIndex - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty))
@@ -169,12 +171,14 @@ public class SoalHandler : MonoBehaviour
                                     soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target,solusi, difficultyIndex);
                                 }
 
-                                if (difficultyIndex >= minTreshold && difficultyIndex <= maxTreshold && target != null)
+
+                                if (optimizeCount >= 500)
                                 {
-                                    Debug.Log("COBA COUNT: " + cobaCount);
+                                    // Debug.Log("COBA COUNT: " + cobaCount);
                                     gl.isFound = true;
+                                    gl.difficulty = soalCandidate.difficulty; // LOG
                                     solusi = soalCandidate.solusi;
-                                    GenerateSoal(bilanganObj, target);
+                                    GenerateSoal(soalCandidate.balok, soalCandidate.target);
 
                                     string soal = "";
                                     foreach (Bilangan item in soalCandidate.balok)
@@ -186,11 +190,7 @@ public class SoalHandler : MonoBehaviour
 
                                     founded = true;
                                     optimized = true;
-                                }
-                                else if (cobaCount >= 1000)
-                                {
-
-                                    optimized = true;
+                                    Debug.LogWarning("Optimizing selesai. semua selesai");
                                 }
                             }
 
