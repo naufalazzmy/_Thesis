@@ -233,7 +233,7 @@ public class SoalHandler : MonoBehaviour
                 Node target = getTarget(bilanganObj);
                 if (target == null)
                 {
-                    Debug.LogError("TARGET NULL");
+                    Debug.LogWarning("TARGET NULL");
                 }
                 else
                 {
@@ -340,6 +340,7 @@ public class SoalHandler : MonoBehaviour
                 }
                 else
                 {
+                    Debug.LogError("Ada Bagi: " + maxOperatorCount);
                     jumlahBagi = maxOperatorCount;
                 }
             }
@@ -362,13 +363,13 @@ public class SoalHandler : MonoBehaviour
             //{
             //    maxOperatorCount = 2;
             //}
-            maxOperatorCount = Random.Range(1, 3);
+            maxOperatorCount = Random.Range(1, 3); //1-2
 
             for (int i = 0; i < maxOperatorCount; i++)
             {
                 if (!isBagiMax)
                 {
-                    rand = Random.Range(1, 2); // buat cari ada apakah operator bagi/kali, kalo bagi maximal 1
+                    rand = Random.Range(1, 3); // buat cari ada apakah operator bagi/kali, kalo bagi maximal 1
                 }
                 else
                 {
@@ -377,12 +378,13 @@ public class SoalHandler : MonoBehaviour
 
                 if (rand == 1)
                 {
-                    jumlahKali = maxOperatorCount;
+                    jumlahKali++;
                 }
                 else
                 {
-                    Debug.LogError("bagi maxed");
-                    jumlahBagi = maxOperatorCount;
+                    Debug.LogError("Ada Bagi 1");
+                    
+                    jumlahBagi++;
                     isBagiMax = true;
                 }
             }
@@ -417,7 +419,7 @@ public class SoalHandler : MonoBehaviour
             {
                 if (!isBagiMax)
                 {
-                    rand = Random.Range(1, 2); // asign apakah operator bagi/kali
+                    rand = Random.Range(1, 3); // asign apakah operator bagi/kali
                 }
                 else
                 {
@@ -426,12 +428,12 @@ public class SoalHandler : MonoBehaviour
 
                 if (rand == 1)
                 {
-                    jumlahKali = maxOperatorCount;
+                    jumlahKali++;
                 }
                 else
                 {
-                    Debug.LogError("bagi maxed");
-                    jumlahBagi = maxOperatorCount;
+                    Debug.LogError("Ada Bagi 1" );
+                    jumlahBagi++;
                     isBagiMax = true;
                 }
             }
@@ -475,12 +477,12 @@ public class SoalHandler : MonoBehaviour
 
                 if (rand == 1)
                 {
-                    jumlahKali = maxOperatorCount;
+                    jumlahKali++;
                 }
                 else
                 {
                     Debug.LogError("bagi maxed");
-                    jumlahBagi = maxOperatorCount;
+                    jumlahBagi++;
                     isBagiMax = true;
                 }
             }
@@ -868,6 +870,18 @@ public class SoalHandler : MonoBehaviour
             {
                 return null;
             }
+
+            //buat prevent ada hasil akir yang komanya ga bner ex: 0.333333 . minimal 2 angka dibelakang koma ex: 6.25
+            string sHasil = bilanganTemp[0].bilangan.ToString();
+            if (sHasil.Contains(".")){
+                if(sHasil.Length >= 5)
+                {
+                    return null;
+                }
+            }
+
+            
+
             return gen.newNode(bilanganTemp, null, null);
         }
         else
