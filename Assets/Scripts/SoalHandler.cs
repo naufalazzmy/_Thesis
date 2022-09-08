@@ -175,7 +175,15 @@ public class SoalHandler : MonoBehaviour
                                     gl.isFound = true;
                                     solusi = soalCandidate.solusi;
                                     GenerateSoal(bilanganObj, target);
-                                    
+
+                                    string soal = "";
+                                    foreach (Bilangan item in soalCandidate.balok)
+                                    {
+                                        soal += (item.bilangan.ToString() + item.op.ToString() + "|");
+                                    }
+                                    gl.blokSoal = soal;
+                                    gl.solusiSoal = solusi;
+
                                     founded = true;
                                     optimized = true;
                                 }
@@ -200,6 +208,15 @@ public class SoalHandler : MonoBehaviour
                         //}
                         solusi = soalCandidate.solusi;
                         GenerateSoal(soalCandidate.balok, soalCandidate.target);
+
+                        //LOG
+                        string soal = "";
+                        foreach (Bilangan item in soalCandidate.balok)
+                        {
+                            soal += (item.bilangan.ToString() + item.op.ToString() + "|");
+                        }
+                        gl.blokSoal = soal;
+                        gl.solusiSoal = solusi;
                         gl.difficulty = soalCandidate.difficulty; // LOG
                         gl.isFound = false; // LOG
                         
@@ -240,6 +257,15 @@ public class SoalHandler : MonoBehaviour
                     if (cobaCount <= 1000)
                     {
                         GenerateSoal(bilanganObj, target);
+
+                        string soal = "";
+                        foreach (Bilangan item in bilanganObj)
+                        {
+                            soal += (item.bilangan.ToString() + item.op.ToString()+"|");
+                        }
+                        gl.blokSoal = soal;
+                        gl.solusiSoal = solusi;
+
                         founded = true;
 
                     }

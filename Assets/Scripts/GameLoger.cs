@@ -26,6 +26,9 @@ public class GameLoger : MonoBehaviour
     public float currentSum;
     public float prevSum;
 
+    public string blokSoal;
+    public string solusiSoal;
+
     public bool isFound = false;
 
     void Start()

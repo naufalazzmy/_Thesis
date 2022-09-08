@@ -269,11 +269,17 @@ public class GameManager : MonoBehaviour
     {
         sendLog.Log("INDEX: " + gl.indexSoal);
         sendLog.Log("SCHEMA: " + gl.schema);
-        sendLog.Log("Z1: " + gl.z1);
-        sendLog.Log("Z2: " + gl.z2);
-        sendLog.Log("Z3: " + gl.z3);
-        sendLog.Log("Z4: " + gl.z4);
-        sendLog.Log("DIFF: " + gl.difficulty);
+        //sendLog.Log("Z1: " + gl.z1);
+        //sendLog.Log("Z2: " + gl.z2);
+        //sendLog.Log("Z3: " + gl.z3);
+        //sendLog.Log("Z4: " + gl.z4);
+        sendLog.Log("SOAL: " + gl.blokSoal);
+        sendLog.Log("SOLUSI: " + gl.solusiSoal);
+        sendLog.Log("PREV DIFF: " + gl.prevDifficulty);
+        sendLog.Log("PREV PERFORMANCE: " + gl.prevPerformance);
+        sendLog.Log("TARGET DIFF: " + gl.targetDifficulty);
+        sendLog.Log("CURRENT DIFF: " + gl.difficulty);
+        sendLog.Log("isFound: " + gl.isFound);
         sendLog.Log("STATUS: SKIPPED");
         sendLog.Log("TOTAL UNDO: "+restartTimes);
         sendLog.Log("TOTAL RESTART: "+undoTimes);
@@ -326,11 +332,17 @@ public class GameManager : MonoBehaviour
                 {
                     sendLog.Log("INDEX: " + gl.indexSoal);
                     sendLog.Log("SCHEMA: " + gl.schema);
-                    sendLog.Log("Z1: " + gl.z1);
-                    sendLog.Log("Z2: " + gl.z2);
-                    sendLog.Log("Z3: " + gl.z3);
-                    sendLog.Log("Z4: " + gl.z4);
-                    sendLog.Log("DIFF: " + gl.difficulty);
+                    //sendLog.Log("Z1: " + gl.z1);
+                    //sendLog.Log("Z2: " + gl.z2);
+                    //sendLog.Log("Z3: " + gl.z3);
+                    //sendLog.Log("Z4: " + gl.z4);
+                    sendLog.Log("SOAL: " + gl.blokSoal);
+                    sendLog.Log("SOLUSI: " + gl.solusiSoal);
+                    sendLog.Log("PREV DIFF: " + gl.prevDifficulty);
+                    sendLog.Log("PREV PERFORMANCE: " + gl.prevPerformance);
+                    sendLog.Log("TARGET DIFF: " + gl.targetDifficulty);
+                    sendLog.Log("CURRENT DIFF: " + gl.difficulty);
+                    sendLog.Log("isFound: " + gl.isFound);
                     sendLog.Log("STATUS: SUCCESS");
                     sendLog.Log("TOTAL UNDO: " + restartTimes);
                     sendLog.Log("TOTAL RESTART: " + undoTimes);
