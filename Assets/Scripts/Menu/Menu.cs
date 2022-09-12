@@ -29,6 +29,12 @@ public class Menu : MonoBehaviour
         StartCoroutine(nextScene("MainScene", 2f));
     }
 
+    public void toLatihan()
+    {
+        tirai.SetTrigger("close");
+        StartCoroutine(nextScene("LatihanScene", 2f));
+    }
+
     public void InitNama()
     {
         string nama;

@@ -28,6 +28,7 @@ public class GameLoger : MonoBehaviour
 
     public string blokSoal;
     public string solusiSoal;
+    public string timeToGenerate;
 
     public bool isFound = false;
 
