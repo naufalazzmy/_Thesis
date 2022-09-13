@@ -69,6 +69,12 @@ public class LatihanHandler : MonoBehaviour
                 SetLife(difficultyIndex);
                 Node target = getTarget(bilanganObj);
 
+                //Debug.LogWarning(jumlahBlok);
+                //Debug.LogWarning(jumlahOperand);
+                Debug.Log("curDiff: " + difficultyIndex);
+                float q = gl.prevDifficulty + gl.prevPerformance;
+                Debug.Log("target: " + q);
+
                 if (target == null)
                 {
                     Debug.LogError("TARGET NULL");
@@ -124,12 +130,9 @@ public class LatihanHandler : MonoBehaviour
                                 //float maxTreshold = 0;
                                 //float minTreshold = 0;
 
-                                //NOTE: untuk latihan, difficultynya dikasih anatara range
-                                float randomDiff = Random.Range(0.01f, 0.11f);
                                 if (gl.prevStatus == "SKIPPED")
                                 {
-                                    
-                                    targetDiff = gl.prevDifficulty - randomDiff;
+                                    targetDiff = gl.prevDifficulty - gl.prevPerformance;
                                     diffstring = targetDiff.ToString();
                                     cutted = diffstring.Substring(0, 4);
 
@@ -138,7 +141,7 @@ public class LatihanHandler : MonoBehaviour
                                 }
                                 else if (gl.prevStatus == "SUCCESS")
                                 {
-                                    targetDiff = gl.prevDifficulty + randomDiff;
+                                    targetDiff = gl.prevDifficulty + gl.prevPerformance;
                                     diffstring = targetDiff.ToString();
                                     cutted = diffstring.Substring(0, 4);
 
@@ -150,7 +153,7 @@ public class LatihanHandler : MonoBehaviour
                                 Debug.LogWarning(jumlahOperand);
                                 Debug.Log("curDiff: " + difficultyIndex);
                                 Debug.Log("prevDiff: " + gl.prevDifficulty);
-                                Debug.Log("prevformance: " + randomDiff);
+                                Debug.Log("prevformance: " + gl.prevPerformance);
                                 Debug.Log("target: " + targetDiff);
                                 //Debug.Log("minTres: " + minTreshold);
                                 //Debug.Log("maxTres: " + maxTreshold);
@@ -218,7 +221,7 @@ public class LatihanHandler : MonoBehaviour
                         gl.isFound = false; // LOG
 
                         //Debug.Log("set diff: " + gl.difficulty);
-                        //SetLife(difficultyIndex); //hati
+                        SetLife(difficultyIndex); //hati
                         //Debug.Log("Best diff: " + soalCandidate.difficulty);
                         Debug.LogWarning("best: " + soalCandidate.difficulty);
                         Debug.LogWarning("CAPEK NYARI SUMPAH");

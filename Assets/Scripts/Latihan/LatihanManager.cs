@@ -275,12 +275,9 @@ public class LatihanManager : MonoBehaviour
         gl.prevSum = gl.currentSum;
         gl.prevStatus = "SKIPPED";
 
-        if (gl.prevPerformance == 0)
-        {
-            Debug.LogWarning("skiped with gl: " + gl.prevPerformance);
-            gl.prevPerformance = 0.1f; //untuk initial difficulty kalo soal pertama dia gagal
+        float randomPerformance = Random.Range(0.01f, 0.1f);
+        gl.prevPerformance = randomPerformance;
 
-        }
         gl.targetDifficulty = gl.difficulty - gl.prevPerformance;
 
         tirai.SetTrigger("close");
@@ -342,7 +339,10 @@ public class LatihanManager : MonoBehaviour
                     //kalkulasi performa player
                     int currentLife = sh.lifeCount - restartTimes;
                     float performance = (float)currentLife / (float)sh.lifeCount;
-                    gl.prevPerformance = performance * 0.1f; //biar jadi 0.0n dst...
+
+                    float randomPerformance = Random.Range(0.01f, 0.1f);
+                    gl.prevPerformance = randomPerformance;
+                   // gl.prevPerformance = performance * 0.1f; //biar jadi 0.0n dst...
 
                     gl.targetDifficulty = gl.difficulty + gl.prevPerformance;
                 }
