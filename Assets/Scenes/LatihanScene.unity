@@ -8012,7 +8012,7 @@ MonoBehaviour:
   nextSceneTarget: LatihanScene
   sendLog: {fileID: 1452727264}
   sh: {fileID: 655684138}
-  isDebug: 1
+  isDebug: 0
   prevDiffText: {fileID: 421561704}
   prevPerformanceText: {fileID: 1591076925}
   currDiffText: {fileID: 671073224}

@@ -253,12 +253,13 @@ public class LatihanManager : MonoBehaviour
 
     public void skipSoal()
     {
+        sendLog.Log("MODE: LATIHAN");
         sendLog.Log("INDEX: " + gl.indexSoal);
         sendLog.Log("SCHEMA: " + gl.schema);
-        //sendLog.Log("Z1: " + gl.z1);
-        //sendLog.Log("Z2: " + gl.z2);
-        //sendLog.Log("Z3: " + gl.z3);
-        //sendLog.Log("Z4: " + gl.z4);
+        sendLog.Log("Z1: " + gl.z1);
+        sendLog.Log("Z2: " + gl.z2);
+        sendLog.Log("Z3: " + gl.z3);
+        sendLog.Log("Z4: " + gl.z4);
         sendLog.Log("SOAL: " + gl.blokSoal);
         sendLog.Log("SOLUSI: " + gl.solusiSoal);
         sendLog.Log("PREV DIFF: " + gl.prevDifficulty);
@@ -313,12 +314,13 @@ public class LatihanManager : MonoBehaviour
             {
                 if (waktuKerja != null || waktuKerja != "" || waktuKerja != " ")
                 {
+                    sendLog.Log("MODE: LATIHAN");
                     sendLog.Log("INDEX: " + gl.indexSoal);
                     sendLog.Log("SCHEMA: " + gl.schema);
-                    //sendLog.Log("Z1: " + gl.z1);
-                    //sendLog.Log("Z2: " + gl.z2);
-                    //sendLog.Log("Z3: " + gl.z3);
-                    //sendLog.Log("Z4: " + gl.z4);
+                    sendLog.Log("Z1: " + gl.z1);
+                    sendLog.Log("Z2: " + gl.z2);
+                    sendLog.Log("Z3: " + gl.z3);
+                    sendLog.Log("Z4: " + gl.z4);
                     sendLog.Log("SOAL: " + gl.blokSoal);
                     sendLog.Log("SOLUSI: " + gl.solusiSoal);
                     sendLog.Log("PREV DIFF: " + gl.prevDifficulty);
