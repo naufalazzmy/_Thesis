@@ -13,6 +13,7 @@ public class GameLoger : MonoBehaviour
     public float z2;
     public float z3;
     public float z4;
+    public float pureDiff;
     public float difficulty;
     public string status;
 
@@ -28,7 +29,8 @@ public class GameLoger : MonoBehaviour
 
     public string blokSoal;
     public string solusiSoal;
-    public string timeToGenerate;
+
+    public string elespasedTime; //untuk hitung waktu generate
 
     public bool isFound = false;
 

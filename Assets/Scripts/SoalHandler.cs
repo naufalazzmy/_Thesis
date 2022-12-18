@@ -29,7 +29,9 @@ public class SoalHandler : MonoBehaviour
     public string solusi = "";
 
 
-    public Soal newCandidate(List<Bilangan> currBalok, Node currTargt, string currSolution, float currDifficulty)
+
+
+    public Soal newCandidate(List<Bilangan> currBalok, Node currTargt, string currSolution, Difficulty currDifficulty)
     {
         Soal temp = new Soal();
         temp.balok = currBalok;
@@ -39,8 +41,23 @@ public class SoalHandler : MonoBehaviour
         return temp;
     }
 
+    public Difficulty newDifficulty(float z1, float z2, float z3, float z4, float pdiff, float wdiff)
+    {
+        Difficulty temp = new Difficulty();
+        temp.z1 = z1;
+        temp.z2 = z2;
+        temp.z3 = z3;
+        temp.z4 = z4;
+        temp.pdifficulty = pdiff;
+        temp.wdifficulty = wdiff;
+        return temp;
+    }
+
     private void Start()
     {
+        System.Diagnostics.Stopwatch stAll = new System.Diagnostics.Stopwatch();
+        stAll.Start();
+        
 
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         gl.indexSoal = gl.indexSoal + 1; // init index soal
@@ -54,30 +71,37 @@ public class SoalHandler : MonoBehaviour
 
         if (gl.prevStatus == "SUCCESS" || gl.prevStatus == "SKIPPED")
         {
-            Soal soalCandidate = newCandidate(null, null,"", 2f);
+            Soal soalCandidate = newCandidate(null, null,"", newDifficulty(0f,0f,0f,0f,0f,2f)); //w = 2f
             while (!founded)
             {
 
 
                 Debug.Log("-RESTART-");
 
+                //System.Diagnostics.Stopwatch stGenerator = new System.Diagnostics.Stopwatch();
+                //stGenerator.Start();
+
                 generateMainBlok();
+
+                //stGenerator.Stop();
+                //Debug.LogError("Generator: " + (stGenerator.Elapsed));
+                //stGenerator.Reset();
 
                 Debug.LogWarning("blok: " + (jumlahBagi + jumlahKali + jumlahKurang + jumlahTambah));
                 List<Bilangan> bilanganObj = BuatSoal();
-                float difficultyIndex = getDifficulty(bilanganObj);
-                SetLife(difficultyIndex);
+                Difficulty difficultyIndex = getDifficulty(bilanganObj);
+                SetLife(difficultyIndex.wdifficulty);
                 Node target = getTarget(bilanganObj);
 
                 //Debug.LogWarning(jumlahBlok);
                 //Debug.LogWarning(jumlahOperand);
-                Debug.Log("curDiff: " + difficultyIndex);
+                Debug.Log("curDiff: " + difficultyIndex.wdifficulty);
                 float q = gl.prevDifficulty + gl.prevPerformance;
                 Debug.Log("target: " + q);
 
                 if (target == null)
                 {
-                    Debug.LogError("TARGET NULL");
+                    Debug.LogWarning("TARGET NULL");
                 }
                 else
                 {
@@ -85,22 +109,22 @@ public class SoalHandler : MonoBehaviour
                     //float minTreshold = gl.prevDifficulty - 0.015f; //0.447 || 0.015
                     //float maxTreshold = gl.prevDifficulty - 0.1f; // 0.362  -   0.462 || 0.1
 
-                    string aS = difficultyIndex.ToString().Substring(0, 3); //1 angka dibelakang koma (0.5..)
+                    string aS = difficultyIndex.wdifficulty.ToString().Substring(0, 3); //1 angka dibelakang koma (0.5..)
                     string bS = gl.targetDifficulty.ToString().Substring(0, 3);
                     bool optimized = false;
 
                     //Debug.LogWarning("beda curr: " + Mathf.Abs(difficultyIndex - gl.targetDifficulty));
                     //Debug.LogWarning("beda best: " + Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty));
-                    Debug.LogWarning("curr: " + difficultyIndex);
+                    Debug.LogWarning("curr: " + difficultyIndex.wdifficulty);
 
                     if (soalCandidate.balok == null)
                     {
-                        soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target,solusi, difficultyIndex);
+                        soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target,solusi, newDifficulty(difficultyIndex.z1, difficultyIndex.z2, difficultyIndex.z3, difficultyIndex.z4, difficultyIndex.pdifficulty, difficultyIndex.wdifficulty));
                     }
-                    if (Mathf.Abs(difficultyIndex - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty))
+                    if (Mathf.Abs(difficultyIndex.wdifficulty - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty.wdifficulty - gl.targetDifficulty))
                     {
                         soalCandidate = null;
-                        soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target, solusi, difficultyIndex);
+                        soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target, solusi, newDifficulty(difficultyIndex.z1, difficultyIndex.z2, difficultyIndex.z3, difficultyIndex.z4, difficultyIndex.pdifficulty, difficultyIndex.wdifficulty));
 
                     }
 
@@ -115,7 +139,7 @@ public class SoalHandler : MonoBehaviour
                             bilanganObj.Clear();
                             bilanganObj = BuatSoal();
                             difficultyIndex = getDifficulty(bilanganObj);
-                            SetLife(difficultyIndex);
+                            SetLife(difficultyIndex.wdifficulty);
                             target = getTarget(bilanganObj);
                             if (target == null)
                             {
@@ -165,10 +189,10 @@ public class SoalHandler : MonoBehaviour
                                 Debug.LogWarning("best: " + soalCandidate.difficulty);
 
                                 //get soal paling mendekati
-                                if (Mathf.Abs(difficultyIndex - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty - gl.targetDifficulty))
+                                if (Mathf.Abs(difficultyIndex.wdifficulty - gl.targetDifficulty) < Mathf.Abs(soalCandidate.difficulty.wdifficulty - gl.targetDifficulty))
                                 {
                                     soalCandidate = null;
-                                    soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target,solusi, difficultyIndex);
+                                    soalCandidate = newCandidate(new List<Bilangan>(bilanganObj), target,solusi, newDifficulty(difficultyIndex.z1, difficultyIndex.z2, difficultyIndex.z3, difficultyIndex.z4, difficultyIndex.pdifficulty, difficultyIndex.wdifficulty));
                                 }
 
 
@@ -176,7 +200,7 @@ public class SoalHandler : MonoBehaviour
                                 {
                                     // Debug.Log("COBA COUNT: " + cobaCount);
                                     gl.isFound = true;
-                                    gl.difficulty = soalCandidate.difficulty; // LOG
+                                    gl.difficulty = soalCandidate.difficulty.wdifficulty; // LOG
                                     solusi = soalCandidate.solusi;
                                     GenerateSoal(soalCandidate.balok, soalCandidate.target);
 
@@ -185,6 +209,15 @@ public class SoalHandler : MonoBehaviour
                                     {
                                         soal += (item.bilangan.ToString() + item.op.ToString() + "|");
                                     }
+
+
+                                    gl.z1 = soalCandidate.difficulty.z1;
+                                    Debug.LogError("COK: " + gl.z1);
+                                    gl.z2 = soalCandidate.difficulty.z2;
+                                    gl.z3 = soalCandidate.difficulty.z3;
+                                    gl.z4 = soalCandidate.difficulty.z4;
+                                    gl.pureDiff = soalCandidate.difficulty.pdifficulty;
+
                                     gl.blokSoal = soal;
                                     gl.solusiSoal = solusi;
 
@@ -217,11 +250,16 @@ public class SoalHandler : MonoBehaviour
                         }
                         gl.blokSoal = soal;
                         gl.solusiSoal = solusi;
-                        gl.difficulty = soalCandidate.difficulty; // LOG
+                        gl.z1 = soalCandidate.difficulty.z1;
+                        gl.z2 = soalCandidate.difficulty.z2;
+                        gl.z3 = soalCandidate.difficulty.z3;
+                        gl.z4 = soalCandidate.difficulty.z4;
+                        gl.pureDiff = soalCandidate.difficulty.pdifficulty;
+                        gl.difficulty = soalCandidate.difficulty.wdifficulty; // LOG
                         gl.isFound = false; // LOG
                         
                         //Debug.Log("set diff: " + gl.difficulty);
-                        SetLife(difficultyIndex); //hati
+                        SetLife(difficultyIndex.wdifficulty); //hati
                         //Debug.Log("Best diff: " + soalCandidate.difficulty);
                         Debug.LogWarning("best: " + soalCandidate.difficulty);
                         Debug.LogWarning("CAPEK NYARI SUMPAH");
@@ -234,19 +272,34 @@ public class SoalHandler : MonoBehaviour
 
 
             }
+            stAll.Stop();
+            Debug.LogError("Time taken: " + (stAll.Elapsed));
+            gl.elespasedTime = stAll.Elapsed.ToString();
+            stAll.Reset();
         }
         else
         {
-            Debug.LogError("-AWAL-");
+
+
+            //Debug.LogError("-AWAL-");
             while (!founded)
             {
 
 
                 cobaCount++;
+
+                //System.Diagnostics.Stopwatch stGenerator = new System.Diagnostics.Stopwatch();
+                //stGenerator.Start();
+
                 generateMainBlok();
+
+                //stGenerator.Stop();
+                //Debug.LogError("Generator: " + (stGenerator.Elapsed));
+                //stGenerator.Reset();
+
                 List<Bilangan> bilanganObj = BuatSoal();
-                float difficultyIndex = getDifficulty(bilanganObj);
-                SetLife(difficultyIndex);
+                Difficulty difficultyIndex = getDifficulty(bilanganObj);
+                SetLife(difficultyIndex.wdifficulty);
                 Node target = getTarget(bilanganObj);
                 if (target == null)
                 {
@@ -280,7 +333,10 @@ public class SoalHandler : MonoBehaviour
 
 
             }
-
+            stAll.Stop();
+            Debug.LogError("Time taken: " + (stAll.Elapsed));
+            gl.elespasedTime = stAll.Elapsed.ToString();
+            stAll.Reset();
         }
     }
 
@@ -366,7 +422,7 @@ public class SoalHandler : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Ada Bagi: " + maxOperatorCount);
+                    Debug.LogWarning("Ada Bagi: " + maxOperatorCount);
                     jumlahBagi = maxOperatorCount;
                 }
             }
@@ -408,7 +464,7 @@ public class SoalHandler : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Ada Bagi 1");
+                    Debug.LogWarning("Ada Bagi 1");
                     
                     jumlahBagi++;
                     isBagiMax = true;
@@ -458,7 +514,7 @@ public class SoalHandler : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Ada Bagi 1" );
+                    //Debug.LogError("Ada Bagi 1" );
                     jumlahBagi++;
                     isBagiMax = true;
                 }
@@ -709,7 +765,7 @@ public class SoalHandler : MonoBehaviour
         return fact;
     }
 
-    private float getDifficulty(List<Bilangan> bilanganObj)
+    private Difficulty getDifficulty(List<Bilangan> bilanganObj)
     {
         int jumBalok = 0;
         int jumOperand = 0;
@@ -728,6 +784,15 @@ public class SoalHandler : MonoBehaviour
         float z2 = 0;
         float z3 = 0;
         float z4 = 0;
+
+        float pz1 = 0;
+        float pz2 = 0;
+        float pz3 = 0;
+        float pz4 = 0;
+        float pDiff = 0;
+        float wDiff = 0;
+
+
         float totalSum = 0;
 
         foreach (float c in ListBilangan)
@@ -738,16 +803,22 @@ public class SoalHandler : MonoBehaviour
         //Debug.Log(jumlahBlok);
 
         // last weight(20) = z4[0.3] z3 [0.2] z1,z2 [1]
-
+        pz1 = getCombination(jumBalok) / 10;
         z1 = (getCombination(jumBalok) / 10) * 0.937f; // 10=>5 | 28 => 8
+
+        //Debug.Log("z2: " + (totalSum) / 45f);
+        pz2 = (totalSum) / 45f;
         z2 = ((totalSum) / 45f) * 0.312f; // ini masih lebih dari 1 |72=>8|45=>5(9max)
         float maxi = ListBilangan.Max();
         float mini = ListBilangan.Min();
         // Debug.Log("Maxi: " + maxi);
         //Debug.Log("Mini: " + mini);
-        z3 = (1 - ((maxi - mini) / 9f)) * 0.254f; // range cari INI KOK BISA MINUS BGST [pembaginya itu maximal dari nilai 1 balok yang bisa dihasilkan]
+        Debug.Log("z3: " + (1 - ((maxi - mini) / 9f)));
+        pz3 = (1 - ((maxi - mini) / 9f));
+        z3 = (1 - ((maxi - mini) / 9f)) * 0.254f; // range cari INI KOK BISA MINUS [pembaginya itu maximal dari nilai 1 balok yang bisa dihasilkan]
                                                   //z4 = (jumlahOperand / 4f) * 0.3f;
-
+        Debug.Log("z4: " + (float)jumOperand / (float)jumBalok);
+        pz4 = ((float)jumOperand / (float)jumBalok);
         z4 = ((float)jumOperand / (float)jumBalok) * 0.984f;
         //Debug.Log("jumlahOperand: " + jumOperand);
         //Debug.Log("jumlahBlok: " + jumBalok);
@@ -757,17 +828,20 @@ public class SoalHandler : MonoBehaviour
         // Debug.Log((z1 + z2 + z3 + z4) / 2.191f);
         // Debug.Log("----------------");
         curDifficulty = (z1 + z2 + z3 + z4) / 2.487f;
+        wDiff = curDifficulty;
+        pDiff = pz1 + pz2 + pz3 + pz4;
 
 
-        gl.z1 = z1;
-        gl.z2 = z2;
-        gl.z3 = z3;
-        gl.z4 = z4;
-        gl.currentSum = totalSum;
+        //TODO: log ini bukan best candidate
+        //gl.z1 = (getCombination(jumBalok) / 10);
+        //gl.z2 = ((totalSum) / 45f);
+        //gl.z3 = (1 - ((maxi - mini) / 9f));
+        //gl.z4 = ((float)jumOperand / (float)jumBalok);
+        //gl.currentSum = totalSum;
         gl.difficulty = curDifficulty; // LOG
 
-
-        return curDifficulty;
+        Difficulty thisDif = newDifficulty(pz1, pz2, pz3, pz4, pDiff, wDiff);
+        return thisDif;
     }
 
     // cuman buat check remove multiple
