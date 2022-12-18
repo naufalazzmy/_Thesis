@@ -270,7 +270,8 @@ public class LatihanManager : MonoBehaviour
         sendLog.Log("STATUS: SKIPPED");
         sendLog.Log("TOTAL UNDO: " + restartTimes);
         sendLog.Log("TOTAL RESTART: " + undoTimes);
-        sendLog.Log("WAKTU: " + waktuKerja + "\n");
+        sendLog.Log("WAKTU: " + waktuKerja);
+        sendLog.Log("WAKTU GENERATE: " + gl.elespasedTime + "\n");
 
         gl.prevDifficulty = gl.difficulty;
         gl.prevSum = gl.currentSum;
@@ -331,7 +332,8 @@ public class LatihanManager : MonoBehaviour
                     sendLog.Log("STATUS: SUCCESS");
                     sendLog.Log("TOTAL UNDO: " + restartTimes);
                     sendLog.Log("TOTAL RESTART: " + undoTimes);
-                    sendLog.Log("WAKTU: " + waktuKerja + "\n");
+                    sendLog.Log("WAKTU: " + waktuKerja);
+                    sendLog.Log("WAKTU GENERATE: " + gl.elespasedTime + "\n");
 
                     gl.prevSuccessDifficulty = gl.difficulty;
                     gl.prevDifficulty = gl.difficulty;

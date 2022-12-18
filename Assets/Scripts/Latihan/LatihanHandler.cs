@@ -53,6 +53,8 @@ public class LatihanHandler : MonoBehaviour
 
     private void Start()
     {
+        System.Diagnostics.Stopwatch stAll = new System.Diagnostics.Stopwatch();
+        stAll.Start();
 
         gl = GameObject.Find("GameLoger").GetComponent<GameLoger>();
         gl.indexSoal = gl.indexSoal + 1; // init index soal
@@ -258,6 +260,10 @@ public class LatihanHandler : MonoBehaviour
 
 
             }
+            stAll.Stop();
+            Debug.LogError("Time taken: " + (stAll.Elapsed));
+            gl.elespasedTime = stAll.Elapsed.ToString();
+            stAll.Reset();
         }
         else
         {
@@ -304,7 +310,10 @@ public class LatihanHandler : MonoBehaviour
 
 
             }
-
+            stAll.Stop();
+            Debug.LogError("Time taken: " + (stAll.Elapsed));
+            gl.elespasedTime = stAll.Elapsed.ToString();
+            stAll.Reset();
         }
     }
 
